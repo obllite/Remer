@@ -99,3 +99,4 @@ ipcMain.on('changeAvatorFile-send', async (event, arg) => {
             event.reply('changeAvatorFile-reply', stateCode)
         })
 })
+/* this is git test */
