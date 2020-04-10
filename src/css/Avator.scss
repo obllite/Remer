@@ -1,0 +1,44 @@
+.avator {
+    box-sizing: border-box;
+    padding: 10px 0px 10px 10px;
+    .avatorBox {
+        width: 80px;
+        height: 80px;
+        box-sizing: border-box;
+        border: 1px solid #000;
+        border-radius: 80px;
+    }
+    .imgLegible {
+        width: 80px;
+        height: 80px;
+        box-sizing: border-box;
+        border-radius: 80px;
+        position: absolute;
+        z-index: 1;
+    }
+    .imgBlur {
+        width: 80px;
+        height: 80px;
+        box-sizing: border-box;
+        border-radius: 80px;
+        position: absolute;
+        z-index: 1;
+        transition: filter 0.15s ease-in-out;
+        filter: blur(2px);
+    }
+    .changeButton {
+        width: 60px;
+        height: 20px;
+        font-size: 14px;
+        background-color: #fff;
+        box-sizing: border-box;
+        border: 1px solid #000;
+        position: absolute;
+        top: 50px;
+        left: 20px;
+        z-index: 2;
+        transform: translateZ(5px);
+/*         visibility: hidden; */
+        cursor: pointer;
+    }
+}
