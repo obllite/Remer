@@ -50,7 +50,8 @@ app.on('activate', function () {
 
 // Main process ipc
 
-//handler changeAvatorFile: 更换用户头像
+/* FUNCTION handler changeAvatorFile: 更换用户头像 */
+/* FIXME 存在没有调用的dialog， 可以删除然后重新封装async函数 */
 ipcMain.on('changeAvatorFile-send', async (event, arg) => {
     //stateCode 值
     //console.log(arg)
@@ -79,20 +80,13 @@ ipcMain.on('changeAvatorFile-send', async (event, arg) => {
             console.log(stateCode)
             switch (stateCode) {
                 case "changeFail":
-                    dialog.showErrorBox("出错啦", "更换头像失败")
+                    stateCode = "更换头像失败";
                     break;
                 case "changeCancel":
-/*                     dialog.showMessageBox({
-                        type: "info",
-                        message: "更换头像已取消"
-                    }) */
-                    console.log("更换头像已取消")
+                    stateCode = "更换头像已取消";
                     break;
                 case "changeSuc":
-                    dialog.showMessageBox({
-                        type: "info",
-                        message: "更换头像成功"
-                    })
+                    stateCode = "更换头像成功";
                     break;
                 default:
                     break;
