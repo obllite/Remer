@@ -3,6 +3,10 @@ import avatorURL from "../img/avactor.jpg"
 import "../css/Avator.scss"
 import changeAvator from '../utils/changeAvator'
 
+/* COMPONENT 用户头像组件*/
+/* FIXME 更换avator img 之后会导致页面刷新,可能是由于 setTimeout 产生的异步事件导致的 */
+/* TODO 样式可以重构以复用 */
+
 class Avator extends React.Component {
     // eslint-disable-next-line no-useless-constructor
     constructor(props) {

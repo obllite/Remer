@@ -1,0 +1,19 @@
+@import "../iconfont/navIcon/iconfont.css";
+
+.navItem {
+    height: 80px;
+    background-color: #fefefe;
+    box-sizing: border-box;
+    border-bottom: 1px solid #9a9a9a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    .iconfont {
+        font-size: 30px;
+        font-weight: 200;
+    }
+}
+.navItem:hover {
+    background-color: pink;
+}

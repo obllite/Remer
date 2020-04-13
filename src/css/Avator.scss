@@ -15,6 +15,7 @@
         border-radius: 80px;
         position: absolute;
         z-index: 1;
+        user-select: none;
     }
     .imgBlur {
         width: 80px;
@@ -25,6 +26,7 @@
         z-index: 1;
         transition: filter 0.15s ease-in-out;
         filter: blur(2px);
+        user-select: none;
     }
     .changeButton {
         width: 60px;

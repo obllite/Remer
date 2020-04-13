@@ -82,10 +82,11 @@ ipcMain.on('changeAvatorFile-send', async (event, arg) => {
                     dialog.showErrorBox("出错啦", "更换头像失败")
                     break;
                 case "changeCancel":
-                    dialog.showMessageBox({
+/*                     dialog.showMessageBox({
                         type: "info",
                         message: "更换头像已取消"
-                    })
+                    }) */
+                    console.log("更换头像已取消")
                     break;
                 case "changeSuc":
                     dialog.showMessageBox({

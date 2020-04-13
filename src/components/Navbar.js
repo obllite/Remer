@@ -1,21 +1,26 @@
 import React from 'react';
 import Avator from "./Avator"
+import Navitem from "./Navitem"
 import "../css/Navbar.scss"
-//TODO 实现导航栏
+//TODO 添加选项组件
 class Navbar extends React.Component {
     // eslint-disable-next-line no-useless-constructor
     constructor(props) {
         super(props)
         this.state = {
             CSSclass: {
-                navbar: "navbar"
+                navbar: "navbar",
+                avatorCircle: "avatorCircle"
             },
         }
     }
     render() {
         return (
             <div className={this.state.CSSclass.navbar}>
-                <Avator></Avator>
+                <div className={this.state.CSSclass.avatorCircle}>
+                    <Avator></Avator>
+                </div>
+                <Navitem></Navitem>
             </div>
         )
     }

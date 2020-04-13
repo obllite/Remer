@@ -1,5 +1,15 @@
 .navbar {
-    width: 100px;
+    width: 50px;
     height: 100vh;
-    border: 1px solid #000;
+    hr {
+        margin: 0;
+    }
+    .avatorCircle {
+        width: 120px;
+        height: 120px;
+        box-sizing: border-box;
+        border-right: 1px solid #000;
+        border-bottom: 1px solid #000;
+        border-radius: 0px 0px 100px 0px;
+    }
 }
