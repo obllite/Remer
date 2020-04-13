@@ -1,6 +1,9 @@
 .navbar {
     width: 50px;
-    height: 100vh;
+    float: left;
+    position: relative;
+    z-index: 10;
+    /*     height: 100vh; */
     hr {
         margin: 0;
     }
@@ -8,8 +11,9 @@
         width: 120px;
         height: 120px;
         box-sizing: border-box;
-        border-right: 1px solid #000;
-        border-bottom: 1px solid #000;
+        /*         border-right: 1px solid #9A9A9A;
+        border-bottom: 1px solid #9A9A9A; 
         border-radius: 0px 0px 100px 0px;
+        */
     }
 }

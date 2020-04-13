@@ -2,7 +2,8 @@ import React from 'react';
 import Avator from "./Avator"
 import Navitem from "./Navitem"
 import "../css/Navbar.scss"
-//TODO 添加选项组件
+//COMPONENT 导航栏组件
+
 class Navbar extends React.Component {
     // eslint-disable-next-line no-useless-constructor
     constructor(props) {

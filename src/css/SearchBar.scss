@@ -1,0 +1,38 @@
+@import "../iconfont/navIcon/iconfont.css";
+.searchBar {
+    width: 80vw;
+    float: right;
+    position: relative;
+    right: 50%;
+    z-index: 10;
+    padding-top: 20px;
+    .searchInput {
+        width: 100%;
+        border: 0px;
+        display: block;
+        font-size: 20px;
+        float: right;
+        position: relative;
+        left: 50%;
+        background-color: rgba($color: #adb5bd, $alpha: 0.2);
+        outline: none;
+        z-index: 1;
+    }
+    .searchInput:active {
+        background-color: rgba($color: #adb5bd, $alpha: 0.3);
+        transform: background-color 0.4s ease-in-out;
+        outline: none;
+    }
+    .iconfont {
+        float: right;
+        left: calc(50% - 24px);
+        position: relative;
+        color: #000000;
+        font-size: 24px;
+        font-weight: bolder;
+        z-index: 2;
+    }
+    .iconfont:active {
+        color: red;
+    }
+}

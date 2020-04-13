@@ -4,6 +4,7 @@ import "../css/Navitem.scss"
 /* TODO 考虑用 HOC 或 Hooks 需考虑复用，再根据 params 在父组件中循环渲染出来*/
 /* PARAMS 搜 索、复 习、单词本、设 置*/
 /* TODO 此处参数应由父组件传入，最终应修改 */
+/* TODO 加入点击事件，并保存相应的状态，以实现面包屑的效果 */
 const itemTitle = [
     {
         title: "搜 索",
