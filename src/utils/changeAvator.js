@@ -8,7 +8,6 @@ function changeAvator() {
                     this.setState({ ipc: true })
                 }) */
         window.ipcRenderer.on('changeAvatorFile-reply', (event, arg) => {
-            console.log(arg)
             let myNotification = new Notification('更换头像提示', {
                 body: arg
             })
