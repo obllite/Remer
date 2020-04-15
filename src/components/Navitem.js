@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import "../css/Navitem.scss"
+import itemHandler from "../utils/navItemHandler"
 /* COMPONENT  导航栏选项组件*/
-/* TODO 考虑用 HOC 或 Hooks 需考虑复用，再根据 params 在父组件中循环渲染出来*/
 /* PARAMS 搜 索、复 习、单词本、设 置*/
-/* TODO 此处参数应由父组件传入，最终应修改 */
-/* TODO 加入点击事件，并保存相应的状态，以实现面包屑的效果 */
+/* FIXME 此处参数应由父组件传入，最终应修改 */
+/* TODO 为第一个search item子组件自动获取焦点，失去焦点时 search item 组件消失 */
+/* TODO 为后三个item子组件加入点击事件，实现 rooter 切换和 transiform 效果 */
+
 const itemTitle = [
     {
         title: "搜 索",
@@ -22,11 +24,12 @@ const itemTitle = [
         title: "设 置",
         iconfont: "iconfont icon-shezhi"
     }]
+
 function Navitem(props) {
     const [itemClass, setItemClass] = useState("navItem")
     const items = itemTitle.map((item, index) => {
         return (
-            <div key={index} className={itemClass}>
+            <div key={index} className={itemClass} onClick={itemHandler[index]}>
                 <div className={item.iconfont}></div>
                 {item.title}
             </div>
@@ -38,4 +41,5 @@ function Navitem(props) {
         </>
     )
 }
+
 export default Navitem
