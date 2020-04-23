@@ -17,7 +17,6 @@ function Wordlist(props) {
     //functions
     const dragStart = (e) => {
         setdragitem(e.currentTarget)
-        //console.log(dragitem)
     }
     const dragOver = (e) => {
         e.preventDefault();
@@ -64,6 +63,7 @@ function Wordlist(props) {
                 index={index}
                 itemDragStart={dragStart}
                 itemDragEnd={dragEnd}
+                displayFlag={false}
             >
             </Worditem>
         )
@@ -73,7 +73,9 @@ function Wordlist(props) {
             className={wordlist}
             onDragOver={(e) => { dragOver(e) }}
         >
-            <div className={wordlistHeader}>maybe some controllers or file path</div>
+            <div className={wordlistHeader}>
+                maybe some controllers or file path
+            </div>
             <div className='wordlistContainer'>
                 {listItems}
             </div>

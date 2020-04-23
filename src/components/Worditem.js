@@ -9,14 +9,13 @@ function Worditem(props) {
     let {
         wordSet,
         index,
-        dragitem,
         itemDragStart,
-        itemDragEnd
+        itemDragEnd,
     } = props
     //state
     const [draggable, setdraggable] = useState(false)
     const [ifCollected, setifCollected] = useState(false)
-    const [ifDisplay, setifDisplay] = useState('hidden')
+    const [ifDisplay, setifDisplay] = useState(false)
     const selfRef = createRef()
     //classnames
     const worditem = classnames('worditem')
@@ -28,8 +27,8 @@ function Worditem(props) {
     })
     const collecticon = classnames({
         'iconfont': true,
-        'icon-Notvisible': ifDisplay === 'hidden',
-        'icon-browse': ifDisplay === 'visible'
+        'icon-Notvisible': !ifDisplay,
+        'icon-browse': ifDisplay
     })
     //function
     const allowDrag = () => {
@@ -42,14 +41,10 @@ function Worditem(props) {
         setifCollected(!ifCollected)
         wordSet.ifCollected = !wordSet.ifCollected
     }
-    const displayChinese = () => {
-        setifDisplay('visible')
-        console.log("display called ifDisplay ", ifDisplay)
+    const changeDisplay = () => {
+        setifDisplay(!ifDisplay)
     }
-    const hideChinese = () => {
-        setifDisplay('hidden')
-        console.log("hide called ifDisplay ", ifDisplay)
-    }
+
     return (
         <div
             className={worditem}
@@ -76,7 +71,7 @@ function Worditem(props) {
             >
             </div>
             <div
-                style={{ visibility: ifDisplay }}
+                style={{ visibility: ifDisplay ? "visible":"hidden" }}
             >
                 {wordSet.pronunciation}
                 {wordSet.speech}
@@ -84,8 +79,8 @@ function Worditem(props) {
             </div>
             <div
                 className={collecticon}
-                onMouseDown={displayChinese}
-                onMouseUp={hideChinese}
+                onMouseDown={changeDisplay}
+                onMouseUp={changeDisplay}
             >
             </div>
         </div>
