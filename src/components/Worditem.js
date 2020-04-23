@@ -34,9 +34,9 @@ function Worditem(props) {
     }
     const dragLeave = () => {
         if (dragEl !== selfRef) {
-            if (selfRef === ) {
+/*             if (selfRef === ) {
                 
-            }
+            } */
         }
     }
     const insertBefore = () => {
