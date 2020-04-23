@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 import Worditem from './Worditem'
 function Wordlist(props) {
@@ -6,11 +6,15 @@ function Wordlist(props) {
         data,
         ...rest
     } = props
+    //classname defination
     const wordlist = classnames('wordlist');
     const worditem = classnames('worditem');
+    const wordlistHeader = classnames('wordlistHeader');
+    //state defination
     const [dragitem, setdragitem] = useState(null);
     const [overitem, setoveritem] = useState(null);
-    const [worddata, setworddata] = useState(data)
+    const [worddata, setworddata] = useState(data);
+    //functions
     const dragStart = (e) => {
         setdragitem(e.currentTarget)
         //console.log(dragitem)
@@ -25,7 +29,7 @@ function Wordlist(props) {
         const targetIndex = JSON.parse(e.target.dataset.item).newIndex;
         const animateName = dragIndex > targetIndex ? "drag-up" : "drag-down";
         if (overitem && e.target.dataset.item !== overitem.dataset.item) {
-            overitem.classList.remove("drag-up","drag-down")
+            overitem.classList.remove("drag-up", "drag-down")
         }
         if (!e.target.classList.contains(animateName)) {
             e.target.classList.add(animateName)
@@ -44,16 +48,17 @@ function Wordlist(props) {
         let tempData = data;
         let originIndex = Number(dragitem.dataset.id);
         let desIndex = Number(overitem.dataset.id);
-        tempData.splice(desIndex,0,tempData.splice(originIndex,1)[0]);
-        tempData = tempData.map((item, index)=> {
+        tempData.splice(desIndex, 0, tempData.splice(originIndex, 1)[0]);
+        tempData = tempData.map((item, index) => {
             item.newIndex = index + 1;
             return item
         })
         setworddata(tempData)
     }
+
     let listItems = data.map((item, index) => {
         return (
-            <Worditem 
+            <Worditem
                 key={index}
                 wordSet={item}
                 index={index}
@@ -66,10 +71,14 @@ function Wordlist(props) {
     return (
         <div
             className={wordlist}
-            onDragOver={(e)=>{dragOver(e)}}
+            onDragOver={(e) => { dragOver(e) }}
         >
+            <div className={wordlistHeader}>maybe some controllers or file path</div>
+            <div className='wordlistContainer'>
                 {listItems}
+            </div>
         </div>
+
     )
 }
 
