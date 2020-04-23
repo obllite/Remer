@@ -1,11 +1,12 @@
 .wordlist {
     height: $full-vh;
-    width: 1.5 * $quarter-vw;
+    width: 1 * $quarter-vw;
     background-color: $gray-100; /* #E9EBE8 */
     float: left;
     position: relative;
     overflow-x: none;
     overflow-y: scroll;
+    list-style: none;
 }
 .drag-up {
     animation: dragup ease 0.2s 1;
@@ -37,8 +38,4 @@
         margin-bottom: 60px;
         margin-top: 10px;
     }
-}
-
-ul {
-    list-style: none;
 }

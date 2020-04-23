@@ -8,7 +8,9 @@ function Worditem(props) {
     let {
         wordSet,
         index,
-        dragEl
+        dragitem,
+        itemDragStart,
+        itemDragEnd
     } = props
     const worditem = classnames('worditem')
     const dragicon = classnames('dragicon')
@@ -18,25 +20,22 @@ function Worditem(props) {
     const selfRef = createRef()
 
     const allowDrag = () => {
+        console.log('allow is called')
         setdraggable(true)
     }
     const forbidDrag = () => {
+        console.log('forbid is called')
         setdraggable(false)
     }
-    const dragStart = () => {
-        dragEl = selfRef
-        console.log(dragEl)
-    }
-    const dragEnd = (e) => {
-        dragEl.style.display = "block";
-        
-    }
     return (
-        <div className={worditem}
-        ref={selfRef}
-        draggable = {draggable}
-        onDragStart={dragStart}
-        onDragEnd={(e) => {dragEnd(e)}}
+        <div 
+            className={worditem}
+            ref={selfRef}
+            draggable = {draggable}
+            onDragStart={itemDragStart}
+            onDragEnd={itemDragEnd}
+            data-id={index}
+            data-item={JSON.stringify(wordSet)}   
         >
             <div>
                 {wordSet.english}

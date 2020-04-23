@@ -12,4 +12,7 @@
     background-color: $teal;
     grid-area: 1 / 2 / 3 / 3;
     align-self: stretch;
+    &:active {
+        background-color: $pink;
+    }
 }
