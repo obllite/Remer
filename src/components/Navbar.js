@@ -1,7 +1,7 @@
 import React from 'react';
 import Avator from "./Avator"
 import Navitem from "./Navitem"
-import "../css/Navbar.scss"
+/* import "../css/Navbar.scss" */
 //COMPONENT 导航栏组件
 
 class Navbar extends React.Component {
@@ -11,16 +11,19 @@ class Navbar extends React.Component {
         this.state = {
             CSSclass: {
                 navbar: "navbar",
-                avatorCircle: "avatorCircle"
+                avatorCircle: "avatorCircle",
+                logoTop: "logoTop",
+                logoBottom: "logoBottom"
             },
         }
     }
     render() {
         return (
             <div className={this.state.CSSclass.navbar}>
-                <div className={this.state.CSSclass.avatorCircle}>
+{/*                 <div className={this.state.CSSclass.avatorCircle}>
                     <Avator></Avator>
-                </div>
+                </div> */}
+
                 <Navitem></Navitem>
             </div>
         )

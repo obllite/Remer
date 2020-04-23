@@ -1,6 +1,6 @@
 import React from "react"
 import avatorURL from "../img/avactor.jpg"
-import "../css/Avator.scss"
+/* import "../css/Avator.scss" */
 import changeAvator from '../utils/changeAvator'
 
 /* COMPONENT 用户头像组件*/

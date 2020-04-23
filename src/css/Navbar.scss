@@ -1,19 +1,38 @@
 .navbar {
-    width: 50px;
+    height: $full-vh;
+    width: $navbar-width;
+    background-color: $navbar-color;
+    color: $white;
     float: left;
     position: relative;
-    z-index: 10;
-    /*     height: 100vh; */
-    hr {
-        margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.navItem {
+    height: $navItem-height;
+    width: $navItem-width;
+    margin: 40px 0px 40px 0px;
+    box-sizing: border-box;
+    border-radius: $border-radius-lg;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    user-select: none;
+    flex-basis: 40px;
+    &:hover {
+        background-color: rgba($color: $black, $alpha: 0.1);
+        transform: background-color 0.4s ease-in-out;
     }
-    .avatorCircle {
-        width: 120px;
-        height: 120px;
-        box-sizing: border-box;
-        /*         border-right: 1px solid #9A9A9A;
-        border-bottom: 1px solid #9A9A9A; 
-        border-radius: 0px 0px 100px 0px;
-        */
+}
+
+.nav-icon {
+    font-size: $h2-font-size;
+    font-weight: $font-weight-iconfont;
+    &:hover {
+        font-size: $h1-font-size;
+        transition: font-size 0.2s ease-in-out;
     }
 }

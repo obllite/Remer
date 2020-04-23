@@ -50,7 +50,7 @@ app.on('activate', function () {
 
 // Main process ipc
 
-/* FUNCTION handler changeAvatorFile: 更换用户头像 */
+/* HOOK handler changeAvatorFile: 更换用户头像 */
 /* FIXME 存在没有调用的dialog， 可以删除然后重新封装async函数 */
 ipcMain.on('changeAvatorFile-send', async (event, arg) => {
     //stateCode 值

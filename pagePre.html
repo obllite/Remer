@@ -11,7 +11,46 @@
 </head>
 
 <body>
-    <input type="text" id="search">
+    <ul class="list-group" id="items">
+        <li class="list-group-item" data-id="0" draggable="true">
+            Menu1
+        </li>
+        <li class="list-group-item" data-id="1" draggable="true">
+            Menu2
+        </li>
+        <li class="list-group-item" data-id="2" draggable="true">
+            Menu3
+        </li>
+        <li class="list-group-item" data-id="3" draggable="true">
+            Menu4
+        </li>
+    </ul>
 </body>
+<script>
+    var dragElement = null;
+var source = document.querySelectorAll('.list-group-item');
 
+for(var i = 0; i < source.length; i++){
+    source[i].addEventListener('dragstart',function(ev){
+        dragElement = this;
+    },false);
+
+    source[i].addEventListener('dragenter', function(ev){
+        if(dragElement != this){
+            this.parentNode.insertBefore(dragElement,this);
+        }
+    }, false)
+
+    source[i].addEventListener('dragleave', function(ev){
+        if(dragElement != this){
+            if(this == this.parentNode.lastElementChild || this == this.parentNode.lastChild){
+                this.parentNode.appendChild(dragElement);
+            }
+        }
+    }, false)
+};
+
+document.ondragover = function(e){e.preventDefault();}
+document.ondrop = function(e){e.preventDefault();}
+</script>
 </html>

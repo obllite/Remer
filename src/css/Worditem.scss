@@ -1,0 +1,15 @@
+.worditem {
+    margin: 4px;
+    border: 1px solid #000;
+    border-radius: $border-radius;
+    user-select: none;
+    display: grid;
+    grid-template-columns: auto 20px;
+    grid-template-rows: 50% 50%;
+}
+.dragicon {
+    margin: 0;
+    background-color: $teal;
+    grid-area: 1 / 2 / 3 / 3;
+    align-self: stretch;
+}

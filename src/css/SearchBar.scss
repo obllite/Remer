@@ -1,24 +1,29 @@
 @import "../iconfont/navIcon/iconfont.css";
 .searchBar {
     float: right;
-    width: 60vw;
+    position: absolute;
+    left: $quarter-vw;
+    z-index: 10;
+    height: 40px;
+    width: $half-vw;
     display: flex;
     margin: 2vh 20vw 0 0;
-    border: 1px solid #9A9A9A;
-    border-radius: 14px;
+    border: 1px solid #9a9a9a;
+    border-radius: $border-radius-normal;
     user-select: none;
 }
-input {
+.searchInput {
     outline: none;
-    width: 60vw;
+    width: $half-vw;
     border: none;
-    border-radius: 14px;
+    border-radius: $border-radius-normal;
     font-size: 20px;
-    font-weight: 200;
+    font-weight: $font-weight-lighter;
     padding-left: 20px;
     caret-color: #1177b0;
 }
-.iconfont.icon-search {
+.iconfont.icon-search.search-icon {
+    transform: translateY(-10px);
     font-size: 40px;
     cursor: pointer;
 }

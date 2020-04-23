@@ -1,0 +1,24 @@
+@import "../iconfont/navIcon/iconfont.css";
+.searchBar {
+    float: right;
+    width: 60vw;
+    display: flex;
+    margin: 2vh 20vw 0 0;
+    border: 1px solid #9A9A9A;
+    border-radius: 14px;
+    user-select: none;
+}
+input {
+    outline: none;
+    width: 60vw;
+    border: none;
+    border-radius: 14px;
+    font-size: 20px;
+    font-weight: 200;
+    padding-left: 20px;
+    caret-color: #1177b0;
+}
+.iconfont.icon-search {
+    font-size: 40px;
+    cursor: pointer;
+}
