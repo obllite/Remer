@@ -27,28 +27,16 @@ function Worditem(props) {
         dragEl = selfRef
         console.log(dragEl)
     }
-    const dragEnter = () => {
-        if (dragEl !== selfRef) {
-            insertBefore()
-        }
-    }
-    const dragLeave = () => {
-        if (dragEl !== selfRef) {
-/*             if (selfRef === ) {
-                
-            } */
-        }
-    }
-    const insertBefore = () => {
-        console.log("insert before is called");
+    const dragEnd = (e) => {
+        dragEl.style.display = "block";
+        
     }
     return (
         <div className={worditem}
         ref={selfRef}
         draggable = {draggable}
         onDragStart={dragStart}
-        onDragEnter={dragEnter}
-        onDragLeave={dragLeave}
+        onDragEnd={(e) => {dragEnd(e)}}
         >
             <div>
                 {wordSet.english}
