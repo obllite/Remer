@@ -31,17 +31,18 @@ function Worditem(props) {
         'icon-browse': ifDisplay
     })
     //function
-    const allowDrag = () => {
+    const allowDrag = (e) => {
         setdraggable(true)
     }
-    const forbidDrag = () => {
+    const forbidDrag = (e) => {
         setdraggable(false)
     }
     const ifcollectWords = () => {
         setifCollected(!ifCollected)
         wordSet.ifCollected = !wordSet.ifCollected
     }
-    const changeDisplay = () => {
+    const changeDisplay = (e) => {
+        e.preventDefault();
         setifDisplay(!ifDisplay)
     }
 
@@ -66,21 +67,20 @@ function Worditem(props) {
             </div>
             <div
                 className={dragTag}
-                onMouseDown={allowDrag}
-                onMouseUp={forbidDrag}
+                onMouseDown={(e)=>{allowDrag(e)}}
+                onMouseUp={(e)=>{forbidDrag(e)}}
             >
             </div>
             <div
                 style={{ visibility: ifDisplay ? "visible":"hidden" }}
             >
-                {wordSet.pronunciation}
                 {wordSet.speech}
                 {wordSet.chinese}
             </div>
             <div
                 className={collecticon}
-                onMouseDown={changeDisplay}
-                onMouseUp={changeDisplay}
+                onMouseDown={(e)=>{changeDisplay(e)}}
+                onMouseUp={(e)=>{changeDisplay(e)}}
             >
             </div>
         </div>

@@ -7,7 +7,7 @@ const {
 } = require("electron");
 const path = require("path");
 const fs = require("fs")
-
+const searchWord = require('./utils/searchWord')
 function createWindow() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
@@ -93,4 +93,11 @@ ipcMain.on('changeAvatorFile-send', async (event, arg) => {
             }
             event.reply('changeAvatorFile-reply', stateCode)
         })
+})
+
+/* HOOK handler searchHandler: 搜索单词 */
+ipcMain.on('searchWord-send', (event, arg) => {
+    console.log('arg is ',arg)
+    const content = searchWord()
+    event.reply('searchWord-reply',content)
 })

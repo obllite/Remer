@@ -3,7 +3,6 @@ import store from '../store/store'
 const itemHandler = [searchItemHandler, reviewItemHandler, bookItemHandler, configItemHandler]
 /* FUNCTION searchItemHandler 点击侧边栏的搜索， 显示search bar */
 function searchItemHandler() {
-    console.log("search item is clicked")
     store.dispatch({
         type: "showSearchBar",
     })

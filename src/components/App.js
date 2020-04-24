@@ -7,6 +7,7 @@ import Navbar from './Navbar';
 import SearchBar from './SearchBar'
 import Wordlist from './Wordlist'
 import ShowView from './ShowView'
+import Worddetail from './Worddetail'
 /* NOTE 重构样式，先不显示用户头像组件 */
 let wordSet = [
   {newIndex:1, ifCollected:false,english: 'abandon', pronunciation: '/ ə’bændən/', speech: 'vt', chinese: '丢弃' },
@@ -39,12 +40,14 @@ let wordSet = [
 function App() {
   const [searchDisplay, setsearchDisplay] = useState(false)
   const [wordNum, setwordNum] = useState(20)
+  const [wordContent, setwordContent] = useState('this is word content')
   return (
     <Provider store={store}>
       <div className="App">
         <Navbar></Navbar>        
         <SearchBar></SearchBar>
         <Wordlist data={wordSet}></Wordlist>
+        <Worddetail></Worddetail>
         <ShowView></ShowView>
       </div>
     </Provider>

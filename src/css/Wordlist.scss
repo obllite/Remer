@@ -1,5 +1,5 @@
 .wordlist {
-    width: 1 * $quarter-vw;
+    width: 300px;
     height: $full-vh;
     background-color: $gray-100;
     float: left;
@@ -7,7 +7,7 @@
 }
 .wordlistHeader {
     height: 40px;
-    width: 1 * $quarter-vw;
+    width: 300px;
     background-color: $gray-100;
     box-sizing: border-box;
 }

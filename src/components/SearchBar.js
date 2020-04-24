@@ -2,7 +2,8 @@
 import React, { useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import store from '../store/store'
-/* import '../css/SearchBar.scss';  */                                                  
+import searchHandler from '../utils/searchHandler'
+/* import '../css/SearchBar.scss';  */
 /* COMPONENT 搜索框组件 */
 function SearchBar(props) {
     const [searchBar, setSearchBar] = useState("searchBar")
@@ -13,18 +14,27 @@ function SearchBar(props) {
     const handleBlur = () => {
         if (props.ifInputFocus && inputEl.current.value === "") {
             store.dispatch({
-                type:"hideSearchBar",
+                type: "hideSearchBar",
             })
+        }
+    }
+
+    //NOTE 此处要考虑前端的节流
+    const handleSearch = (e) => {
+        if (e.keyCode === 13) {
+            //调用search handler 来处理事件
+            searchHandler(inputEl.current.value)
         }
     }
     return props.ifSearchBarDisplay ? (
         <div className={searchBar}>
-            <input 
-                className={searchInput} 
-                type="text" 
-                placeholder={inputValue} 
+            <input
+                className={searchInput}
+                type="text"
+                placeholder={inputValue}
                 onBlur={handleBlur}
                 ref={inputEl}
+                onKeyDown={(e) => { handleSearch(e) }}
             />
             <div className={searchIcon}>
             </div>
@@ -34,4 +44,4 @@ function SearchBar(props) {
 const mapStateToProps = (state) => {
     return state
 }
-export default connect(mapStateToProps,null)(SearchBar)
+export default connect(mapStateToProps, null)(SearchBar)

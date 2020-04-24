@@ -1,6 +1,7 @@
 const initState = {
     ifSearchBarDisplay: false,
-    ifInputFocus: false
+    ifInputFocus: false,
+    wordContent: ''
 }
 function reducer(state = initState, action) {
     switch (action.type) {
@@ -14,6 +15,10 @@ function reducer(state = initState, action) {
             return {
                 ifSearchBarDisplay: false,
                 ifInputFocus: false
+            }
+        case "wordContent":
+            return {
+                wordContent: 'wordContent'
             }
         default:
             return state
