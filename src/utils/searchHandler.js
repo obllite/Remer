@@ -5,10 +5,11 @@ function searchHandler(word) {
     console.log('word is ', word)
     if(isElectron()) {
         window.ipcRenderer.on('searchWord-reply',(event,wordContent)=>{
+            //console.log('content is ', wordContent);
             store.dispatch({
                 type: "wordContent",
+                wordContent: wordContent
             })
-            console.log('searchWord replyed');            
         })
     }
     window.ipcRenderer.send('searchWord-send', word);

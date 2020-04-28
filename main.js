@@ -5,9 +5,15 @@ const {
     ipcMain,
     dialog
 } = require("electron");
+const cheerio = require("cheerio");
+const request = require("request");
 const path = require("path");
-const fs = require("fs")
-const searchWord = require('./utils/searchWord')
+const fs = require("fs");
+
+
+//http URL definition
+const httpURlCollins = "https://www.collinsdictionary.com/zh/dictionary/english/";
+const httpQue = [httpURlCollins];
 function createWindow() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
@@ -96,8 +102,35 @@ ipcMain.on('changeAvatorFile-send', async (event, arg) => {
 })
 
 /* HOOK handler searchHandler: 搜索单词 */
-ipcMain.on('searchWord-send', (event, arg) => {
+//TODO http url 与 arg 之间拼接
+ipcMain.on('searchWord-send', async (event, arg) => {
     console.log('arg is ',arg)
-    const content = searchWord()
+    const content = await searchWord(arg,httpQue)
+    //console.log(content);
     event.reply('searchWord-reply',content)
 })
+
+//FUNCTION scrapy 部分
+//PARAMS httpQue 为 http url 队列，考虑传入配置interface来进行http配置
+//TODO 将这部分函数放到 utils 中
+function searchWord(word, httpQue){
+    //console.log(innerContent)
+    let httpURL = '';
+    console.log('http is ', httpQue[0]);
+    console.log('word is ', word);
+    httpURL = httpQue[0].concat(word);
+    console.log('httpURL is ', httpURL);
+    
+    return new Promise((resolve, reject) => {
+        request.get(httpURL, (err, res, data) => {
+            resolve(getContent(data))
+        })
+    })
+}
+function getContent(data) {
+    let $ = cheerio.load(data);
+    let innerContent = $(".content.definitions.cobuild.br").html()
+    //console.log(innerContent)
+    return innerContent
+}
+
