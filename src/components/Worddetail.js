@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 //TODO 完成 worddetail 样式
@@ -8,7 +8,7 @@ function Worddetail(props) {
     return (
         <div
             className={worddetail}
-            dangerouslySetInnerHTML={{__html:props.wordContent}}
+            dangerouslySetInnerHTML={{ __html: props.wordContent }}
         >
         </div>
     )

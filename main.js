@@ -1,3 +1,5 @@
+//NOTE main.js 中导入需要用path.join 来导入
+
 // Modules to control application life and create native browser window
 const {
     app,
@@ -9,7 +11,7 @@ const cheerio = require("cheerio");
 const request = require("request");
 const path = require("path");
 const fs = require("fs");
-
+let main_process_utils = null;
 
 //http URL definition
 const httpURlCollins = "https://www.collinsdictionary.com/zh/dictionary/english/";
@@ -36,7 +38,11 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+    //导入所有所需的模块
+    loadUtils()
+    createWindow()
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -53,6 +59,11 @@ app.on('activate', function () {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+function loadUtils() {
+    const file = path.join(__dirname, 'utils/scrapy.js')
+    main_process_utils = require(file) 
+}
 
 // Main process ipc
 
@@ -104,22 +115,23 @@ ipcMain.on('changeAvatorFile-send', async (event, arg) => {
 /* HOOK handler searchHandler: 搜索单词 */
 //TODO 完成所有的http params
 ipcMain.on('searchWord-send', async (event, arg) => {
-    console.log('arg is ',arg)
-    const content = await searchWord(arg,httpQue)
-    event.reply('searchWord-reply',content)
+    console.log('arg is ', arg)
+    const content = await searchWord(arg, httpQue)
+    event.reply('searchWord-reply', content)
 })
 
 //FUNCTION scrapy 部分
 //PARAMS httpQue 为 http url 队列，考虑传入配置interface来进行http配置
-//TODO 将这部分函数放到 utils 中
-function searchWord(word, httpQue){
+//NOTE 无法将这部分代码放入 utils 中
+//TODO 添加请求错误处理（特别是超时，因为多数国外网站需要梯子）
+function searchWord(word, httpQue) {
     //console.log(innerContent)
     let httpURL = '';
     console.log('http is ', httpQue[0]);
     console.log('word is ', word);
     httpURL = httpQue[0].concat(word);
     console.log('httpURL is ', httpURL);
-    
+    main_process_utils.utilsTest()
     return new Promise((resolve, reject) => {
         request.get(httpURL, (err, res, data) => {
             resolve(getContent(data))
@@ -129,6 +141,7 @@ function searchWord(word, httpQue){
 function getContent(data) {
     let $ = cheerio.load(data);
     let innerContent = $(".content.definitions.cobuild.br").html()
+    console.log(innerContent)
     return innerContent
 }
 
