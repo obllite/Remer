@@ -1,4 +1,2 @@
-const utilsTest = () => {
-    console.log('this is utilsTest')
-}
-exports.utilsTest = utilsTest
+const searchHandler = require('./main_searchHandler')
+exports.searchWord = searchHandler.searchWord
