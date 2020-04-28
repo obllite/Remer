@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import store from '../store/store'
+//TODO 完成 worddetail 样式
+//TODO 完成加载动画
 function Worddetail(props) {
     const worddetail = classnames('worddetail')
     return (
         <div
             className={worddetail}
-            dangerouslySetInnerHTML={{ __html: props.wordContent }}
+            dangerouslySetInnerHTML={{__html:props.wordContent}}
         >
         </div>
     )

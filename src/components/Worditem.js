@@ -3,7 +3,6 @@ import classnames from 'classnames';
 
 //COMPONENT 单词显示框
 //PARAMS wordSet {english,pronunciation ,speech, chinese }
-//TODO 完成Worditem 组件样式
 
 function Worditem(props) {
     let {

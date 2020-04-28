@@ -1,44 +1,11 @@
-import { combineReducers } from 'redux';
+//NOTE 由于combineReducers 使用会导致 action 无法接收，解决后应改为 combineReducers
+import { getContent } from '../utils/searchHandler'
 const searchBarInitState = {
     ifSearchBarDisplay: false,
     ifInputFocus: false,
-    wordContent:''
-}
-const getWordInitState = {
-    wordContent: ''
-}
-const searchBarReducer = (state = searchBarInitState, action) => {
-    switch (action.type) {
-        /* 控制searchBar显示 */
-        case "showSearchBar":
-            return {
-                ifSearchBarDisplay: !state.ifSearchBarDisplay,
-                ifInputFocus: !state.ifInputFocus
-            }
-        case "hideSearchBar":
-            return {
-                ifSearchBarDisplay: false,
-                ifInputFocus: false
-            }
-        default:
-            return state
-    }
-}
-
-const getWordReducer = (state = getWordInitState, action) => {
-    /* 从主进程获得单词信息后返回数据给组件 */
-    switch (action.type) {
-        case 'resolveWord':
-            return {
-                wordContent: state.wordContent
-            }
-
-        default:
-            return state
-    }
+    wordContent: '<h1>placeholder template</h1>'
 }
 const reducer = (state = searchBarInitState, action) => {
-
     switch (action.type) {
         /* 控制searchBar显示 */
         case "showSearchBar":
@@ -51,14 +18,14 @@ const reducer = (state = searchBarInitState, action) => {
                 ifSearchBarDisplay: false,
                 ifInputFocus: false
             }
-        case 'resolveWord':
-            console.log('is in resolve word')
+        case 'wordContent':
             return {
-                wordContent: state.wordContent
+                ifSearchBarDisplay: false,
+                ifInputFocus: false,
+                wordContent: state.wordContent += getContent()
             }
         default:
             return state
     }
 }
-console.log(reducer)
 export default reducer

@@ -102,11 +102,10 @@ ipcMain.on('changeAvatorFile-send', async (event, arg) => {
 })
 
 /* HOOK handler searchHandler: 搜索单词 */
-//TODO http url 与 arg 之间拼接
+//TODO 完成所有的http params
 ipcMain.on('searchWord-send', async (event, arg) => {
     console.log('arg is ',arg)
     const content = await searchWord(arg,httpQue)
-    //console.log(content);
     event.reply('searchWord-reply',content)
 })
 
@@ -130,7 +129,6 @@ function searchWord(word, httpQue){
 function getContent(data) {
     let $ = cheerio.load(data);
     let innerContent = $(".content.definitions.cobuild.br").html()
-    //console.log(innerContent)
     return innerContent
 }
 
