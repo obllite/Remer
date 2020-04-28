@@ -20,6 +20,7 @@ function createWindow() {
     const mainWindow = new BrowserWindow({
         width: 1200,
         height: 740,
+        minWidth: 360,
         webPreferences: {
             nodeIntegration: true,
             preload: path.join(__dirname, 'preload.js')
@@ -115,8 +116,9 @@ ipcMain.on('changeAvatorFile-send', async (event, arg) => {
 //TODO 完成所有的http params
 ipcMain.on('searchWord-send', async (event, arg) => {
     console.log('arg is ', arg)
+    let wordHeader = `<h1>${arg}</h1>`
     const content = await main_process_utils.searchWord(arg, httpQue)
-    event.reply('searchWord-reply', content)
+    event.reply('searchWord-reply', wordHeader+=content)
 })
 
 

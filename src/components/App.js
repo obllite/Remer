@@ -40,14 +40,14 @@ let wordSet = [
 function App() {
   const [searchDisplay, setsearchDisplay] = useState(false)
   const [wordNum, setwordNum] = useState(20)
-  const [wordContent, setwordContent] = useState('this is word content')
+  const [wordContent, setwordContent] = useState('')
   return (
     <Provider store={store}>
       <div className="App">
         <Navbar></Navbar>        
         <SearchBar></SearchBar>
         <Wordlist data={wordSet}></Wordlist>
-        <Worddetail></Worddetail>
+        <Worddetail wordContent={wordContent}></Worddetail>
         <ShowView></ShowView>
       </div>
     </Provider>
