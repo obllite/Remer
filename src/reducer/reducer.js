@@ -1,10 +1,10 @@
 //NOTE 由于combineReducers 使用会导致 action 无法接收，解决后应改为 combineReducers
 import { getContent } from '../utils/searchHandler'
-import { stat } from 'fs'
 const searchBarInitState = {
     ifSearchBarDisplay: false,
     ifInputFocus: false,
-    wordContent: ''
+    wordContent: '',
+    
 }
 const reducer = (state = searchBarInitState, action) => {
     switch (action.type) {

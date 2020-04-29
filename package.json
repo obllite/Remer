@@ -41,6 +41,7 @@
     ]
   },
   "devDependencies": {
-    "is-electron": "^2.2.0"
+    "is-electron": "^2.2.0",
+    "react-router-dom": "^5.1.2"
   }
 }

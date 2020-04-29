@@ -1,7 +1,7 @@
 $imgURL: "../img/bgImg.png";
 .showView {
     width: 100vw;
-    height: 100vh;
+    height: $full-vh;
     background-image: url(#{$imgURL});
     background-size: cover;
 }
