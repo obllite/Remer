@@ -11,6 +11,8 @@ function WordBlock(props) {
     const englishInput = classnames('englishInput')
     const chineseInput = classnames('chineseInput')
     const inputContainer = classnames('inputContainer')
+    const wordExplain = classnames("wordExplain")
+
     const englishPlaceHolder = "Input English"
     const chinesePlaceHolder = "Input Chinese"
 
@@ -32,7 +34,7 @@ function WordBlock(props) {
 
         >
             <div className={inputContainer}>
-                <div className={wordCount}>{index}</div>
+                <div className={wordCount}>{index+1}</div>
                 <input
                     type="text"
                     className={englishInput}
@@ -45,8 +47,11 @@ function WordBlock(props) {
                 />
             </div>
             {showFlag ?
-                <div>
-                    detail
+                <div className={wordExplain}>
+                    <div>+</div>
+                    <input type="text"/>
+                    <input type="text"/>
+                    <div>^</div>
                 </div>
                 : <></>}
         </div>

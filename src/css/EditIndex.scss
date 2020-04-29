@@ -46,6 +46,12 @@
     color: $black !important;
 }
 
+
+.wordExplain {
+    
+}
+
+
 .englishInput {
     flex: auto;
     &:focus {
@@ -58,3 +64,5 @@
         color: $blue;
     }
 }
+
+
