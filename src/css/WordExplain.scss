@@ -1,0 +1,25 @@
+//word explain 样式
+.explainContainer {
+    @include edit_input_mixin();
+    list-style: none;
+    li {
+        list-style-type: none;
+    }
+}
+
+.wordExplain {
+    display: flex;
+}
+.addExplain {
+    height: 30px;
+    width: 30px;
+    box-sizing: border-box;
+    font-size: 18px;
+    text-align: center;
+    line-height: 30px;
+    user-select: none;
+}
+
+.setCollection {
+    display: block;
+}

@@ -1,0 +1,13 @@
+@mixin edit_input_mixin() {
+    input {
+        background: none;
+        outline: none;
+        border: 0px;
+        flex:auto;
+    }
+    input:focus {
+        &::-webkit-input-placeholder{
+            color: $blue;
+        }
+    }
+}

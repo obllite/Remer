@@ -1,0 +1,34 @@
+.wordBlock {
+    box-sizing: border-box;
+    border-top: 1px solid #bababa;
+    border-bottom: 1px solid #bababa;
+    margin: 20px 0px;
+    &:focus-within {
+        background-color: $gray-300;
+    }
+    &::-webkit-input-placeholder {
+        color: $gray-100;
+    }
+}
+
+.inputContainer {
+    margin: -1px;
+    display: flex;
+    box-sizing: border-box;
+    border-bottom: 1px solid #bababa;
+    &:focus-within {
+        color: $blue;
+    }
+    @include edit_input_mixin();
+}
+
+.wordCount {
+    height: 30px;
+    width: 30px;
+    box-sizing: border-box;
+    font-size: 18px;
+    text-align: center;
+    line-height: 30px;
+    user-select: none;
+    color: $black !important;
+}
