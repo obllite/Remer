@@ -5,15 +5,16 @@ import WordBlock from './WordBlock'
 
 function EditIndex() {
     const editIndex = classnames('editIndex')
-    let blocks = [false,false,false]
-
-    
-    let wordblock = blocks.map((item, index) => {
+    const data = [1,2,3] 
+    let blockStatesTmp = [false, false, false]
+    const [blockStates, setblockStates] = useState(blockStatesTmp)
+    let wordblock = data.map((item, index) => {
         return (
             <WordBlock
                 index={index}
                 key={index}
-                ifShowDetail={item}
+                blockStates={blockStates}
+                setblockStates={setblockStates}
             >
             </WordBlock>
         )
@@ -24,6 +25,7 @@ function EditIndex() {
         >
             asdfasdf
             {wordblock}
+
         </div>
     )
 }

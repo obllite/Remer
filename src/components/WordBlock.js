@@ -4,7 +4,6 @@ import classnames from 'classnames'
 function WordBlock(props) {
     const {
         index,
-        ifShowDetail,
     } = props
     const wordBlock = classnames('wordBlock')
     const wordCount = classnames('wordCount')
@@ -16,11 +15,15 @@ function WordBlock(props) {
     const englishPlaceHolder = "Input English"
     const chinesePlaceHolder = "Input Chinese"
 
-    const [showFlag, setshowFlag] = useState(ifShowDetail)
 
     const handlePutDown = (e) => {
         console.log("handle put down called");
-        setshowFlag(true)
+        let blockStatesTmp = props.blockStates
+        blockStatesTmp = blockStatesTmp.map(()=>{
+            return false
+        })
+        blockStatesTmp[index] = true
+        props.setblockStates(blockStatesTmp)
     }
 
     return (
@@ -46,12 +49,10 @@ function WordBlock(props) {
                     placeholder={chinesePlaceHolder}
                 />
             </div>
-            {showFlag ?
+            {props.blockStates[index] ?
                 <div className={wordExplain}>
-                    <div>+</div>
                     <input type="text"/>
                     <input type="text"/>
-                    <div>^</div>
                 </div>
                 : <></>}
         </div>
