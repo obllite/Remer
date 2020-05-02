@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -13,7 +13,7 @@ import store from '../store/store';
 import Navbar from './Navbar';
 import SearchBar from './SearchBar'
 import Wordlist from './Wordlist'
-import ShowView from './ShowView'//NOTE 以后实现背景图片功能时加入
+//NOTE 以后实现背景图片功能时加入 import ShowView from './ShowView'
 import Worddetail from './Worddetail'
 import EditIndex from './EditIndex'
 import RemerConfig from './RemerConfig'

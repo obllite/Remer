@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import classnames from 'classnames'
 
 function WordExplain(props) {
@@ -8,6 +8,7 @@ function WordExplain(props) {
     const addExplain = classnames("addExplain")
     const meaning = classnames('meaning')
     const setCollection = classnames('setCollection')
+    const hideClass = classnames('hide')
     //const
     const explainPlaceHolder = "Meaning"
     const setCollectionPlaceHolder = "Set Collection"
@@ -18,17 +19,15 @@ function WordExplain(props) {
     }
     //states
     const [meanings, setmeanings] = useState([{
-        meaning: 'test',
-        collections: ['', '']
-    },{
-        meaning:'dictionary',
-        collections:['字典']
+        meaning: '',
+        collections: ['']
     }])
     //inner handler
     const addMeaning = (e, index) => {
         e.nativeEvent.stopImmediatePropagation();
         meanings.splice(index+1,0,meaningInit)
         setmeanings(meanings)
+        console.log(props.ifPutDown);
     }
 
     const addSetCollection = (e,index_m,index_c) => {
@@ -65,7 +64,7 @@ function WordExplain(props) {
     }
     return (
         <ul
-            className={explainContainer}
+            className={props.ifPutDown? explainContainer: hideClass}
         >
             {
                 meanings.map((item_m, index_m) => {

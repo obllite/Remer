@@ -1,5 +1,5 @@
 import React from 'react';
-import Avator from "./Avator"
+//import Avator from "./Avator"
 import Navitem from "./Navitem"
 /* import "../css/Navbar.scss" */
 //COMPONENT 导航栏组件

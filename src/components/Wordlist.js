@@ -4,7 +4,6 @@ import Worditem from './Worditem'
 function Wordlist(props) {
     let {
         data,
-        ...rest
     } = props
     //classname defination
     const wordlist = classnames('wordlist');
@@ -13,6 +12,7 @@ function Wordlist(props) {
     //state defination
     const [dragitem, setdragitem] = useState(null);
     const [overitem, setoveritem] = useState(null);
+    // eslint-disable-next-line no-unused-vars
     const [worddata, setworddata] = useState(data);
     //functions
     const dragStart = (e) => {

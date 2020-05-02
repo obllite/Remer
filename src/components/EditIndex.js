@@ -5,7 +5,7 @@ import WordBlock from './WordBlock'
 
 function EditIndex() {
     const editIndex = classnames('editIndex')
-    const data = [1,2,3] 
+    const data = [1, 2, 3]
     let blockStatesTmp = [false, false, false]
     const [blockStates, setblockStates] = useState(blockStatesTmp)
     let wordblock = data.map((item, index) => {
@@ -23,10 +23,9 @@ function EditIndex() {
         <div
             className={editIndex}
         >
-            asdfasdf
-            {wordblock}
-
+                {wordblock}
         </div>
     )
 }
+
 export default EditIndex

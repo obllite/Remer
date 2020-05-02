@@ -30,6 +30,7 @@ const itemTitle = [
     }]
 
 function Navitem(props) {
+    // eslint-disable-next-line no-unused-vars
     const [itemClass, setItemClass] = useState("navItem")
     const items = itemTitle.map((item, index) => {
         if (index === 0) {

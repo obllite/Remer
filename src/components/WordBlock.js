@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import classnames from 'classnames'
 import WordExplain from './WordExplain'
-
 function WordBlock(props) {
     const {
         index,
@@ -27,15 +26,6 @@ function WordBlock(props) {
         props.setblockStates(blockStatesTmp)
     }
 
-    const addMeaning = (e, explainContainerRef) => {
-        e.nativeEvent.stopImmediatePropagation();
-        console.log('add meaning', explainContainerRef);
-
-    }
-    const addSetCollection = (e)=>{
-        e.nativeEvent.stopImmediatePropagation();
-        console.log("add set collection");
-    }
     return (
         <div
             className={wordBlock}
@@ -59,10 +49,9 @@ function WordBlock(props) {
                     placeholder={chinesePlaceHolder}
                 />
             </div>
-            {props.blockStates[index] ?
                 <WordExplain
+                ifPutDown={props.blockStates[index]}
                 ></WordExplain>
-                : <></>}
         </div>
     )
 }
