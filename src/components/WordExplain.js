@@ -12,7 +12,10 @@ function WordExplain(props) {
     //const
     const explainPlaceHolder = "Meaning"
     const setCollectionPlaceHolder = "Set Collection"
-    const inputRefList = []
+    const meaningRefList = []
+    let inputRefList = [{
+        refList: []
+    }]
     //meaning collections init obj
     const meaningInit = {
         meaning: '',
@@ -44,18 +47,21 @@ function WordExplain(props) {
             //up
             case 38:
                 if (index_c - 1 > -1) {
-                    inputRefList[index_c - 1].focus()
+                    inputRefList[index_m].refList[index_c - 1].focus()
                     setTimeout(() => {
-                        inputRefList[index_c - 1].setSelectionRange(-1,-1)
+                        inputRefList[index_m].refList[index_c - 1].setSelectionRange(-1, -1)
                     }, 0);
+                }
+                if (index_c - 1 === -1) {
+                    meaningRefList[index_m].focus()
                 }
                 break;
             //down    
             case 40:
-                if (index_c + 1 < inputRefList.length) {
-                    inputRefList[index_c + 1].focus()
+                if (index_c + 1 < inputRefList[index_m].refList.length) {
+                    inputRefList[index_m].refList[index_c + 1].focus()
                     setTimeout(() => {
-                        inputRefList[index_c + 1].setSelectionRange(-1,-1)
+                        inputRefList[index_m].refList[index_c + 1].setSelectionRange(-1, -1)
                     }, 0);
                 }
                 break;
@@ -82,9 +88,20 @@ function WordExplain(props) {
             return element
         }))
     }
-    const handleMeaning2focus = (e) => {
+    const handleMeaning2focus = (e, index_m) => {
+        switch (e.keyCode) {
+            //down    
+            case 40:
+                inputRefList[index_m].refList[0].focus()
+                setTimeout(() => {
+                    inputRefList[index_m].refList[0].setSelectionRange(-1, -1)
+                }, 0);
+                break;
+            default:
+                break
+        }
         if (e.keyCode === 13) {
-            inputRefList[0].focus()
+            inputRefList[index_m].refList[0].focus()
         }
     }
     const handelSetColectionChange = (e, index_m, index_c) => {
@@ -118,7 +135,10 @@ function WordExplain(props) {
                                     value={item_m.meaning}
                                     onChange={(e) => { handleMeaningChange(e, item_m, index_m) }}
                                     onKeyDown={(e) => {
-                                        handleMeaning2focus(e)
+                                        handleMeaning2focus(e, index_m)
+                                    }}
+                                    ref={meaning => {
+                                        meaningRefList.splice(index_m, 0, meaning)
                                     }}
                                 />
                             </div >
@@ -139,7 +159,12 @@ function WordExplain(props) {
                                                 onKeyDown={(e) => { addSetCollection(e, index_m, index_c) }}
                                                 //autoFocus={true}
                                                 ref={input => {
-                                                    inputRefList.splice(index_c, 0, input)
+                                                    if(inputRefList[index_m] === undefined) {
+                                                        inputRefList.push({
+                                                            refList: []
+                                                        })
+                                                    }
+                                                    inputRefList[index_m].refList.splice(index_c, 0, input)
                                                 }}
                                             />
                                         </li>
