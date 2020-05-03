@@ -32,16 +32,44 @@ function WordExplain(props) {
 
     const addSetCollection = (e, index_m, index_c) => {
         e.nativeEvent.stopImmediatePropagation();
-        if (e.keyCode && e.keyCode !== 13) {
-            return
+        if (e.keyCode === undefined) {
+            setmeanings(meanings.map((item, i) => {
+                if (i === index_m) {
+                    item.collections.splice(index_c + 1, 0, '')
+                }
+                return item
+            }))
         }
-        setmeanings(meanings.map((item, i) => {
-            if (i === index_m) {
-                item.collections.splice(index_c + 1, 0, '')
-            }
-            console.log(inputRefList)
-            return item
-        })) 
+        switch (e.keyCode) {
+            //up
+            case 38:
+                if (index_c - 1 > -1) {
+                    inputRefList[index_c - 1].focus()
+                    setTimeout(() => {
+                        inputRefList[index_c - 1].setSelectionRange(-1,-1)
+                    }, 0);
+                }
+                break;
+            //down    
+            case 40:
+                if (index_c + 1 < inputRefList.length) {
+                    inputRefList[index_c + 1].focus()
+                    setTimeout(() => {
+                        inputRefList[index_c + 1].setSelectionRange(-1,-1)
+                    }, 0);
+                }
+                break;
+            case 13:
+                setmeanings(meanings.map((item, i) => {
+                    if (i === index_m) {
+                        item.collections.splice(index_c + 1, 0, '')
+                    }
+                    return item
+                }))
+                break;
+            default:
+                break;
+        }
     }
 
 
@@ -55,9 +83,9 @@ function WordExplain(props) {
         }))
     }
     const handleMeaning2focus = (e) => {
-        if(e.keyCode === 13) {
+        if (e.keyCode === 13) {
             inputRefList[0].focus()
-        } 
+        }
     }
     const handelSetColectionChange = (e, index_m, index_c) => {
         console.log('onchange is called');
@@ -89,7 +117,7 @@ function WordExplain(props) {
                                     placeholder={explainPlaceHolder}
                                     value={item_m.meaning}
                                     onChange={(e) => { handleMeaningChange(e, item_m, index_m) }}
-                                    onKeyDown={(e) => { 
+                                    onKeyDown={(e) => {
                                         handleMeaning2focus(e)
                                     }}
                                 />
@@ -109,11 +137,9 @@ function WordExplain(props) {
                                                 value={item_c}
                                                 onChange={(e) => { handelSetColectionChange(e, index_m, index_c) }}
                                                 onKeyDown={(e) => { addSetCollection(e, index_m, index_c) }}
-                                                ref={(input)=>{
-                                                    if(input){
-                                                        inputRefList.push(input)
-                                                        if(input !== inputRefList[0])input.focus()
-                                                    }
+                                                //autoFocus={true}
+                                                ref={input => {
+                                                    inputRefList.splice(index_c, 0, input)
                                                 }}
                                             />
                                         </li>
