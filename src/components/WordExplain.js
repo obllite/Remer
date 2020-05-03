@@ -21,6 +21,9 @@ function WordExplain(props) {
         meaning: '',
         collections: ['']
     }
+    const inputInit = {
+        refList:[]
+    }
     //hooks
     const [meanings, setmeanings] = useState([{
         meaning: '',
@@ -160,9 +163,7 @@ function WordExplain(props) {
                                                 //autoFocus={true}
                                                 ref={input => {
                                                     if(inputRefList[index_m] === undefined) {
-                                                        inputRefList.push({
-                                                            refList: []
-                                                        })
+                                                        inputRefList.push(inputInit)
                                                     }
                                                     inputRefList[index_m].refList.splice(index_c, 0, input)
                                                 }}
