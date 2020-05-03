@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import classnames from 'classnames'
-
+//COMPONENT word explain 组件，编辑单词的详细意思和固定搭配
 function WordExplain(props) {
     //classnames
     const explainContainer = classnames('explainContainer')
@@ -12,12 +12,13 @@ function WordExplain(props) {
     //const
     const explainPlaceHolder = "Meaning"
     const setCollectionPlaceHolder = "Set Collection"
+    const inputRefList = []
     //meaning collections init obj
     const meaningInit = {
-        meaning:'',
-        collections:['']
+        meaning: '',
+        collections: ['']
     }
-    //states
+    //hooks
     const [meanings, setmeanings] = useState([{
         meaning: '',
         collections: ['']
@@ -25,21 +26,24 @@ function WordExplain(props) {
     //inner handler
     const addMeaning = (e, index) => {
         e.nativeEvent.stopImmediatePropagation();
-        meanings.splice(index+1,0,meaningInit)
+        meanings.splice(index + 1, 0, meaningInit)
         setmeanings(meanings)
-        console.log(props.ifPutDown);
     }
 
-    const addSetCollection = (e,index_m,index_c) => {
-        console.log(index_c);
+    const addSetCollection = (e, index_m, index_c) => {
         e.nativeEvent.stopImmediatePropagation();
-        setmeanings(meanings.map((item, i)=>{
-            if (i === index_m){
-                item.collections.splice(i+1,0,'')
+        if (e.keyCode && e.keyCode !== 13) {
+            return
+        }
+        setmeanings(meanings.map((item, i) => {
+            if (i === index_m) {
+                item.collections.splice(index_c + 1, 0, '')
             }
+            console.log(inputRefList)
             return item
-        }))
+        })) 
     }
+
 
     const handleMeaningChange = (e, item, index) => {
         console.log('constent is ', item.meaning)
@@ -50,21 +54,25 @@ function WordExplain(props) {
             return element
         }))
     }
-
-    const handelSetColectionChange = (e, index_m,index_c) => {
+    const handleMeaning2focus = (e) => {
+        if(e.keyCode === 13) {
+            inputRefList[0].focus()
+        } 
+    }
+    const handelSetColectionChange = (e, index_m, index_c) => {
         console.log('onchange is called');
         setmeanings(meanings.map((element, i) => {
-            if(i === index_m) {
+            if (i === index_m) {
                 let new_collections = element.collections
                 new_collections[index_c] = e.target.value;
-                element = Object.assign(element,{collections:new_collections})
+                element = Object.assign(element, { collections: new_collections })
             }
             return element
         }))
     }
     return (
         <ul
-            className={props.ifPutDown? explainContainer: hideClass}
+            className={props.ifPutDown ? explainContainer : hideClass}
         >
             {
                 meanings.map((item_m, index_m) => {
@@ -73,7 +81,7 @@ function WordExplain(props) {
                             <div className={wordExplain}>
                                 <div
                                     className={addExplain}
-                                    onClick={(e) => { addMeaning(e,index_m) }}
+                                    onClick={(e) => { addMeaning(e, index_m) }}
                                 >+</div>
                                 <input
                                     type="text"
@@ -81,6 +89,9 @@ function WordExplain(props) {
                                     placeholder={explainPlaceHolder}
                                     value={item_m.meaning}
                                     onChange={(e) => { handleMeaningChange(e, item_m, index_m) }}
+                                    onKeyDown={(e) => { 
+                                        handleMeaning2focus(e)
+                                    }}
                                 />
                             </div >
                             <ul>
@@ -89,14 +100,21 @@ function WordExplain(props) {
                                         <li className={wordExplain} key={index_c}>
                                             <div
                                                 className={addExplain}
-                                                onClick={(e) => { addSetCollection(e,index_m,index_c) }}
+                                                onClick={(e) => { addSetCollection(e, index_m, index_c) }}
                                             >+</div>
                                             <input
                                                 type="text"
                                                 className={setCollection}
                                                 placeholder={setCollectionPlaceHolder}
                                                 value={item_c}
-                                                onChange={(e) => { handelSetColectionChange(e,index_m,index_c) }}
+                                                onChange={(e) => { handelSetColectionChange(e, index_m, index_c) }}
+                                                onKeyDown={(e) => { addSetCollection(e, index_m, index_c) }}
+                                                ref={(input)=>{
+                                                    if(input){
+                                                        inputRefList.push(input)
+                                                        if(input !== inputRefList[0])input.focus()
+                                                    }
+                                                }}
                                             />
                                         </li>
                                     )

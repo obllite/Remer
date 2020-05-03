@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom'
 /* import {browserHistory} from 'react-router' */
 /* COMPONENT  导航栏选项组件*/
 /* PARAMS 搜 索、复 习、单词本、设 置*/
-/* TODO 应该使用 template method pattern itemTitle 应该由父组件传入 */
-/* TODO 实现 rooter 切换和 transiform 效果 */
 
 const itemTitle = [
     {
