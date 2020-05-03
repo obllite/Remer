@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import classnames from 'classnames';
 import WordBlock from './WordBlock'
 //COMPONENT 创建，打开，编辑 notebook 文件的组件
-//TODO 添加 word block
 function EditIndex() {
     const editIndex = classnames('editIndex')
     const data = [1]

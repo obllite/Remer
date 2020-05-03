@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import classnames from 'classnames'
 //COMPONENT word explain 组件，编辑单词的详细意思和固定搭配
+
+//FIXME 使用自定义hook 完成添加input auto focus
 function WordExplain(props) {
     //classnames
     const explainContainer = classnames('explainContainer')
@@ -57,6 +59,9 @@ function WordExplain(props) {
                 }
                 if (index_c - 1 === -1) {
                     meaningRefList[index_m].focus()
+                    setTimeout(() => {
+                        meaningRefList[index_m].setSelectionRange(-1,-1)
+                    }, 0);
                 }
                 break;
             //down    
@@ -65,6 +70,12 @@ function WordExplain(props) {
                     inputRefList[index_m].refList[index_c + 1].focus()
                     setTimeout(() => {
                         inputRefList[index_m].refList[index_c + 1].setSelectionRange(-1, -1)
+                    }, 0);
+                }
+                if (index_c + 1 === inputRefList[index_m].refList.length && inputRefList[index_m + 1] !== undefined) {
+                    meaningRefList[index_m + 1].focus();
+                    setTimeout(() => {
+                        meaningRefList[index_m + 1].setSelectionRange(-1,-1)
                     }, 0);
                 }
                 break;
@@ -93,6 +104,16 @@ function WordExplain(props) {
     }
     const handleMeaning2focus = (e, index_m) => {
         switch (e.keyCode) {
+            case 38:
+                if(index_m - 1 < 0) {
+                    return 
+                }
+                let length = inputRefList[index_m - 1].refList.length;
+                inputRefList[index_m - 1].refList[length - 1].focus()
+                setTimeout(() => {
+                    inputRefList[index_m - 1].refList[length - 1].setSelectionRange(-1, -1)
+                }, 0);
+                break;
             //down    
             case 40:
                 inputRefList[index_m].refList[0].focus()

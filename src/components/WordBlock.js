@@ -2,6 +2,8 @@ import React from 'react'
 import classnames from 'classnames'
 import WordExplain from './WordExplain'
 //COMPONENT word block 组件 显示单词编辑的基本区域
+
+//TODO 添加add 方法
 function WordBlock(props) {
     const {
         index,
