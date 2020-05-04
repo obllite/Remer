@@ -17,7 +17,7 @@
     box-sizing: border-box;
     border-bottom: 1px solid #bababa;
     &:focus-within {
-        color: $blue;
+        color: $teal;
     }
     @include edit_input_mixin();
 }

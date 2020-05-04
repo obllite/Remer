@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import classnames from 'classnames'
 //COMPONENT word explain 组件，编辑单词的详细意思和固定搭配
 
@@ -15,9 +15,7 @@ function WordExplain(props) {
     const explainPlaceHolder = "Meaning"
     const setCollectionPlaceHolder = "Set Collection"
     const meaningRefList = []
-    let inputRefList = [{
-        refList: []
-    }]
+
     //meaning collections init obj
     const meaningInit = {
         meaning: '',
@@ -27,21 +25,18 @@ function WordExplain(props) {
         refList:[]
     }
     //hooks
-    const [meanings, setmeanings] = useState([{
-        meaning: '',
-        collections: ['']
-    }])
+
     //inner handler
     const addMeaning = (e, index) => {
         e.nativeEvent.stopImmediatePropagation();
-        meanings.splice(index + 1, 0, meaningInit)
-        setmeanings(meanings)
+        props.meanings.splice(index + 1, 0, meaningInit)
+        props.setmeanings(props.meanings)
     }
 
     const addSetCollection = (e, index_m, index_c) => {
         e.nativeEvent.stopImmediatePropagation();
         if (e.keyCode === undefined) {
-            setmeanings(meanings.map((item, i) => {
+            props.setmeanings(props.meanings.map((item, i) => {
                 if (i === index_m) {
                     item.collections.splice(index_c + 1, 0, '')
                 }
@@ -52,9 +47,9 @@ function WordExplain(props) {
             //up
             case 38:
                 if (index_c - 1 > -1) {
-                    inputRefList[index_m].refList[index_c - 1].focus()
+                    props.inputRefList[index_m].refList[index_c - 1].focus()
                     setTimeout(() => {
-                        inputRefList[index_m].refList[index_c - 1].setSelectionRange(-1, -1)
+                        props.inputRefList[index_m].refList[index_c - 1].setSelectionRange(-1, -1)
                     }, 0);
                 }
                 if (index_c - 1 === -1) {
@@ -66,13 +61,13 @@ function WordExplain(props) {
                 break;
             //down    
             case 40:
-                if (index_c + 1 < inputRefList[index_m].refList.length) {
-                    inputRefList[index_m].refList[index_c + 1].focus()
+                if (index_c + 1 < props.inputRefList[index_m].refList.length) {
+                    props.inputRefList[index_m].refList[index_c + 1].focus()
                     setTimeout(() => {
-                        inputRefList[index_m].refList[index_c + 1].setSelectionRange(-1, -1)
+                        props.inputRefList[index_m].refList[index_c + 1].setSelectionRange(-1, -1)
                     }, 0);
                 }
-                if (index_c + 1 === inputRefList[index_m].refList.length && inputRefList[index_m + 1] !== undefined) {
+                if (index_c + 1 === props.inputRefList[index_m].refList.length && props.inputRefList[index_m + 1] !== undefined) {
                     meaningRefList[index_m + 1].focus();
                     setTimeout(() => {
                         meaningRefList[index_m + 1].setSelectionRange(-1,-1)
@@ -80,7 +75,7 @@ function WordExplain(props) {
                 }
                 break;
             case 13:
-                setmeanings(meanings.map((item, i) => {
+                props.setmeanings(props.meanings.map((item, i) => {
                     if (i === index_m) {
                         item.collections.splice(index_c + 1, 0, '')
                     }
@@ -94,8 +89,7 @@ function WordExplain(props) {
 
 
     const handleMeaningChange = (e, item, index) => {
-        console.log('constent is ', item.meaning)
-        setmeanings(meanings.map((element, i) => {
+        props.setmeanings(props.meanings.map((element, i) => {
             if (i === index) {
                 element = { ...element, [meaning]: e.target.value }
             }
@@ -108,29 +102,29 @@ function WordExplain(props) {
                 if(index_m - 1 < 0) {
                     return 
                 }
-                let length = inputRefList[index_m - 1].refList.length;
-                inputRefList[index_m - 1].refList[length - 1].focus()
+                let length = props.inputRefList[index_m - 1].refList.length;
+                props.inputRefList[index_m - 1].refList[length - 1].focus()
                 setTimeout(() => {
-                    inputRefList[index_m - 1].refList[length - 1].setSelectionRange(-1, -1)
+                    props.inputRefList[index_m - 1].refList[length - 1].setSelectionRange(-1, -1)
                 }, 0);
                 break;
             //down    
             case 40:
-                inputRefList[index_m].refList[0].focus()
+                props.inputRefList[index_m].refList[0].focus()
                 setTimeout(() => {
-                    inputRefList[index_m].refList[0].setSelectionRange(-1, -1)
+                    props.inputRefList[index_m].refList[0].setSelectionRange(-1, -1)
                 }, 0);
                 break;
             default:
                 break
         }
         if (e.keyCode === 13) {
-            inputRefList[index_m].refList[0].focus()
+            props.inputRefList[index_m].refList[0].focus()
         }
     }
     const handelSetColectionChange = (e, index_m, index_c) => {
         console.log('onchange is called');
-        setmeanings(meanings.map((element, i) => {
+        props.setmeanings(props.meanings.map((element, i) => {
             if (i === index_m) {
                 let new_collections = element.collections
                 new_collections[index_c] = e.target.value;
@@ -144,7 +138,7 @@ function WordExplain(props) {
             className={props.ifPutDown ? explainContainer : hideClass}
         >
             {
-                meanings.map((item_m, index_m) => {
+                props.meanings.map((item_m, index_m) => {
                     return (
                         <li key={index_m}>
                             <div className={wordExplain}>
@@ -183,10 +177,10 @@ function WordExplain(props) {
                                                 onKeyDown={(e) => { addSetCollection(e, index_m, index_c) }}
                                                 //autoFocus={true}
                                                 ref={input => {
-                                                    if(inputRefList[index_m] === undefined) {
-                                                        inputRefList.push(inputInit)
+                                                    if(props.inputRefList[index_m] === undefined) {
+                                                        props.inputRefList.push(inputInit)
                                                     }
-                                                    inputRefList[index_m].refList.splice(index_c, 0, input)
+                                                    props.inputRefList[index_m].refList.splice(index_c, 0, input)
                                                 }}
                                             />
                                         </li>

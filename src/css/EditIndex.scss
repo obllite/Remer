@@ -5,4 +5,43 @@
     border: 1px solid #000;
     float: left;
     padding: 0px 20px;
+    overflow-y: scroll;
+}
+
+.bottomBtn {
+    width: calc(#{$full-vw} - 100px);
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:hover .addBlock {
+        visibility: visible;
+    }
+    &:hover .submitEdit {
+        visibility: visible;
+    }
+    &:hover .dividingLine {
+        visibility: visible;
+    }
+}
+
+.dividingLine {
+    height: 30px;
+    flex-grow: 1;
+    visibility: hidden;
+    hr {
+        border: 1px dashed $teal;
+    }
+}
+.addBlockContainer,
+.submitEditContainer {
+    width: 60px;
+    display: inline-flex;
+    outline: 1px solid transparent;
+}
+.addBlock {
+    @include edit_bottom_btn();
+}
+.submitEdit {
+    @include edit_bottom_btn();
 }

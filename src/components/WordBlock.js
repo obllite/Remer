@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import classnames from 'classnames'
 import WordExplain from './WordExplain'
 //COMPONENT word block 组件 显示单词编辑的基本区域
 
-//TODO 添加add 方法
 function WordBlock(props) {
     const {
         index,
@@ -18,7 +17,13 @@ function WordBlock(props) {
     const englishPlaceHolder = "English"
     const chinesePlaceHolder = "Chinese"
 
-
+    let inputRefList = [{
+        refList: []
+    }]
+    const [meanings, setmeanings] = useState([{
+        meaning: '',
+        collections: ['']
+    }])
     const handlePutDown = (e) => {
         console.log("handle put down called");
         let blockStatesTmp = props.blockStates
@@ -52,9 +57,12 @@ function WordBlock(props) {
                     placeholder={chinesePlaceHolder}
                 />
             </div>
-                <WordExplain
+            <WordExplain
                 ifPutDown={props.blockStates[index]}
-                ></WordExplain>
+                meanings={meanings}
+                setmeanings={setmeanings}
+                inputRefList={inputRefList}
+            ></WordExplain>
         </div>
     )
 }

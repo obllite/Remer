@@ -7,7 +7,24 @@
     }
     input:focus {
         &::-webkit-input-placeholder{
-            color: $blue;
+            color: $teal;
         }
     }
+}
+@mixin edit_bottom_btn() {
+    height: 30px;
+    box-sizing: border-box;
+    border: 1px solid $teal;
+    color: $teal;
+    font-size: 30px;
+    font-weight: 200;
+    line-height: 30px;
+    text-align: center;
+    flex: 1;
+    display: inline-block;
+    visibility: hidden;
+    &:hover {
+        background-color: $gray-300;
+    }
+    cursor: default;
 }
