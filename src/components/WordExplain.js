@@ -123,7 +123,6 @@ function WordExplain(props) {
         }
     }
     const handelSetColectionChange = (e, index_m, index_c) => {
-        console.log('onchange is called');
         props.setmeanings(props.meanings.map((element, i) => {
             if (i === index_m) {
                 let new_collections = element.collections

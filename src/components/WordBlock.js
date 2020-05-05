@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import classnames from 'classnames'
 import WordExplain from './WordExplain'
+import EditDataCtx from './EditDataCtx'
 //COMPONENT word block 组件 显示单词编辑的基本区域
 
 function WordBlock(props) {
@@ -20,12 +21,22 @@ function WordBlock(props) {
     let inputRefList = [{
         refList: []
     }]
+
+    //hooks
+    const {updateData } = useContext(EditDataCtx)
+    const [english, setenglish] = useState('')
+    const [chinese, setchinese] = useState('')
     const [meanings, setmeanings] = useState([{
         meaning: '',
         collections: ['']
     }])
+    useEffect(() => {
+        updateData(index,english,chinese,meanings)
+        return () => {
+        }
+    })
+    //handlers
     const handlePutDown = (e) => {
-        console.log("handle put down called");
         let blockStatesTmp = props.blockStates
         blockStatesTmp = blockStatesTmp.map(() => {
             return false
@@ -33,7 +44,12 @@ function WordBlock(props) {
         blockStatesTmp[index] = true
         props.setblockStates(blockStatesTmp)
     }
-
+    const handleEnligsh = (e) => {
+        setenglish(e.target.value)
+    }
+    const handleChinese = (e) => {
+        setchinese(e.target.value)
+    }
     return (
         <div
             className={wordBlock}
@@ -50,11 +66,17 @@ function WordBlock(props) {
                     type="text"
                     className={englishInput}
                     placeholder={englishPlaceHolder}
+                    onChange={(e) => {
+                        handleEnligsh(e)
+                    }}
                 />
                 <input
                     type="text"
                     className={chineseInput}
                     placeholder={chinesePlaceHolder}
+                    onChange={(e)=>{
+                        handleChinese(e)
+                    }}
                 />
             </div>
             <WordExplain

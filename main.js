@@ -62,7 +62,7 @@ app.on('activate', function () {
 
 function loadUtils() {
     const file = path.join(__dirname, 'utils/index.js')
-    main_process_utils = require(file) 
+    main_process_utils = require(file)
 }
 
 // Main process ipc
@@ -87,7 +87,6 @@ ipcMain.on('changeAvatorFile-send', async (event, arg) => {
                         throw err;
                     }
                 });
-
             }
         })
         .catch((e) => {
@@ -118,7 +117,19 @@ ipcMain.on('searchWord-send', async (event, arg) => {
     console.log('arg is ', arg)
     let wordHeader = `<h1>${arg}</h1>`
     const content = await main_process_utils.searchWord(arg, httpQue)
-    event.reply('searchWord-reply', wordHeader+=content)
+    event.reply('searchWord-reply', wordHeader += content)
 })
 
-
+/* HOOK handler saveEditBlocks：将edit 区域的数据存入 notebooks/CeditBlockache.json */
+ipcMain.on('saveEditBlocks-send', (event, arg) => {
+    let blocksDataJson = {}
+    for (let i = 0; i < arg.length; i++) {
+        let serial = 'block' + i;
+        blocksDataJson[serial] = arg[i]
+    }
+    blocksDataJson = JSON.stringify(blocksDataJson)
+    console.log('blocksDataJson is --->', blocksDataJson)
+    let writeLength = blocksDataJson.length
+    main_process_utils.saveEditBlocks(blocksDataJson)
+    event.reply('saveEditBlocks-reply', writeLength)
+})
