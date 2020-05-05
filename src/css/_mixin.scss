@@ -26,5 +26,6 @@
     &:hover {
         background-color: $gray-300;
     }
+    user-select: none;
     cursor: pointer;
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useRef,useEffect } from 'react'
 import classnames from 'classnames';
 import WordBlock from './WordBlock'
 import EditDataCtx from './EditDataCtx'
@@ -27,6 +27,10 @@ function EditIndex() {
     //hooks
     const [count, setcount] = useState([1])
     const [blockStates, setblockStates] = useState(blockStatesTmp)
+    let toBottom = useRef()
+    useEffect(() => {
+        scrollToBottom()
+    },[count])
     //handlers
     const handleAddBlock = () => {
         if (count.length === maxlength) {
@@ -35,6 +39,14 @@ function EditIndex() {
         }
         setcount([...count, count[count.length - 1] + 1])
     }
+    const scrollToBottom = ()=> {
+        console.log('scroll is called');
+        const scrollHeight = toBottom.scrollHeight;
+        const height = toBottom.clientHeight;
+        console.log(scrollHeight,height)
+        const maxScrollTop = scrollHeight - height;
+        toBottom.scrollTop = maxScrollTop > 0 ? maxScrollTop+30 : 0;
+      }
     //在此处保存暂存的blockJsonSets
     const handleSubmitEdit = () => {
         saveEditBlocks(blocksData)
@@ -55,7 +67,11 @@ function EditIndex() {
         <EditDataCtx.Provider value={{ updateData }}>
             <div
                 className={editIndex}
+                ref={(el)=>{
+                    toBottom=el
+                }}
             >
+
                 {wordblock}
                 <div className={bottomBtn}>
                     <div className={dividingLine}><hr /></div>
@@ -77,6 +93,7 @@ function EditIndex() {
                     </div>
                     <div className={dividingLine}><hr /></div>
                 </div>
+
             </div>
         </EditDataCtx.Provider>
     )
