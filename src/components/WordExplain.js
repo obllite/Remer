@@ -14,7 +14,7 @@ function WordExplain(props) {
     //const
     const explainPlaceHolder = "Meaning"
     const setCollectionPlaceHolder = "Set Collection"
-    const meaningRefList = []
+
 
     //meaning collections init obj
     const meaningInit = {
@@ -22,7 +22,7 @@ function WordExplain(props) {
         collections: ['']
     }
     const inputInit = {
-        refList:[]
+        refList: []
     }
     //hooks
 
@@ -53,9 +53,9 @@ function WordExplain(props) {
                     }, 0);
                 }
                 if (index_c - 1 === -1) {
-                    meaningRefList[index_m].focus()
+                    props.meaningRefList[index_m].focus()
                     setTimeout(() => {
-                        meaningRefList[index_m].setSelectionRange(-1,-1)
+                        props.meaningRefList[index_m].setSelectionRange(-1, -1)
                     }, 0);
                 }
                 break;
@@ -68,10 +68,43 @@ function WordExplain(props) {
                     }, 0);
                 }
                 if (index_c + 1 === props.inputRefList[index_m].refList.length && props.inputRefList[index_m + 1] !== undefined) {
-                    meaningRefList[index_m + 1].focus();
+                    props.meaningRefList[index_m + 1].focus();
                     setTimeout(() => {
-                        meaningRefList[index_m + 1].setSelectionRange(-1,-1)
+                        props.meaningRefList[index_m + 1].setSelectionRange(-1, -1)
                     }, 0);
+                }
+                break;
+            // right
+            case 39:
+                if (props.inputRefList[index_m].refList[index_c].selectionStart === props.inputRefList[index_m].refList[index_c].value.length) {
+                    if (index_c + 1 < props.inputRefList[index_m].refList.length) {
+                        props.inputRefList[index_m].refList[index_c + 1].focus()
+                        setTimeout(() => {
+                            props.inputRefList[index_m].refList[index_c + 1].setSelectionRange(-1, -1)
+                        }, 0);
+                    }
+                    if (index_c + 1 === props.inputRefList[index_m].refList.length && props.inputRefList[index_m + 1] !== undefined) {
+                        props.meaningRefList[index_m + 1].focus();
+                        setTimeout(() => {
+                            props.meaningRefList[index_m + 1].setSelectionRange(-1, -1)
+                        }, 0);
+                    }
+                }
+                break;
+            case 37:
+                if (props.inputRefList[index_m].refList[index_c].selectionStart === 0) {
+                    if (index_c - 1 > -1) {
+                        props.inputRefList[index_m].refList[index_c - 1].focus()
+                        setTimeout(() => {
+                            props.inputRefList[index_m].refList[index_c - 1].setSelectionRange(-1, -1)
+                        }, 0);
+                    }
+                    if (index_c - 1 === -1) {
+                        props.meaningRefList[index_m].focus()
+                        setTimeout(() => {
+                            props.meaningRefList[index_m].setSelectionRange(-1, -1)
+                        }, 0);
+                    }
                 }
                 break;
             case 13:
@@ -99,8 +132,8 @@ function WordExplain(props) {
     const handleMeaning2focus = (e, index_m) => {
         switch (e.keyCode) {
             case 38:
-                if(index_m - 1 < 0) {
-                    return 
+                if (index_m - 1 < 0) {
+                    return
                 }
                 let length = props.inputRefList[index_m - 1].refList.length;
                 props.inputRefList[index_m - 1].refList[length - 1].focus()
@@ -110,6 +143,12 @@ function WordExplain(props) {
                 break;
             //down    
             case 40:
+                props.inputRefList[index_m].refList[0].focus()
+                setTimeout(() => {
+                    props.inputRefList[index_m].refList[0].setSelectionRange(-1, -1)
+                }, 0);
+                break;
+            case 39:
                 props.inputRefList[index_m].refList[0].focus()
                 setTimeout(() => {
                     props.inputRefList[index_m].refList[0].setSelectionRange(-1, -1)
@@ -155,7 +194,7 @@ function WordExplain(props) {
                                         handleMeaning2focus(e, index_m)
                                     }}
                                     ref={meaning => {
-                                        meaningRefList.splice(index_m, 0, meaning)
+                                        props.meaningRefList.splice(index_m, 0, meaning)
                                     }}
                                 />
                             </div >
@@ -176,7 +215,7 @@ function WordExplain(props) {
                                                 onKeyDown={(e) => { addSetCollection(e, index_m, index_c) }}
                                                 //autoFocus={true}
                                                 ref={input => {
-                                                    if(props.inputRefList[index_m] === undefined) {
+                                                    if (props.inputRefList[index_m] === undefined) {
                                                         props.inputRefList.push(inputInit)
                                                     }
                                                     props.inputRefList[index_m].refList.splice(index_c, 0, input)

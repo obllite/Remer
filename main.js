@@ -1,5 +1,3 @@
-//NOTE main.js 中导入需要用path.join 来导入
-
 // Modules to control application life and create native browser window
 const {
     app,
@@ -21,6 +19,7 @@ function createWindow() {
         width: 1200,
         height: 740,
         minWidth: 360,
+        alwaysOnTop: true,
         webPreferences: {
             nodeIntegration: true,
             preload: path.join(__dirname, 'preload.js')

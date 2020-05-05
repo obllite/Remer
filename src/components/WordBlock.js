@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useRef } from 'react'
 import classnames from 'classnames'
 import WordExplain from './WordExplain'
 import EditDataCtx from './EditDataCtx'
@@ -18,20 +18,23 @@ function WordBlock(props) {
     const englishPlaceHolder = "English"
     const chinesePlaceHolder = "Chinese"
 
+    const meaningRefList = []
     let inputRefList = [{
         refList: []
     }]
 
     //hooks
-    const {updateData } = useContext(EditDataCtx)
+    const { updateData } = useContext(EditDataCtx)
     const [english, setenglish] = useState('')
     const [chinese, setchinese] = useState('')
     const [meanings, setmeanings] = useState([{
         meaning: '',
         collections: ['']
     }])
+    const englishInputRef = useRef()
+    const chineseInputRef = useRef()
     useEffect(() => {
-        updateData(index,english,chinese,meanings)
+        updateData(index, english, chinese, meanings)
         return () => {
         }
     })
@@ -47,8 +50,31 @@ function WordBlock(props) {
     const handleEnligsh = (e) => {
         setenglish(e.target.value)
     }
+    const switch2Chinese = (e) => {
+        if (e.keyCode === 39 && englishInputRef.current.selectionStart === englishInputRef.current.value.length) {
+            setTimeout(() => {
+                chineseInputRef.current.setSelectionRange(-1,-1)
+            }, 0);
+            chineseInputRef.current.focus()
+        }
+    }
     const handleChinese = (e) => {
         setchinese(e.target.value)
+    }
+    const switch2English = (e) => {
+        console.log(e.keyCode);
+        if (e.keyCode === 37 && chineseInputRef.current.selectionStart === 0) {
+            setTimeout(() => {
+                englishInputRef.current.setSelectionRange(-1,-1)
+            }, 0);
+            englishInputRef.current.focus()
+        }
+        if(e.keyCode === 39 || e.keyCode === 40 ){
+            setTimeout(() => {
+                meaningRefList[0].setSelectionRange(-1,-1)
+            }, 0);
+            meaningRefList[0].focus()
+        }
     }
     return (
         <div
@@ -69,19 +95,28 @@ function WordBlock(props) {
                     onChange={(e) => {
                         handleEnligsh(e)
                     }}
+                    onKeyDown={(e) => {
+                        switch2Chinese(e)
+                    }}
+                    ref={englishInputRef}
                 />
                 <input
                     type="text"
                     className={chineseInput}
                     placeholder={chinesePlaceHolder}
-                    onChange={(e)=>{
+                    onChange={(e) => {
                         handleChinese(e)
                     }}
+                    onKeyDown={(e)=>{
+                        switch2English(e)
+                    }}
+                    ref={chineseInputRef}
                 />
             </div>
             <WordExplain
                 ifPutDown={props.blockStates[index]}
                 meanings={meanings}
+                meaningRefList={meaningRefList}
                 setmeanings={setmeanings}
                 inputRefList={inputRefList}
             ></WordExplain>
