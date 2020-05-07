@@ -28,25 +28,22 @@ function FoldBlock(props) {
         switch (e.target.className) {
             case foldCloseIcon:
                 e.target.className = foldOpenIcon
-                setifPutDown(false)
+                setifPutDown(true)
                 break;
             case foldOpenIcon:
                 e.target.className = foldCloseIcon
-                setifPutDown(true)
+                setifPutDown(false)
                 break;
             default:
                 break;
         }
     }
     const handleaddFile = (e) => {
-        console.log('index is ',index)
-        console.log(props.fileNames[index].names)
         setifNewFile(true)
     }
     const hanleNewFileChange = (e) => {
         if (fileNewRef.current.value !== '') {
             ifCanNew = validateFileName(fileNewRef.current.value, props.fileNames[index].names)
-            console.log(fileNewRef.current.value)
             if (!ifCanNew) {
                 fileNewLiRef.current.style.color = "red"
                 fileNewRef.current.style.color = "red"
@@ -68,7 +65,13 @@ function FoldBlock(props) {
                 return
             }
             setifNewFile(false)
-            let newNames = [...props.fileNames[index].names, handleNewFile(fileNewRef.current.value)]
+            let fileName = fileNewRef.current.value
+            let filePath = '/' + props.notBookNames[index] + '/' + fileName
+            if(!handleNewFile(fileName, filePath)){
+                console.log('create file failed')
+                return
+            }
+            let newNames = [...props.fileNames[index].names, fileName]
             props.setfileNames(props.fileNames.map((item, i) => {
                 if (i === index) {
                     item.names = newNames
@@ -80,7 +83,13 @@ function FoldBlock(props) {
     const handleNewFileKeyDown = (e) => {
         if (e.keyCode === 13 && ifCanNew) {
             setifNewFile(false)
-            let newNames = [...props.fileNames[index].names, handleNewFile(fileNewRef.current.value)]
+            let fileName = fileNewRef.current.value
+            let filePath = '/' + props.notBookNames[index] + '/' + fileName
+            if(!handleNewFile(fileName, filePath)){
+                console.log('create file failed')
+                return
+            }
+            let newNames = [...props.fileNames[index].names, filePath]
             props.setfileNames(props.fileNames.map((item, i) => {
                 if (i === index) {
                     item.names = newNames
@@ -93,7 +102,7 @@ function FoldBlock(props) {
         <>
             <div className={foldList}>
                 <span
-                    className={foldCloseIcon}
+                    className={foldOpenIcon}
                     onClick={(e) => {
                         handleFold(e)
                     }}

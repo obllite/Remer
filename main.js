@@ -133,8 +133,9 @@ ipcMain.on('saveEditBlocks-send', (event, arg) => {
     event.reply('saveEditBlocks-reply', writeLength)
 })
 
+/* HOOK handler handleNewFile： file view 新建notebook 下文件 */
 ipcMain.on('newFile-send',(event, arg)=>{
-    console.log('file name is ', arg)
+    console.log('file info is ', arg)
     let ifNewFileSuc = main_process_utils.newFile(arg)
     event.reply('newFile-reply',ifNewFileSuc)
 })

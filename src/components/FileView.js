@@ -75,6 +75,7 @@ function FileView() {
                             key={fold_index}
                             index={fold_index}
                             notBookName={fold_item}
+                            notBookNames={notBookNames}
                             fileNames={fileNames}
                             setfileNames={setfileNames}
                         ></FoldBlock>
