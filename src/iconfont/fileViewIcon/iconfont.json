@@ -1,0 +1,58 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "3758135",
+      "name": "文件",
+      "font_class": "wenjian",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "6241498",
+      "name": "文件夹添加",
+      "font_class": "wenjianjiatianjia",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "11487977",
+      "name": "arrow-right",
+      "font_class": "arrow-right",
+      "unicode": "e743",
+      "unicode_decimal": 59203
+    },
+    {
+      "icon_id": "11909736",
+      "name": "添加文件、添加",
+      "font_class": "tianjiawenjian-",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "12011691",
+      "name": "arrow-down",
+      "font_class": "arrow-down",
+      "unicode": "e7b2",
+      "unicode_decimal": 59314
+    },
+    {
+      "icon_id": "12530922",
+      "name": "文件夹-打开状态",
+      "font_class": "wenjianjiadakaizhuangtai",
+      "unicode": "e70a",
+      "unicode_decimal": 59146
+    },
+    {
+      "icon_id": "12538641",
+      "name": "文件夹-关闭状态",
+      "font_class": "wenjianjiaguanbizhuangtai",
+      "unicode": "e719",
+      "unicode_decimal": 59161
+    }
+  ]
+}

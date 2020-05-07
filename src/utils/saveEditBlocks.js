@@ -1,7 +1,7 @@
 import isElectron from 'is-electron';
 
 //TODO 可以使用 diff 算法优化
-/* HOOK 保存编辑区域的数据 */
+/* HOOK 保存编辑区域的数据，参数 编辑区word block 中的数据,包括 english、chinese、 meanings、setCollection */
 const saveEditBlocks = (blocksData) => {
     if(isElectron()) {
         //TODO 实现写文件进度条

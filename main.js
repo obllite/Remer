@@ -18,7 +18,7 @@ function createWindow() {
     const mainWindow = new BrowserWindow({
         width: 1200,
         height: 740,
-        minWidth: 360,
+        minWidth: 400,
         alwaysOnTop: true,
         webPreferences: {
             nodeIntegration: true,
@@ -131,4 +131,10 @@ ipcMain.on('saveEditBlocks-send', (event, arg) => {
     let writeLength = blocksDataJson.length
     main_process_utils.saveEditBlocks(blocksDataJson)
     event.reply('saveEditBlocks-reply', writeLength)
+})
+
+ipcMain.on('newFile-send',(event, arg)=>{
+    console.log('file name is ', arg)
+    let ifNewFileSuc = main_process_utils.newFile(arg)
+    event.reply('newFile-reply',ifNewFileSuc)
 })

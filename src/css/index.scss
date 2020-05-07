@@ -5,7 +5,7 @@
 /* iconfont 样式 */
 @import "../iconfont/navIcon/iconfont.css";
 @import "../iconfont/wordlistIcon/iconfont.css";
-
+@import "../iconfont//fileViewIcon//iconfont.css";
 /* Nav 样式 */
 @import "./Navbar.scss";
 @import "./SearchBar.scss";
@@ -19,7 +19,7 @@
 @import "./EditIndex.scss";
 @import "./WordBlock.scss";
 @import "./WordExplain.scss";
-
+@import "./FileView.scss";
 .hide {
     display: none;
 }

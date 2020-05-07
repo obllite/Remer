@@ -1,6 +1,7 @@
-import React, { useState,useRef,useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import classnames from 'classnames';
 import WordBlock from './WordBlock'
+import FileView from './FileView'
 import EditDataCtx from './EditDataCtx'
 
 import saveEditBlocks from '../utils/saveEditBlocks'
@@ -14,6 +15,7 @@ function EditIndex() {
     const submitEditContainer = classnames('submitEditContainer')
     const bottomBtn = classnames('bottomBtn')
     const dividingLine = classnames('dividingLine')
+    const editAndPreview = classnames('editAndPreview')
     //consts
     let blockStatesTmp = [false, false, false]
     let blocksData = []
@@ -30,7 +32,7 @@ function EditIndex() {
     let toBottom = useRef()
     useEffect(() => {
         scrollToBottom()
-    },[count])
+    }, [count])
     //handlers
     const handleAddBlock = () => {
         if (count.length === maxlength) {
@@ -39,18 +41,15 @@ function EditIndex() {
         }
         setcount([...count, count[count.length - 1] + 1])
     }
-    const scrollToBottom = ()=> {
-        console.log('scroll is called');
+    const scrollToBottom = () => {
         const scrollHeight = toBottom.scrollHeight;
         const height = toBottom.clientHeight;
-        console.log(scrollHeight,height)
         const maxScrollTop = scrollHeight - height;
-        toBottom.scrollTop = maxScrollTop > 0 ? maxScrollTop+30 : 0;
-      }
+        toBottom.scrollTop = maxScrollTop > 0 ? maxScrollTop + 30 : 0;
+    }
     //在此处保存暂存的blockJsonSets
     const handleSubmitEdit = () => {
         saveEditBlocks(blocksData)
-        console.log('Submit Edit');
     }
     let wordblock = count.map((item, index) => {
         return (
@@ -67,31 +66,35 @@ function EditIndex() {
         <EditDataCtx.Provider value={{ updateData }}>
             <div
                 className={editIndex}
-                ref={(el)=>{
-                    toBottom=el
-                }}
-            >
 
-                {wordblock}
-                <div className={bottomBtn}>
-                    <div className={dividingLine}><hr /></div>
-                    <div className={addBlockContainer}>
-                        <div
-                            className={addBlock}
-                            onClick={handleAddBlock}
-                        >
-                            +
+            >
+                <FileView></FileView>
+                <div
+                    className={editAndPreview}
+                    ref={(el) => {
+                        toBottom = el
+                    }}>
+                    {wordblock}
+                    <div className={bottomBtn}>
+                        <div className={dividingLine}><hr /></div>
+                        <div className={addBlockContainer}>
+                            <div
+                                className={addBlock}
+                                onClick={handleAddBlock}
+                            >
+                                +
                     </div>
+                        </div>
+                        <div className={submitEditContainer}>
+                            <div
+                                className={submitEdit}
+                                onClick={handleSubmitEdit}
+                            >
+                                ↑
                     </div>
-                    <div className={submitEditContainer}>
-                        <div
-                            className={submitEdit}
-                            onClick={handleSubmitEdit}
-                        >
-                            ↑
+                        </div>
+                        <div className={dividingLine}><hr /></div>
                     </div>
-                    </div>
-                    <div className={dividingLine}><hr /></div>
                 </div>
 
             </div>

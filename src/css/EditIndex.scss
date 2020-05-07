@@ -1,15 +1,18 @@
 .editIndex {
     width: calc(#{$full-vw} - 60px);
     height: $full-vh;
-    box-sizing: border-box;
-    border: 1px solid #000;
     float: left;
-    padding: 0px 20px;
+    overflow-x: hidden;
+}
+.editAndPreview {
+    width: auto;
+    //width: calc(#{$full-vw} - 270px);
+    height: 100%;
+    padding: 0 20px;
+    overflow-x: hidden;
     overflow-y: scroll;
 }
-
 .bottomBtn {
-    width: calc(#{$full-vw} - 100px);
     height: 30px;
     margin: 0 auto;
     display: flex;

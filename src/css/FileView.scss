@@ -1,0 +1,76 @@
+.fileView {
+    height: 100%;
+    float: left;
+    position: relative;
+    background-color: rgba($color: #eef0ed, $alpha: 1);
+    overflow-x: hidden;
+}
+.foldList {
+    width: 100%;
+    height: 30px;
+    background-color: $background-color;
+    padding: 0px 10px;
+    line-height: 30px;
+    font-size: 18px;
+    font-weight: 400;
+    color: $white;
+    user-select: none;
+    overflow: hidden;
+    &:hover {
+        span.icon-tianjiawenjian- {
+            visibility: visible;
+        }
+    }
+    span {
+        margin-right: 5px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    span.icon-tianjiawenjian- {
+        font-size: 24px;
+        float: right;
+        visibility: hidden;
+        &:active {
+            font-size: 28px;
+        }
+    }
+}
+.fileList {
+    color: $teal;
+    box-sizing: border-box;
+    list-style: none;
+    user-select: none;
+    cursor: default;
+    li {
+        &:hover {
+            border-left: 2px solid $teal;
+        }
+        &:active {
+            background-color: $gray-400;
+        }
+    }
+    span {
+        margin: 0px 5px;
+    }
+}
+.fileViewControler {
+    width: 10px;
+    height: 100%;
+    border-left: 1px solid #000;
+    border-right: 1px solid #000;
+    box-sizing: border-box;
+    float: left;
+    position: relative;
+    cursor: col-resize;
+}
+.newFileLi {
+    display: flex;
+    background-color: $gray-400;
+    input {
+        width: 100%;
+        background-color: $gray-400;
+        outline: none;
+        border: 0px;
+        flex: auto;
+    }
+}

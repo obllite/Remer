@@ -53,7 +53,7 @@ function WordBlock(props) {
     const switch2Chinese = (e) => {
         if (e.keyCode === 39 && englishInputRef.current.selectionStart === englishInputRef.current.value.length) {
             setTimeout(() => {
-                chineseInputRef.current.setSelectionRange(-1,-1)
+                chineseInputRef.current.setSelectionRange(-1, -1)
             }, 0);
             chineseInputRef.current.focus()
         }
@@ -65,13 +65,19 @@ function WordBlock(props) {
         console.log(e.keyCode);
         if (e.keyCode === 37 && chineseInputRef.current.selectionStart === 0) {
             setTimeout(() => {
-                englishInputRef.current.setSelectionRange(-1,-1)
+                englishInputRef.current.setSelectionRange(-1, -1)
             }, 0);
             englishInputRef.current.focus()
         }
-        if(e.keyCode === 39 || e.keyCode === 40 ){
+        if (e.keyCode === 39 && chineseInputRef.current.selectionStart === chineseInputRef.current.value.length) {
             setTimeout(() => {
-                meaningRefList[0].setSelectionRange(-1,-1)
+                meaningRefList[0].setSelectionRange(-1, -1)
+            }, 0);
+            meaningRefList[0].focus()
+        }
+        if (e.keyCode === 40) {
+            setTimeout(() => {
+                meaningRefList[0].setSelectionRange(-1, -1)
             }, 0);
             meaningRefList[0].focus()
         }
@@ -107,7 +113,7 @@ function WordBlock(props) {
                     onChange={(e) => {
                         handleChinese(e)
                     }}
-                    onKeyDown={(e)=>{
+                    onKeyDown={(e) => {
                         switch2English(e)
                     }}
                     ref={chineseInputRef}
