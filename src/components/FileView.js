@@ -29,16 +29,20 @@ function FileView() {
     })
     useEffect(() => {
         let loadFlag = 'file view init'
-        window.ipcRenderer.send('loadFileViewInfo-send', loadFlag)
-        window.ipcRenderer.on('loadFileViewInfo-reply', (event, arg) => {
-            console.log('arg is ', arg.fileNames)
-            if (loadFlag) {
-                setfileNames(arg.fileNames)
-                setnoteBookNames(arg.noteBookNames)
+
+        if (window.ipcRenderer) {
+
+            window.ipcRenderer.send('loadFileViewInfo-send', loadFlag)
+            window.ipcRenderer.on('loadFileViewInfo-reply', (event, arg) => {
+                console.log('arg is ', arg.fileNames)
+                if (loadFlag) {
+                    setfileNames(arg.fileNames)
+                    setnoteBookNames(arg.noteBookNames)
+                }
+            })
+            return () => {
+                loadFlag = false
             }
-        })
-        return () => {
-            loadFlag = false
         }
     }, [])
     //handlers

@@ -65,7 +65,7 @@ async function dirTree(pathParams, callback) {
         }
         index--;
     } else {
-        if (index !== 0) {
+        if (index !== 0 && index !== 1) {
             fileViewInfo.fileNames[fold_index].names.push(getName(pathParams))
         }
     }
