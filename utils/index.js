@@ -7,4 +7,4 @@ exports.fileViewInfo = fileViewHandler.fileViewInfo
 exports.searchWord = searchHandler.searchWord
 exports.saveEditBlocks = saveFileHandler.saveEditBlocks
 exports.newFile = fileViewHandler.newFile
-exports.getFileViewInfo = fileViewHandler.getFileViewInfo
+exports.initFileViewInfo = fileViewHandler.initFileViewInfo

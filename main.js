@@ -40,7 +40,7 @@ function createWindow() {
 app.whenReady().then(() => {
     //导入所有所需的模块
     loadUtils()
-    main_process_utils.getFileViewInfo()
+    main_process_utils.initFileViewInfo()
     createWindow()
 })
 

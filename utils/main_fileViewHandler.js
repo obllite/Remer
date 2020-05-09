@@ -15,7 +15,7 @@ let fileViewInfo = {
 //functions
 function newFile(fileInfo) {
     let filePath = path.join(rootPath, fileInfo.path)
-    //console.log('file path is ', filePath)
+    console.log('file path is ', filePath)
     //console.log('file name is ', fileName);
     if (fs.existsSync(filePath)) {
         console.log('file is exist!')
@@ -28,16 +28,13 @@ function newFile(fileInfo) {
             }
         });
         console.log('create file success, file path is ', filePath)
-        console.log('fold index is ', fold_index)
-        /* dirTree(rootPath, () => {
-            fold_index = -1
-        }) */
+        updateFileInfo(filePath)
         return true
     }
 
 }
 
-function getFileViewInfo() {
+function initFileViewInfo() {
     console.log('getFileViewInfo')
     dirTree(rootPath, () => {
         fold_index = -1
@@ -55,7 +52,6 @@ function getFileViewInfo() {
 async function dirTree(pathParams, callback) {
     //深度优先搜索
     if (!fs.statSync(pathParams).isFile()) {
-        console.log('out', markT(index), getName(pathParams))
         //index === 0 时为根目录
         if (!fileViewInfo.noteBookNames.includes(getName(pathParams)) && index !== 0) {
             fold_index++
@@ -71,30 +67,30 @@ async function dirTree(pathParams, callback) {
     } else {
         if (index !== 0) {
             fileViewInfo.fileNames[fold_index].names.push(getName(pathParams))
-            console.log('in ', markT(index), getName(pathParams))
         }
     }
     if(callback !== undefined) {
+        console.log('noteBookNames is ',fileViewInfo.noteBookNames)
+        console.log('fileNames is ',fileViewInfo.fileNames)
         callback()
     }
-   
-}
-function markT(index) {
-    if (index === 0) {
-        return '你要读取的文件夹：'
-    }
-    let str = '';
-    for (let i = 0; i < index; i++) {
-        str += ' |---'
-    }
-    return str;
 }
 
+function updateFileInfo(filePath) {
+    let foldName = filePath.split(path.sep)
+    let fileName = foldName[foldName.length - 1]
+    foldName = foldName[foldName.length - 2]
+    console.log('update file info, file name is ', fileName, 'fold name is', foldName)
+    fold_index = fileViewInfo.noteBookNames.indexOf(foldName)
+    fileViewInfo.fileNames[fold_index].names.push(fileName)
+}
 function getName(pathParams) {
     return path.parse(pathParams).base;
 }
+
+
 //consts
 exports.fileViewInfo = fileViewInfo
 //functions
 exports.newFile = newFile
-exports.getFileViewInfo = getFileViewInfo
+exports.initFileViewInfo = initFileViewInfo
