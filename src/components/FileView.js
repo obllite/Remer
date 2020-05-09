@@ -29,12 +29,9 @@ function FileView() {
     })
     useEffect(() => {
         let loadFlag = 'file view init'
-
         if (window.ipcRenderer) {
-
             window.ipcRenderer.send('loadFileViewInfo-send', loadFlag)
             window.ipcRenderer.on('loadFileViewInfo-reply', (event, arg) => {
-                console.log('arg is ', arg.fileNames)
                 if (loadFlag) {
                     setfileNames(arg.fileNames)
                     setnoteBookNames(arg.noteBookNames)

@@ -26,6 +26,7 @@ function EditIndex() {
             meanings: meanings
         }
     }
+
     //hooks
     const [count, setcount] = useState([1])
     const [blockStates, setblockStates] = useState(blockStatesTmp)
@@ -33,6 +34,18 @@ function EditIndex() {
     useEffect(() => {
         scrollToBottom()
     }, [count])
+    useEffect(() => {
+        let isMounted = true
+        if (isMounted) {
+            window.ipcRenderer.send('loadEditCache-send', 'loadEditCache')
+            window.ipcRenderer.on('loadEditCache-reply', (event, arg) => {
+                console.log('cache data is ', arg)
+            })
+        }
+        return () => {
+            isMounted = false
+        }
+    }, [])
     //handlers
     const handleAddBlock = () => {
         if (count.length === maxlength) {

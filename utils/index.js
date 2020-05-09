@@ -8,3 +8,4 @@ exports.searchWord = searchHandler.searchWord
 exports.saveEditBlocks = saveFileHandler.saveEditBlocks
 exports.newFile = fileViewHandler.newFile
 exports.initFileViewInfo = fileViewHandler.initFileViewInfo
+exports.readNoteBookFile = fileViewHandler.readNoteBookFile

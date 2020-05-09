@@ -1,12 +1,12 @@
 {
-    "block0": {
-        "english": "",
-        "chinese": "",
+    "block#0": {
+        "english": "test",
+        "chinese": "fetch",
         "meanings": [
             {
-                "meaning": "",
+                "meaning": "mean",
                 "collections": [
-                    ""
+                    "set collection"
                 ]
             }
         ]

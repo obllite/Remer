@@ -13,34 +13,13 @@ let fileViewInfo = {
 }
 
 //functions
-function newFile(fileInfo) {
-    let filePath = path.join(rootPath, fileInfo.path)
-    console.log('file path is ', filePath)
-    //console.log('file name is ', fileName);
-    if (fs.existsSync(filePath)) {
-        console.log('file is exist!')
-        return false
-    } else {
-        fs.openSync(filePath, 'w')
-        fs.writeFile(filePath, template.notebook_initTemplate, function (err) {
-            if (err) {
-                return console.log(err);
-            }
-        });
-        console.log('create file success, file path is ', filePath)
-        updateFileInfo(filePath)
-        return true
-    }
-
-}
-
+//init file info
 function initFileViewInfo() {
     console.log('getFileViewInfo')
     dirTree(rootPath, () => {
         fold_index = -1
     })
 }
-
 /* PARAMS
     let fileViewInfo = {
     noteBookNames:[],
@@ -49,6 +28,7 @@ function initFileViewInfo() {
     }]
 }
 */
+
 async function dirTree(pathParams, callback) {
     //深度优先搜索
     if (!fs.statSync(pathParams).isFile()) {
@@ -76,18 +56,41 @@ async function dirTree(pathParams, callback) {
     }
 }
 
+// 新建文件
+function newFile(fileInfo) {
+    let filePath = path.join(rootPath, fileInfo.path)
+    console.log('file path is ', filePath)
+    //console.log('file name is ', fileName);
+    if (fs.existsSync(filePath)) {
+        console.log('file is exist!')
+        return false
+    } else {
+        fs.openSync(filePath, 'w')
+        fs.writeFile(filePath, template.notebook_initTemplate, function (err) {
+            if (err) {
+                return console.log(err);
+            }
+        });
+        console.log('create file success, file path is ', filePath)
+        updateFileInfo(filePath)
+        return true
+    }
+
+}
+//更新文件信息
 function updateFileInfo(filePath) {
     let foldName = filePath.split(path.sep)
     let fileName = foldName[foldName.length - 1]
     foldName = foldName[foldName.length - 2]
-    console.log('update file info, file name is ', fileName, 'fold name is', foldName)
     fold_index = fileViewInfo.noteBookNames.indexOf(foldName)
     fileViewInfo.fileNames[fold_index].names.push(fileName)
+    console.log('new file info is', fileViewInfo.fileNames)
 }
 function getName(pathParams) {
     return path.parse(pathParams).base;
 }
 
+//组合文件路径
 function combinePath(foldName, fileName) {
     let fold_index = fileViewInfo.noteBookNames.indexOf(foldName)
     if(fold_index !== -1 ){
@@ -100,8 +103,19 @@ function combinePath(foldName, fileName) {
         return false
     }
 }
+function readNoteBookFile(filePath,filedata,event,callback) {
+    console.log('cache path is', filePath)
+    fs.readFile(filePath,(err,data)=>{
+        if(err) {
+            throw err
+        }
+        filedata = data
+        callback(event,filedata)
+    }) 
+}
 //consts
 exports.fileViewInfo = fileViewInfo
 //functions
 exports.newFile = newFile
 exports.initFileViewInfo = initFileViewInfo
+exports.readNoteBookFile = readNoteBookFile

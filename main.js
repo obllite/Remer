@@ -7,6 +7,7 @@ const {
 } = require("electron");
 
 const path = require("path");
+const editCachePath = path.join(__dirname,"/noteBooks/editBlockCache.json")
 const fs = require("fs");
 let main_process_utils = null;
 
@@ -124,7 +125,7 @@ ipcMain.on('searchWord-send', async (event, arg) => {
 ipcMain.on('saveEditBlocks-send', (event, arg) => {
     let blocksDataJson = {}
     for (let i = 0; i < arg.length; i++) {
-        let serial = 'block' + i;
+        let serial = 'block#' + i;
         blocksDataJson[serial] = arg[i]
     }
     blocksDataJson = JSON.stringify(blocksDataJson)
@@ -136,15 +137,20 @@ ipcMain.on('saveEditBlocks-send', (event, arg) => {
 
 /* HOOK handler handleNewFile： file view 新建notebook 下文件 */
 ipcMain.on('newFile-send', (event, arg) => {
-    console.log('file info is ', arg)
     let ifNewFileSuc = main_process_utils.newFile(arg)
     event.reply('newFile-reply', ifNewFileSuc)
 })
 
 /* HOOK handler loadFileViewInfo 初始化 fileView 数据 */
 ipcMain.on('loadFileViewInfo-send', (event, arg) => {
-    console.log(arg)
-    console.log(main_process_utils.fileViewInfo.fileNames)
-    //event.returnValue = main_process_utils.fileViewInfo
     event.reply('loadFileViewInfo-reply',main_process_utils.fileViewInfo)
+})
+
+/* HOOK 加载 load edit cache */
+ipcMain.on('loadEditCache-send',(event,arg)=>{
+    let filedata
+    main_process_utils.readNoteBookFile(editCachePath,filedata,event,(event,filedata)=>{
+        filedata = JSON.parse(filedata.toString('utf-8'))
+        event.reply('loadEditCache-reply',filedata)
+    })
 })
