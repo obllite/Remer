@@ -40,6 +40,7 @@ function createWindow() {
 app.whenReady().then(() => {
     //导入所有所需的模块
     loadUtils()
+    main_process_utils.getFileViewInfo()
     createWindow()
 })
 
@@ -134,8 +135,16 @@ ipcMain.on('saveEditBlocks-send', (event, arg) => {
 })
 
 /* HOOK handler handleNewFile： file view 新建notebook 下文件 */
-ipcMain.on('newFile-send',(event, arg)=>{
+ipcMain.on('newFile-send', (event, arg) => {
     console.log('file info is ', arg)
     let ifNewFileSuc = main_process_utils.newFile(arg)
-    event.reply('newFile-reply',ifNewFileSuc)
+    event.reply('newFile-reply', ifNewFileSuc)
+})
+
+/* HOOK handler loadFileViewInfo 初始化 fileView 数据 */
+ipcMain.on('loadFileViewInfo-send', (event, arg) => {
+    console.log(arg)
+    console.log(main_process_utils.fileViewInfo.fileNames)
+    //event.returnValue = main_process_utils.fileViewInfo
+    event.reply('loadFileViewInfo-reply',main_process_utils.fileViewInfo)
 })

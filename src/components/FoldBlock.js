@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
 import classnames from 'classnames'
-import handleNewFile, { validateFileName } from '../utils/fileViewHandler'
+import handleNewFile, { loadFileViewInfo, validateFileName } from '../utils/fileViewHandler'
+
 //COMPONENT 组件用于显示一个NoteBook下的文件结构
 function FoldBlock(props) {
     const {
         index
     } = props
+    //classnames
     const newFileLi = classnames('newFileLi')
     const foldList = classnames('foldList')
     const fileList = classnames('fileList')
@@ -13,8 +15,8 @@ function FoldBlock(props) {
     const fileIcon = classnames('iconfont icon-wenjian')
     const foldOpenIcon = classnames('iconfont icon-wenjianjiadakaizhuangtai')
     const foldCloseIcon = classnames('iconfont icon-wenjianjiaguanbizhuangtai')
-
     let ifCanNew = false
+    //hooks
     const [ifNewFile, setifNewFile] = useState(false)
     const fileNewRef = useRef()
     const [ifPutDown, setifPutDown] = useState(true)
@@ -24,6 +26,8 @@ function FoldBlock(props) {
             fileNewRef.current.focus()
         }
     }, [ifNewFile])
+ 
+    //handlers
     const handleFold = (e) => {
         switch (e.target.className) {
             case foldCloseIcon:
@@ -55,6 +59,7 @@ function FoldBlock(props) {
             }
         }
     }
+    //FIXME handleNewFile 中有异步问题
     const handleNewFileBlur = (e) => {
         if (fileNewRef.current.value === '') {
             setifNewFile(false)
@@ -67,10 +72,7 @@ function FoldBlock(props) {
             setifNewFile(false)
             let fileName = fileNewRef.current.value
             let filePath = '/' + props.notBookNames[index] + '/' + fileName
-            if(!handleNewFile(fileName, filePath)){
-                console.log('create file failed')
-                return
-            }
+            handleNewFile(fileName, filePath)
             let newNames = [...props.fileNames[index].names, fileName]
             props.setfileNames(props.fileNames.map((item, i) => {
                 if (i === index) {
@@ -85,11 +87,8 @@ function FoldBlock(props) {
             setifNewFile(false)
             let fileName = fileNewRef.current.value
             let filePath = '/' + props.notBookNames[index] + '/' + fileName
-            if(!handleNewFile(fileName, filePath)){
-                console.log('create file failed')
-                return
-            }
-            let newNames = [...props.fileNames[index].names, filePath]
+            handleNewFile(fileName, filePath)
+            let newNames = [...props.fileNames[index].names, fileName]
             props.setfileNames(props.fileNames.map((item, i) => {
                 if (i === index) {
                     item.names = newNames
@@ -98,6 +97,7 @@ function FoldBlock(props) {
             }))
         }
     }
+
     return (
         <>
             <div className={foldList}>

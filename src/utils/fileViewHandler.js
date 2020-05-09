@@ -1,16 +1,13 @@
 import isElectron from 'is-electron';
 /* HOOK 新建notebook 下的文件 参数filename  */
 const handleNewFile = (fileName, filePath) => {
-    console.log(filePath);
     let fileInfo = {
         path: filePath,
         name: fileName
     }
     if (isElectron()) {
-        window.ipcRenderer.on('newFile-reply', (event,ifNewFileSuc) => {
-            console.log('file new result: ',ifNewFileSuc)
-            if(ifNewFileSuc) {
-                return fileName
+        window.ipcRenderer.on('newFile-reply', (event, ifNewFileSuc) => {
+            if (ifNewFileSuc) {
             } else {
                 let myNotification = new Notification('创建文件警告', {
                     body: '文件创建失败'
@@ -27,10 +24,11 @@ const handleNewFile = (fileName, filePath) => {
 
 export const validateFileName = (fileName, filelist) => {
     let fileNameReg = /^(.*)?\.json$/
-    let match =  fileNameReg.exec(fileName)
-    if(match === null) {
+    let match = fileNameReg.exec(fileName)
+    if (match === null) {
         return false
     }
     return !filelist.includes(fileName)
 }
+
 export default handleNewFile

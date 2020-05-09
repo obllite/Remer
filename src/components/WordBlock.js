@@ -62,7 +62,6 @@ function WordBlock(props) {
         setchinese(e.target.value)
     }
     const switch2English = (e) => {
-        console.log(e.keyCode);
         if (e.keyCode === 37 && chineseInputRef.current.selectionStart === 0) {
             setTimeout(() => {
                 englishInputRef.current.setSelectionRange(-1, -1)
