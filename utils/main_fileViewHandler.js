@@ -88,7 +88,18 @@ function getName(pathParams) {
     return path.parse(pathParams).base;
 }
 
-
+function combinePath(foldName, fileName) {
+    let fold_index = fileViewInfo.noteBookNames.indexOf(foldName)
+    if(fold_index !== -1 ){
+        if(fileViewInfo.fileNames[fold_index].names.includes(fileName)) {
+            return path.resolve(rootPath,foldName,fileName)
+        } else {
+            return false
+        }
+    } else {
+        return false
+    }
+}
 //consts
 exports.fileViewInfo = fileViewInfo
 //functions
