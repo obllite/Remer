@@ -1,14 +1,1 @@
-{
-    "block#0": {
-        "english": "test",
-        "chinese": "fetch",
-        "meanings": [
-            {
-                "meaning": "mean",
-                "collections": [
-                    "set collection"
-                ]
-            }
-        ]
-    }
-}
+{"block#0":{"english":"test","chinese":"fetch","meanings":[{"meaning":"finish","collections":["set collection"]}]}}

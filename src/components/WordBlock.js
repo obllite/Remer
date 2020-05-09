@@ -13,11 +13,11 @@ function WordBlock(props) {
     const englishInput = classnames('englishInput')
     const chineseInput = classnames('chineseInput')
     const inputContainer = classnames('inputContainer')
-
-
+    let selfData = props.blocksData.length > 0 ? props.blocksData[index]: null
+    //consts
     const englishPlaceHolder = "English"
     const chinesePlaceHolder = "Chinese"
-
+    
     const meaningRefList = []
     let inputRefList = [{
         refList: []
@@ -38,6 +38,16 @@ function WordBlock(props) {
         return () => {
         }
     })
+    useEffect(() => {
+        if(selfData !== null){
+            setenglish(selfData.english)
+            setchinese(selfData.chinese)
+            setmeanings(selfData.meanings)
+        }
+        return () => {
+            
+        }
+    }, [selfData])
     //handlers
     const handlePutDown = (e) => {
         let blockStatesTmp = props.blockStates
@@ -97,6 +107,7 @@ function WordBlock(props) {
                     type="text"
                     className={englishInput}
                     placeholder={englishPlaceHolder}
+                    value={english || ''}
                     onChange={(e) => {
                         handleEnligsh(e)
                     }}
@@ -109,6 +120,7 @@ function WordBlock(props) {
                     type="text"
                     className={chineseInput}
                     placeholder={chinesePlaceHolder}
+                    value={chinese || ''}
                     onChange={(e) => {
                         handleChinese(e)
                     }}

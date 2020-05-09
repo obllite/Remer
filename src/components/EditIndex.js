@@ -18,9 +18,11 @@ function EditIndex() {
     const editAndPreview = classnames('editAndPreview')
     //consts
     let blockStatesTmp = [false, false, false]
-    let blocksData = []
+    //blocks data temp 和 blocksData 为同步的两个相同的数据
+    //temp 用于存储子组件 effect 中更新， blocksData 用于父组件中更新
+    let blocksDataTmp = []
     let updateData = (index, english, chinese, meanings) => {
-        blocksData[index] = {
+        blocksDataTmp[index] = {
             english: english,
             chinese: chinese,
             meanings: meanings
@@ -28,6 +30,8 @@ function EditIndex() {
     }
 
     //hooks
+    const [blocksData, setblocksData] = useState([])
+
     const [count, setcount] = useState([1])
     const [blockStates, setblockStates] = useState(blockStatesTmp)
     let toBottom = useRef()
@@ -36,17 +40,28 @@ function EditIndex() {
     }, [count])
     useEffect(() => {
         let isMounted = true
-        if (isMounted) {
-            window.ipcRenderer.send('loadEditCache-send', 'loadEditCache')
-            window.ipcRenderer.on('loadEditCache-reply', (event, arg) => {
-                console.log('cache data is ', arg)
-            })
-        }
+        window.ipcRenderer.send('loadEditCache-send', 'loadEditCache')
+        window.ipcRenderer.on('loadEditCache-reply', (event, arg) => {
+            if (isMounted) {
+                handleCacheData(arg)
+            }
+        })
         return () => {
             isMounted = false
         }
     }, [])
     //handlers
+    const handleCacheData = (cacheData) => {
+        let tempArr = []
+        for (const key in cacheData) {
+            if (cacheData.hasOwnProperty(key)) {
+                let index = key.split('#')[1]
+                const element = cacheData[key];
+                tempArr[index] = element
+            }
+        }
+        setblocksData(tempArr)
+    }
     const handleAddBlock = () => {
         if (count.length === maxlength) {
             console.log('is max!');
@@ -60,9 +75,9 @@ function EditIndex() {
         const maxScrollTop = scrollHeight - height;
         toBottom.scrollTop = maxScrollTop > 0 ? maxScrollTop + 30 : 0;
     }
-    //在此处保存暂存的blockJsonSets
+    //在此处保存暂存的block data
     const handleSubmitEdit = () => {
-        saveEditBlocks(blocksData)
+        saveEditBlocks(blocksDataTmp)
     }
     let wordblock = count.map((item, index) => {
         return (
@@ -71,6 +86,7 @@ function EditIndex() {
                 key={index}
                 blockStates={blockStates}
                 setblockStates={setblockStates}
+                blocksData={blocksData}
             >
             </WordBlock>
         )
