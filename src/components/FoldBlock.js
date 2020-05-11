@@ -138,6 +138,15 @@ function FoldBlock(props) {
                         return (
                             <li
                                 key={index}
+                                //TODO 实现fileView 到 edit 的切换、 实现右键菜单栏
+                                //NOTE 考虑
+                                onContextMenu={(e)=>{
+                                    e.nativeEvent.stopPropagation()
+                                    let IMenu = {}//menu 接口
+                                    if(window.ipcRenderer){
+                                        window.ipcRenderer.send('show-context-menu',IMenu)
+                                    }
+                                }}
                             >
                                 <span className={fileIcon}></span>
                                 {item}

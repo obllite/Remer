@@ -3,13 +3,17 @@ const {
     app,
     BrowserWindow,
     ipcMain,
-    dialog
+    dialog,
+    Menu,
+    MenuItem
 } = require("electron");
 
 const path = require("path");
-const editCachePath = path.join(__dirname,"/noteBooks/editBlockCache.json")
+const editCachePath = path.join(__dirname, "/noteBooks/editBlockCache.json")
 const fs = require("fs");
 let main_process_utils = null;
+//Menu
+
 
 //http URL definition
 const httpURlCollins = "https://www.collinsdictionary.com/zh/dictionary/english/";
@@ -44,7 +48,9 @@ app.whenReady().then(() => {
     main_process_utils.initFileViewInfo()
     createWindow()
 })
+app.on('browser-window-created', (event, win) => {
 
+})
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
     // On macOS it is common for applications and their menu bar
@@ -67,7 +73,13 @@ function loadUtils() {
 }
 
 // Main process ipc
+/* HOOK 创建右键菜单 */
+/* TODO 封装 new Menu，创建 listener 以及 arg 接口的参数类型 */
+ipcMain.on('show-context-menu', (event,arg) => {
+    console.log(event)
+    const win = BrowserWindow.fromWebContents(event.sender)
 
+})
 /* HOOK handler changeAvatorFile: 更换用户头像 */
 /* FIXME 存在没有调用的dialog， 可以删除然后重新封装async函数 */
 ipcMain.on('changeAvatorFile-send', async (event, arg) => {
@@ -143,14 +155,14 @@ ipcMain.on('newFile-send', (event, arg) => {
 
 /* HOOK handler loadFileViewInfo 初始化 fileView 数据 */
 ipcMain.on('loadFileViewInfo-send', (event, arg) => {
-    event.reply('loadFileViewInfo-reply',main_process_utils.fileViewInfo)
+    event.reply('loadFileViewInfo-reply', main_process_utils.fileViewInfo)
 })
 
 /* HOOK 加载 load edit cache */
-ipcMain.on('loadEditCache-send',(event,arg)=>{
+ipcMain.on('loadEditCache-send', (event, arg) => {
     let filedata
-    main_process_utils.readNoteBookFile(editCachePath,filedata,event,(event,filedata)=>{
+    main_process_utils.readNoteBookFile(editCachePath, filedata, event, (event, filedata) => {
         filedata = JSON.parse(filedata.toString('utf-8'))
-        event.reply('loadEditCache-reply',filedata)
+        event.reply('loadEditCache-reply', filedata)
     })
 })

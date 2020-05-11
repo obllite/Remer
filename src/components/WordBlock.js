@@ -39,7 +39,7 @@ function WordBlock(props) {
         }
     })
     useEffect(() => {
-        if(selfData !== null){
+        if(selfData !== null&&selfData !== undefined){
             setenglish(selfData.english)
             setchinese(selfData.chinese)
             setmeanings(selfData.meanings)
