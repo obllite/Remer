@@ -40,12 +40,14 @@ function EditIndex() {
     }, [count])
     useEffect(() => {
         let isMounted = true
-        window.ipcRenderer.send('loadEditCache-send', 'loadEditCache')
-        window.ipcRenderer.on('loadEditCache-reply', (event, arg) => {
-            if (isMounted) {
-                handleCacheData(arg)
-            }
-        })
+        if(window.ipcRenderer) {
+            window.ipcRenderer.send('loadEditCache-send', 'loadEditCache')
+            window.ipcRenderer.on('loadEditCache-reply', (event, arg) => {
+                if (isMounted) {
+                    handleCacheData(arg)
+                }
+            })
+        }
         return () => {
             isMounted = false
         }

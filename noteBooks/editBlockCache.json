@@ -1,1 +1,14 @@
-{"block#0":{"english":"english","chinese":"test","meanings":[{"meaning":"mean","collections":["collection"]}]},"block#1":{"english":"dd","chinese":"cc","meanings":[{"meaning":"gg","collections":["afsd"]}]}}
+{
+    "block0": {
+        "english": "",
+        "chinese": "",
+        "meanings": [
+            {
+                "meaning": "",
+                "collections": [
+                    ""
+                ]
+            }
+        ]
+    }
+}
