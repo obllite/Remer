@@ -18,15 +18,25 @@ function FoldBlock(props) {
     let ifCanNew = false
     //hooks
     const [ifNewFile, setifNewFile] = useState(false)
+    const [filelis, setfilelis] = useState([])
     const fileNewRef = useRef()
     const [ifPutDown, setifPutDown] = useState(true)
     const fileNewLiRef = useRef()
+    useEffect(() => {
+        setfilelis(props.fileNames[index].names.map((item, i) => { 
+            if(i === 0 ) {
+                return true
+            } else {
+                return false 
+            }
+        }))
+    }, [])
     useEffect(() => {
         if (ifNewFile) {
             fileNewRef.current.focus()
         }
     }, [ifNewFile])
- 
+
     //handlers
     const handleFold = (e) => {
         switch (e.target.className) {
@@ -138,15 +148,28 @@ function FoldBlock(props) {
                         return (
                             <li
                                 key={index}
-                                //TODO 实现fileView 到 edit 的切换、 实现右键菜单栏
-                                //NOTE 考虑
-                                onContextMenu={(e)=>{
+                                //TODO 实现 file list 到 edit 区域的切换、 实现右键菜单栏
+                                onContextMenu={(e) => {
                                     e.nativeEvent.stopPropagation()
                                     let IMenu = {}//menu 接口
-                                    if(window.ipcRenderer){
-                                        window.ipcRenderer.send('show-context-menu',IMenu)
+                                    if (window.ipcRenderer) {
+                                        window.ipcRenderer.send('show-context-menu', IMenu)
                                     }
                                 }}
+                                onClick={(e) => {
+                                    setfilelis(filelis.map((fileli_item, fileli_i) => {
+                                        if (fileli_i === index) {
+                                            fileli_item = true
+                                        } else {
+                                            fileli_item = false
+                                        }
+                                        return fileli_item
+                                    }))
+                                    
+                                }}
+                                style={filelis[index] ? { 
+                                    backgroundColor: "#ced4da",
+                                } : {}}
                             >
                                 <span className={fileIcon}></span>
                                 {item}

@@ -77,8 +77,6 @@ function loadUtils() {
 /* TODO 封装 new Menu，创建 listener 以及 arg 接口的参数类型 */
 ipcMain.on('show-context-menu', (event,arg) => {
     console.log(event)
-    const win = BrowserWindow.fromWebContents(event.sender)
-
 })
 /* HOOK handler changeAvatorFile: 更换用户头像 */
 /* FIXME 存在没有调用的dialog， 可以删除然后重新封装async函数 */
