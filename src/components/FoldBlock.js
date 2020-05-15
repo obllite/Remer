@@ -108,7 +108,6 @@ function FoldBlock(props) {
         }
     }
 
-    //TODO 实现 file list 到 edit 区域的切换、 实现右键菜单栏
     const handleSwitchFile = (e, file_index) => {
         //console.log('fillis is', props.filelis[index])
         //save current file content to cache

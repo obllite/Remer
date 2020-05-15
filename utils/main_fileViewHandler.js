@@ -103,6 +103,14 @@ function combinePath(foldName, fileName) {
         return false
     }
 }
+
+//获取第一个 noteBook 中第一个 file 的路径
+function getDefaultFilePath() {
+    let defaultPath = '/noteBooks/' + fileViewInfo.noteBookNames[0] + '/'+ fileViewInfo.fileNames[0].names[0]
+    return defaultPath
+}
+
+//读noteBook 文件
 function readNoteBookFile(filePath,filedata,event,callback) {
     console.log('load notbook file path is', filePath)
     fs.readFile(filePath,(err,data)=>{
@@ -113,9 +121,11 @@ function readNoteBookFile(filePath,filedata,event,callback) {
         callback(event,filedata)
     }) 
 }
+
 //consts
 exports.fileViewInfo = fileViewInfo
 //functions
 exports.newFile = newFile
 exports.initFileViewInfo = initFileViewInfo
+exports.getDefaultFilePath = getDefaultFilePath
 exports.readNoteBookFile = readNoteBookFile
