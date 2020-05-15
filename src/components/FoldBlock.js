@@ -27,6 +27,7 @@ function FoldBlock(props) {
 
     const { handleLoadData } = useContext(EditDataCtx)
 
+    const foldIconRef = useRef()
     const fileNewRef = useRef()
     const fileNewLiRef = useRef()
 
@@ -52,6 +53,8 @@ function FoldBlock(props) {
         }
     }
     const handleaddFile = (e) => {
+        foldIconRef.current.className = foldOpenIcon
+        setifPutDown(true)
         setifNewFile(true)
     }
     const hanleNewFileChange = (e) => {
@@ -154,6 +157,7 @@ function FoldBlock(props) {
                     onClick={(e) => {
                         handleFold(e)
                     }}
+                    ref={foldIconRef}
                 ></span>
                 {props.notBookName}
                 <span
