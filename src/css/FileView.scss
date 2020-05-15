@@ -38,6 +38,7 @@
 .fileList {
     color: $teal;
     box-sizing: border-box;
+    border-left: 2px solid transparent;
     list-style: none;
     user-select: none;
     cursor: default;

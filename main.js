@@ -12,12 +12,14 @@ const path = require("path");
 const editCachePath = path.join(__dirname, "/noteBooks/editBlockCache.json")
 const fs = require("fs");
 let main_process_utils = null;
+let lastViewedFilePath = ''
 //Menu
 
 
 //http URL definition
 const httpURlCollins = "https://www.collinsdictionary.com/zh/dictionary/english/";
 const httpQue = [httpURlCollins];
+
 function createWindow() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
@@ -75,7 +77,7 @@ function loadUtils() {
 // Main process ipc
 
 /* TODO 封装 new Menu，创建 listener 以及 arg 接口的参数类型 */
-ipcMain.on('show-context-menu', (event,arg) => {
+ipcMain.on('show-context-menu', (event, arg) => {
     console.log(event)
 })
 /* HOOK handler changeAvatorFile: 更换用户头像 */
@@ -153,29 +155,53 @@ ipcMain.on('newFile-send', (event, arg) => {
 
 /* HOOK handler loadFileViewInfo 加载 fileView 数据 */
 ipcMain.on('loadFileViewInfo-send', (event, arg) => {
-    event.reply('loadFileViewInfo-reply', main_process_utils.fileViewInfo)
+    let fileViewInfo = main_process_utils.fileViewInfo
+    if(lastViewedFilePath) {
+        let splitFilePath = lastViewedFilePath.split('/')
+        let lastViewedFile  = splitFilePath.pop()
+        let lastViewedNoteBook = splitFilePath.pop()
+        console.log('lastViewFile is', lastViewedFile)
+        fileViewInfo.lastViewedFile = lastViewedFile
+        fileViewInfo.lastViewedNoteBook = lastViewedNoteBook
+    }
+    event.reply('loadFileViewInfo-reply', fileViewInfo)
 })
 
 /* HOOK 加载 load edit cache */
 ipcMain.on('loadEditCache-send', (event, arg) => {
     let filedata
-    main_process_utils.readNoteBookFile(editCachePath, filedata, event, (event, filedata) => {
-        filedata = JSON.parse(filedata.toString('utf-8'))
-        console.log('this cache data is',filedata)
-        event.reply('loadEditCache-reply', filedata)
-    })
+    if (lastViewedFilePath) {
+        let rollbackFilePath = path.join(__dirname, lastViewedFilePath)
+        console.log('last time view file path is', rollbackFilePath)
+        main_process_utils.readNoteBookFile(rollbackFilePath, filedata, event, (event, filedata) => {
+            filedata = JSON.parse(filedata.toString('utf-8'))
+            console.log('this cache data is', filedata)
+            event.reply('loadEditCache-reply', filedata)
+        })
+    } else {
+        main_process_utils.readNoteBookFile(editCachePath, filedata, event, (event, filedata) => {
+            filedata = JSON.parse(filedata.toString('utf-8'))
+            console.log('this cache data is', filedata)
+            event.reply('loadEditCache-reply', filedata)
+        })
+    }
 })
 
 /* HOOK 加载 noteBook file */
-ipcMain.on('loadfile-send', (event,filePath)=>{
+ipcMain.on('loadfile-send', (event, filePath) => {
     filePath = path.join(__dirname, filePath)
     console.log('filePath is ', filePath)
     let filedata
     main_process_utils.readNoteBookFile(filePath, filedata, event, (event, filedata) => {
-        if(filedata.toString('utf-8')) {
+        if (filedata.toString('utf-8')) {
             filedata = JSON.parse(filedata.toString('utf-8'))
         }
-        console.log('file data is ',filedata)
+        console.log('file data is ', filedata)
         event.reply('loadfile-reply', filedata)
     })
+})
+/* HOOK FilView 组件发送 同步当前的文件路径 */
+ipcMain.on('syncFilePath-send', (event, currentFilePath) => {
+    lastViewedFilePath = '/noteBooks'+ currentFilePath
+    console.log('current file path is ', lastViewedFilePath)
 })

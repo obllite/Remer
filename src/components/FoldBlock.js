@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import classnames from 'classnames'
-import handleNewFile, { loadFileViewInfo, validateFileName } from '../utils/fileViewHandler'
+import handleNewFile, { validateFileName } from '../utils/fileViewHandler'
 import EditDataCtx from './EditDataCtx'
+//FIXME rollback之后的 switch 可能存在内存泄漏
 //COMPONENT 组件用于显示一个NoteBook下的文件结构
 function FoldBlock(props) {
     const {
@@ -16,6 +17,8 @@ function FoldBlock(props) {
     const fileIcon = classnames('iconfont icon-wenjian')
     const foldOpenIcon = classnames('iconfont icon-wenjianjiadakaizhuangtai')
     const foldCloseIcon = classnames('iconfont icon-wenjianjiaguanbizhuangtai')
+    
+    //consts
     let ifCanNew = false
 
     //hooks
@@ -120,7 +123,7 @@ function FoldBlock(props) {
         window.ipcRenderer.send('loadfile-send', filePath)
         //下面应放在edit 中
         window.ipcRenderer.on('loadfile-reply', (event, arg) => {
-            console.log('recieve main processs back data ', arg)
+            //console.log('recieve main processs back data ', arg)
             handleLoadData(arg)
         })
     }

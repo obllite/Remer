@@ -9,7 +9,7 @@ function FileView() {
     //consts
     const maxWidth = 400
     const minWidth = 50
-
+    let currentFilePath = ''
     //hooks
     const [noteBookNames, setnoteBookNames] = useState([])
     const [fileNames, setfileNames] = useState([])
@@ -31,16 +31,26 @@ function FileView() {
     useEffect(() => {
         let loadFlag = 'file view init'
         /* HOOK 加载file View 的信息 */
-        if (window.ipcRenderer) {
+        if (window.ipcRenderer && loadFlag) {
             window.ipcRenderer.send('loadFileViewInfo-send', loadFlag)
             window.ipcRenderer.on('loadFileViewInfo-reply', (event, arg) => {
                 if (loadFlag) {
+                    let flag = false
+                    if (arg.hasOwnProperty("lastViewedFile")) {
+                        flag = true
+                        console.log('arg is', arg)
+                        console.log('last time viewed file is', arg.lastViewedFile)
+                        console.log('last time viewed notebook is', arg.lastViewedNoteBook)
+                    }
                     setfileNames(arg.fileNames)
                     setnoteBookNames(arg.noteBookNames)
                     let tmpArr = []
-                    arg.fileNames.forEach((element,noteBook_i) => {
-                        tmpArr.push(element.names.map((item, file_i)=>{
-                            if(noteBook_i === 0&& file_i === 0){
+                    arg.fileNames.forEach((element, noteBook_i) => {
+                        tmpArr.push(element.names.map((item, file_i) => {
+                            if (flag && item === arg.lastViewedFile) {
+                                return true
+                            }
+                            if (noteBook_i === 0 && file_i === 0 && !flag) {
                                 return true
                             }
                             return false
@@ -54,7 +64,9 @@ function FileView() {
             }
         }
     }, [])
-
+    useEffect(() => {
+        getCurrentFilePath()
+    }, [filelis])
     //handlers
     const handleDragStart = (e) => {
         setstartX(e.clientX)
@@ -78,7 +90,31 @@ function FileView() {
         setifDrag(false)
         localStorage.setItem('scalable_width', fileViewWidth)
     }
+    const getCurrentFilePath = () => {
+        let result = {
+            noteBook: '',
+            fileName: ''
+        }
+        if (filelis.length > 0) {
+            for (let noteBook_i = 0; noteBook_i < filelis.length; noteBook_i++) {
+                for (let file_i = 0; file_i < filelis[noteBook_i].length; file_i++) {
+                    const element = filelis[noteBook_i][file_i];
+                    if (element) {
+                        result.noteBook = noteBookNames[noteBook_i]
+                        result.fileName = fileNames[noteBook_i].names[file_i]
+                        currentFilePath = '/' + result.noteBook + '/' + result.fileName
+                        console.log('current path is', currentFilePath)
+                        if (window.ipcRenderer) {
+                            /* HOOK 用于当前的文件路径，方便以后载入缓存 */
+                            window.ipcRenderer.send("syncFilePath-send", currentFilePath)
+                        }
+                        return result
+                    }
+                }
+            }
 
+        }
+    }
     return (
         <>
             <div className={fileView}
@@ -90,7 +126,7 @@ function FileView() {
                 {noteBookNames.map((fold_item, fold_index) => {
                     return (
                         <FoldBlock
-                            ifFirst={fold_index === 0 ? true: false}
+                            ifFirst={fold_index === 0 ? true : false}
                             key={fold_index}
                             index={fold_index}
                             notBookName={fold_item}

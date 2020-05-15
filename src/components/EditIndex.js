@@ -31,9 +31,9 @@ function EditIndex() {
 
     //hooks
     const [blocksData, setblocksData] = useState([])
-
     const [count, setcount] = useState([1])
     const [blockStates, setblockStates] = useState(blockStatesTmp)
+    const [currentFilePath, setcurrentFilePath] = useState('')
     let toBottom = useRef()
     useEffect(() => {
         scrollToBottom()
@@ -41,7 +41,7 @@ function EditIndex() {
     useEffect(() => {
         let isMounted = true
         /* HOOK 加载cache 中暂存的 edit data*/
-        if(window.ipcRenderer) {
+        if(window.ipcRenderer&&isMounted) {
             window.ipcRenderer.send('loadEditCache-send', 'loadEditCache')
             window.ipcRenderer.on('loadEditCache-reply', (event, arg) => {
                 if (isMounted) {
@@ -55,14 +55,13 @@ function EditIndex() {
     }, [])
     //handlers
     const handleLoadData = (cacheData) => {
-        console.log('cache data is', cacheData)
+        //console.log('cache data is', cacheData)
         let tempArr = []
         let tempCount = []
         for (const key in cacheData) {
             if (cacheData.hasOwnProperty(key)) {
                 let index = key.split('#')[1]
                 tempCount.push(index)
-                console.log('the index is', index)
                 const element = cacheData[key];
                 tempArr[index] = element
             }
@@ -100,10 +99,9 @@ function EditIndex() {
         )
     })
     return (
-        <EditDataCtx.Provider value={{ updateData,handleLoadData }}>
+        <EditDataCtx.Provider value={{ updateData,handleLoadData,setcurrentFilePath }}>
             <div
                 className={editIndex}
-
             >
                 <FileView></FileView>
                 <div
