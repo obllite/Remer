@@ -19,6 +19,7 @@ function FileView() {
     const [startX, setstartX] = useState(0)
     const [startWidth, setstartWidth] = useState(0)
     const [fileViewVisible, setfileViewVisible] = useState('visible')
+    const [filelis, setfilelis] = useState([])
     useEffect(() => {
         document.addEventListener('mousemove', handleDrag)
         document.addEventListener('mouseup', handelDragEnd)
@@ -36,6 +37,16 @@ function FileView() {
                 if (loadFlag) {
                     setfileNames(arg.fileNames)
                     setnoteBookNames(arg.noteBookNames)
+                    let tmpArr = []
+                    arg.fileNames.forEach((element,noteBook_i) => {
+                        tmpArr.push(element.names.map((item, file_i)=>{
+                            if(noteBook_i === 0&& file_i === 0){
+                                return true
+                            }
+                            return false
+                        }))
+                    });
+                    setfilelis(tmpArr)
                 }
             })
             return () => {
@@ -43,6 +54,7 @@ function FileView() {
             }
         }
     }, [])
+
     //handlers
     const handleDragStart = (e) => {
         setstartX(e.clientX)
@@ -78,12 +90,15 @@ function FileView() {
                 {noteBookNames.map((fold_item, fold_index) => {
                     return (
                         <FoldBlock
+                            ifFirst={fold_index === 0 ? true: false}
                             key={fold_index}
                             index={fold_index}
                             notBookName={fold_item}
                             notBookNames={noteBookNames}
                             fileNames={fileNames}
                             setfileNames={setfileNames}
+                            filelis={filelis}
+                            setfilelis={setfilelis}
                         ></FoldBlock>
                     )
                 })

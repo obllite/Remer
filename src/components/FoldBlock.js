@@ -5,7 +5,8 @@ import EditDataCtx from './EditDataCtx'
 //COMPONENT 组件用于显示一个NoteBook下的文件结构
 function FoldBlock(props) {
     const {
-        index
+        index,
+        ifFirst
     } = props
     //classnames
     const newFileLi = classnames('newFileLi')
@@ -16,22 +17,16 @@ function FoldBlock(props) {
     const foldOpenIcon = classnames('iconfont icon-wenjianjiadakaizhuangtai')
     const foldCloseIcon = classnames('iconfont icon-wenjianjiaguanbizhuangtai')
     let ifCanNew = false
+
     //hooks
     const [ifNewFile, setifNewFile] = useState(false)
-    const [filelis, setfilelis] = useState([])
     const [ifPutDown, setifPutDown] = useState(true)
+
     const { handleLoadData } = useContext(EditDataCtx)
+
     const fileNewRef = useRef()
     const fileNewLiRef = useRef()
-    useEffect(() => {
-        setfilelis(props.fileNames[index].names.map((item, i) => {
-            if (i === 0) {
-                return true
-            } else {
-                return false
-            }
-        }))
-    }, [])
+
     useEffect(() => {
         if (ifNewFile) {
             fileNewRef.current.focus()
@@ -55,7 +50,6 @@ function FoldBlock(props) {
     }
     const handleaddFile = (e) => {
         setifNewFile(true)
-        setfilelis([...filelis, false])
     }
     const hanleNewFileChange = (e) => {
         if (fileNewRef.current.value !== '') {
@@ -113,8 +107,9 @@ function FoldBlock(props) {
 
     //TODO 实现 file list 到 edit 区域的切换、 实现右键菜单栏
     const handleSwitchFile = (e, file_index) => {
+        //console.log('fillis is', props.filelis[index])
         //save current file content to cache
-        let currentIndex = filelis.indexOf(true)
+        let currentIndex = props.filelis[index].indexOf(true)
         //console.log('current file is ', props.fileNames[index].names[currentIndex])
         //laod new file to edit
         let fileName = props.fileNames[index].names[file_index]
@@ -125,19 +120,29 @@ function FoldBlock(props) {
         window.ipcRenderer.send('loadfile-send', filePath)
         //下面应放在edit 中
         window.ipcRenderer.on('loadfile-reply', (event, arg) => {
-            //console.log('recieve main processs back data ', arg)
+            console.log('recieve main processs back data ', arg)
             handleLoadData(arg)
         })
     }
     const change2True = (change_i) => {
-        setfilelis(filelis.map((fileli_item, fileli_i) => {
-            if (fileli_i === change_i) {
-                fileli_item = true
+        let tmpArr = props.filelis
+        tmpArr = tmpArr.map((tmp_item, tmp_i) => {
+            if (tmp_i === index) {
+                tmp_item = tmp_item.map((item, i) => {
+                    if (change_i === i) {
+                        return true
+                    }
+                    return false
+                })
             } else {
-                fileli_item = false
+                tmp_item = tmp_item.map((tmp_item, tmp_i)=>{
+                    tmp_item = false
+                    return tmp_item
+                })
             }
-            return fileli_item
-        }))
+            return tmp_item
+        })
+        props.setfilelis(tmpArr)
     }
     return (
         <>
@@ -175,11 +180,10 @@ function FoldBlock(props) {
                                 }
                             />
                         </li>) : <></>}
-                    {props.fileNames[index].names.map((item, index) => {
+                    {props.fileNames[index].names.map((item, file_i) => {
                         return (
                             <li
-                                key={index}
-
+                                key={file_i}
                                 onContextMenu={(e) => {
                                     e.nativeEvent.stopPropagation()
                                     let IMenu = {}//menu 接口
@@ -188,12 +192,14 @@ function FoldBlock(props) {
                                     }
                                 }}
                                 onClick={(e) => {
-                                    change2True(index)
-                                    handleSwitchFile(e, index)
+                                    change2True(file_i)
+                                    handleSwitchFile(e, file_i)
                                 }}
-                                style={filelis[index] ? {
-                                    backgroundColor: "#ced4da",
-                                } : {}}
+                                style={
+                                    props.filelis[index] !== undefined && props.filelis[index][file_i] ? {
+                                        backgroundColor: "#ced4da"
+                                    } : {}
+                                }
                             >
                                 <span className={fileIcon}></span>
                                 {item}
