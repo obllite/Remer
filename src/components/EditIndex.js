@@ -55,15 +55,20 @@ function EditIndex() {
     }, [])
     //handlers
     const handleLoadData = (cacheData) => {
+        console.log('cache data is', cacheData)
         let tempArr = []
+        let tempCount = []
         for (const key in cacheData) {
             if (cacheData.hasOwnProperty(key)) {
                 let index = key.split('#')[1]
+                tempCount.push(index)
+                console.log('the index is', index)
                 const element = cacheData[key];
                 tempArr[index] = element
             }
         }
         setblocksData(tempArr)
+        setcount(tempCount)
     }
     const handleAddBlock = () => {
         if (count.length === maxlength) {

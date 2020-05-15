@@ -161,6 +161,7 @@ ipcMain.on('loadEditCache-send', (event, arg) => {
     let filedata
     main_process_utils.readNoteBookFile(editCachePath, filedata, event, (event, filedata) => {
         filedata = JSON.parse(filedata.toString('utf-8'))
+        console.log('this cache data is',filedata)
         event.reply('loadEditCache-reply', filedata)
     })
 })

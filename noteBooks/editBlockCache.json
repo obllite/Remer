@@ -1,1 +1,1 @@
-{"block#0":{"english":"cache.json ","chinese":"switch test","meanings":[{"meaning":"","collections":[""]}]}}
+{"block#0":{"english":"cache1.json","chinese":"first","meanings":[{"meaning":"a.json","collections":["this is switch load test"]}]},"block#1":{"english":"cache2.json","chinese":"second","meanings":[{"meaning":"adsf","collections":["asdfaldf"]}]}}
