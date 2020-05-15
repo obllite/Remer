@@ -15,7 +15,7 @@ let fileViewInfo = {
 //functions
 //init file info
 function initFileViewInfo() {
-    console.log('getFileViewInfo')
+    //console.log('getFileViewInfo')
     dirTree(rootPath, () => {
         fold_index = -1
     })
@@ -50,8 +50,8 @@ async function dirTree(pathParams, callback) {
         }
     }
     if(callback !== undefined) {
-        console.log('noteBookNames is ',fileViewInfo.noteBookNames)
-        console.log('fileNames is ',fileViewInfo.fileNames)
+        //console.log('noteBookNames is ',fileViewInfo.noteBookNames)
+        //console.log('fileNames is ',fileViewInfo.fileNames)
         callback()
     }
 }
@@ -59,10 +59,10 @@ async function dirTree(pathParams, callback) {
 // 新建文件
 function newFile(fileInfo) {
     let filePath = path.join(rootPath, fileInfo.path)
-    console.log('file path is ', filePath)
+    //console.log('file path is ', filePath)
     //console.log('file name is ', fileName);
     if (fs.existsSync(filePath)) {
-        console.log('file is exist!')
+       // console.log('file is exist!')
         return false
     } else {
         fs.openSync(filePath, 'w')
@@ -84,7 +84,7 @@ function updateFileInfo(filePath) {
     foldName = foldName[foldName.length - 2]
     fold_index = fileViewInfo.noteBookNames.indexOf(foldName)
     fileViewInfo.fileNames[fold_index].names.push(fileName)
-    console.log('new file info is', fileViewInfo.fileNames)
+    //console.log('new file info is', fileViewInfo.fileNames)
 }
 function getName(pathParams) {
     return path.parse(pathParams).base;

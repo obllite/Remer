@@ -103,7 +103,7 @@ function FileView() {
                         result.noteBook = noteBookNames[noteBook_i]
                         result.fileName = fileNames[noteBook_i].names[file_i]
                         currentFilePath = '/' + result.noteBook + '/' + result.fileName
-                        console.log('current path is', currentFilePath)
+                        //console.log('current path is', currentFilePath)
                         if (window.ipcRenderer) {
                             /* HOOK 用于当前的文件路径，方便以后载入缓存 */
                             window.ipcRenderer.send("syncFilePath-send", currentFilePath)

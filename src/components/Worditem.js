@@ -2,7 +2,7 @@ import React, { useState, createRef } from 'react';
 import classnames from 'classnames';
 
 //COMPONENT 单词显示框
-//PARAMS wordSet {english,pronunciation ,speech, chinese }
+
 
 function Worditem(props) {
     let {

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import classnames from 'classnames'
 //COMPONENT word explain 组件，编辑单词的详细意思和固定搭配
 
-//FIXME 使用自定义hook 完成添加input auto focus
 function WordExplain(props) {
     //classnames
     const explainContainer = classnames('explainContainer')
