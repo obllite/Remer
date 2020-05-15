@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect, useRef } from 'react'
 import classnames from 'classnames'
 import WordExplain from './WordExplain'
 import EditDataCtx from './EditDataCtx'
+
 //COMPONENT word block 组件 显示单词编辑的基本区域
 
 function WordBlock(props) {

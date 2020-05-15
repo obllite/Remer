@@ -41,6 +41,7 @@
     ]
   },
   "devDependencies": {
+    "events": "^3.1.0",
     "is-electron": "^2.2.0",
     "react-addons-css-transition-group": "^15.6.2",
     "react-router-dom": "^5.1.2"

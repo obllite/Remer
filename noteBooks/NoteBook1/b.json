@@ -1,0 +1,14 @@
+{
+    "block#0": {
+        "english": "switch",
+        "chinese": "test",
+        "meanings": [
+            {
+                "meaning": "b.json",
+                "collections": [
+                    "this is switch load test"
+                ]
+            }
+        ]
+    }
+}

@@ -73,7 +73,7 @@ function loadUtils() {
 }
 
 // Main process ipc
-/* HOOK 创建右键菜单 */
+
 /* TODO 封装 new Menu，创建 listener 以及 arg 接口的参数类型 */
 ipcMain.on('show-context-menu', (event,arg) => {
     console.log(event)
@@ -151,7 +151,7 @@ ipcMain.on('newFile-send', (event, arg) => {
     event.reply('newFile-reply', ifNewFileSuc)
 })
 
-/* HOOK handler loadFileViewInfo 初始化 fileView 数据 */
+/* HOOK handler loadFileViewInfo 加载 fileView 数据 */
 ipcMain.on('loadFileViewInfo-send', (event, arg) => {
     event.reply('loadFileViewInfo-reply', main_process_utils.fileViewInfo)
 })
@@ -162,5 +162,19 @@ ipcMain.on('loadEditCache-send', (event, arg) => {
     main_process_utils.readNoteBookFile(editCachePath, filedata, event, (event, filedata) => {
         filedata = JSON.parse(filedata.toString('utf-8'))
         event.reply('loadEditCache-reply', filedata)
+    })
+})
+
+/* HOOK 加载 noteBook file */
+ipcMain.on('loadfile-send', (event,filePath)=>{
+    filePath = path.join(__dirname, filePath)
+    console.log('filePath is ', filePath)
+    let filedata
+    main_process_utils.readNoteBookFile(filePath, filedata, event, (event, filedata) => {
+        if(filedata.toString('utf-8')) {
+            filedata = JSON.parse(filedata.toString('utf-8'))
+        }
+        console.log('file data is ',filedata)
+        event.reply('loadfile-reply', filedata)
     })
 })

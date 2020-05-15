@@ -40,11 +40,12 @@ function EditIndex() {
     }, [count])
     useEffect(() => {
         let isMounted = true
+        /* HOOK 加载cache 中暂存的 edit data*/
         if(window.ipcRenderer) {
             window.ipcRenderer.send('loadEditCache-send', 'loadEditCache')
             window.ipcRenderer.on('loadEditCache-reply', (event, arg) => {
                 if (isMounted) {
-                    handleCacheData(arg)
+                    handleLoadData(arg)
                 }
             })
         }
@@ -53,7 +54,7 @@ function EditIndex() {
         }
     }, [])
     //handlers
-    const handleCacheData = (cacheData) => {
+    const handleLoadData = (cacheData) => {
         let tempArr = []
         for (const key in cacheData) {
             if (cacheData.hasOwnProperty(key)) {
@@ -94,7 +95,7 @@ function EditIndex() {
         )
     })
     return (
-        <EditDataCtx.Provider value={{ updateData }}>
+        <EditDataCtx.Provider value={{ updateData,handleLoadData }}>
             <div
                 className={editIndex}
 

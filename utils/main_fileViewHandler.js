@@ -104,7 +104,7 @@ function combinePath(foldName, fileName) {
     }
 }
 function readNoteBookFile(filePath,filedata,event,callback) {
-    console.log('cache path is', filePath)
+    console.log('load notbook file path is', filePath)
     fs.readFile(filePath,(err,data)=>{
         if(err) {
             throw err

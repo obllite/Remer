@@ -29,6 +29,7 @@ function FileView() {
     })
     useEffect(() => {
         let loadFlag = 'file view init'
+        /* HOOK 加载file View 的信息 */
         if (window.ipcRenderer) {
             window.ipcRenderer.send('loadFileViewInfo-send', loadFlag)
             window.ipcRenderer.on('loadFileViewInfo-reply', (event, arg) => {
