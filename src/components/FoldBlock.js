@@ -7,7 +7,8 @@ import EditDataCtx from './EditDataCtx'
 function FoldBlock(props) {
     const {
         index,
-        ifFirst
+        ifFirst,
+        ifLast
     } = props
     //classnames
     const newFileLi = classnames('newFileLi')
@@ -17,7 +18,9 @@ function FoldBlock(props) {
     const fileIcon = classnames('iconfont icon-wenjian')
     const foldOpenIcon = classnames('iconfont icon-wenjianjiadakaizhuangtai')
     const foldCloseIcon = classnames('iconfont icon-wenjianjiaguanbizhuangtai')
-    
+
+    const fileli = classnames('fileli')
+    const indentation = classnames('indentation')
     //consts
     let ifCanNew = false
 
@@ -140,7 +143,7 @@ function FoldBlock(props) {
                     return false
                 })
             } else {
-                tmp_item = tmp_item.map((tmp_item, tmp_i)=>{
+                tmp_item = tmp_item.map((tmp_item, tmp_i) => {
                     tmp_item = false
                     return tmp_item
                 })
@@ -151,7 +154,13 @@ function FoldBlock(props) {
     }
     return (
         <>
-            <div className={foldList}>
+            <div
+                className={foldList}
+                style={ifPutDown||ifLast?{}:{
+                    backgroundClip: "padding-box",
+                    borderBottom: "2px dashed #65AD83"
+                }}
+            >
                 <span
                     className={foldOpenIcon}
                     onClick={(e) => {
@@ -168,9 +177,10 @@ function FoldBlock(props) {
                 ></span>
             </div>
             {ifPutDown ?
-                <ul className={fileList}>
+                <div className={fileList}>
                     {ifNewFile ?
                         (<li className={newFileLi} ref={fileNewLiRef}>
+                            <div className={indentation}></div>
                             <span className={fileIcon}></span>
                             <input type="text"
                                 ref={fileNewRef}
@@ -188,10 +198,12 @@ function FoldBlock(props) {
                         </li>) : <></>}
                     {props.fileNames[index].names.map((item, file_i) => {
                         return (
-                            <li
+                            <div
                                 key={file_i}
+                                className={fileli}
                                 onContextMenu={(e) => {
                                     e.nativeEvent.stopPropagation()
+                                    //TODO 实现右键菜单
                                     let IMenu = {}//menu 接口
                                     if (window.ipcRenderer) {
                                         window.ipcRenderer.send('show-context-menu', IMenu)
@@ -207,12 +219,13 @@ function FoldBlock(props) {
                                     } : {}
                                 }
                             >
+                                <div className={indentation}></div>
                                 <span className={fileIcon}></span>
                                 {item}
-                            </li>
+                            </div>
                         )
                     })}
-                </ul> : <></>}
+                </div> : <></>}
         </>)
 }
 

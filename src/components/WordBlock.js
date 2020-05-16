@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect, useRef } from 'react'
 import classnames from 'classnames'
 import WordExplain from './WordExplain'
 import EditDataCtx from './EditDataCtx'
-//FIXME 添加文件在 file list 收起状态下存在 file list 数组为 undefine 的bug 应先修改是否下拉的状态再添加文件
 //COMPONENT word block 组件 显示单词编辑的基本区域
 
 function WordBlock(props) {

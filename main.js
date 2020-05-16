@@ -27,6 +27,7 @@ function createWindow() {
         height: 740,
         minWidth: 400,
         alwaysOnTop: true,
+        //icon: path.join(__dirname, 'assets/images/sakurajima.jpg'),
         webPreferences: {
             nodeIntegration: true,
             preload: path.join(__dirname, 'preload.js')
@@ -34,6 +35,9 @@ function createWindow() {
         }
     })
 
+    if (process.platform === 'darwin') {
+        app.dock.setIcon(path.join(__dirname, 'assets/images/sakurajima.jpg'));
+    }
     // and load the index.html of the app.
     //mainWindow.loadFile('index.html')
     mainWindow.loadURL('http://localhost:3000/');

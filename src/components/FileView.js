@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import classnames from 'classnames'
 import FoldBlock from './FoldBlock'
+
 //COMPONENT fileview 组件 用于展示NoteBook文件结构
 function FileView() {
     //classnames
@@ -79,11 +80,13 @@ function FileView() {
             setfileViewVisible('visible')
             if (newWidth > maxWidth) {
                 newWidth = maxWidth
-            }
-            if (newWidth < minWidth) {
+                setfileViewWidth(newWidth)
+            }else if (newWidth < minWidth) {
                 setfileViewVisible('hidden')
+                setfileViewWidth(0)
+            } else {
+                setfileViewWidth(newWidth)
             }
-            setfileViewWidth(newWidth)
         }
     }
     const handelDragEnd = (e) => {
@@ -112,7 +115,6 @@ function FileView() {
                     }
                 }
             }
-
         }
     }
     return (
@@ -127,6 +129,7 @@ function FileView() {
                     return (
                         <FoldBlock
                             ifFirst={fold_index === 0 ? true : false}
+                            ifLast={fold_index === noteBookNames.length-1? true:false}
                             key={fold_index}
                             index={fold_index}
                             notBookName={fold_item}
