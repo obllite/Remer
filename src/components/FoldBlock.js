@@ -11,6 +11,10 @@ function FoldBlock(props) {
         ifFirst,
         ifLast
     } = props
+    //menu notifier
+    const handlerename = () => {
+        console.log('rename clicked')
+    }
     //classnames
     const newFileLi = classnames('newFileLi')
     const foldList = classnames('foldList')
@@ -24,21 +28,35 @@ function FoldBlock(props) {
     const indentation = classnames('indentation')
     //consts
     let ifCanNew = false
+    let ifCanRename = false
+    const ifRenameInit = -1
     //hooks
     const [ifNewFile, setifNewFile] = useState(false)
     const [ifPutDown, setifPutDown] = useState(true)
+    const [ifRename, setifRename] = useState({
+        noteBook_i: -1,
+        file_i: -1
+    })
 
     const { handleLoadData } = useContext(EditDataCtx)
 
     const foldIconRef = useRef()
     const fileNewRef = useRef()
     const fileNewLiRef = useRef()
+    const renameRef = useRef(null)
 
     useEffect(() => {
         if (ifNewFile) {
             fileNewRef.current.focus()
         }
     }, [ifNewFile])
+
+    useEffect(() => {
+        if (renameRef.current) {
+            console.log('rename effect inner')
+            renameRef.current.focus()
+        }
+    }, [ifRename])
 
     //handlers
     const handleFold = (e) => {
@@ -97,9 +115,9 @@ function FoldBlock(props) {
                 }
                 return item
             }))
-
         }
     }
+
     const handleNewFileKeyDown = (e) => {
         if (e.keyCode === 13 && ifCanNew) {
             setifNewFile(false)
@@ -156,15 +174,64 @@ function FoldBlock(props) {
         props.setfilelis(tmpArr)
     }
 
-    const renameHandler = () =>{
-
+    /* context menu  */
+    /* rename */
+    // 显示输入的 input
+    const renameHandler = (noteBook_i, file_i) => {
+        console.log('renameHandler', noteBook_i, file_i)
+        setifRename({
+            noteBook_i: noteBook_i,
+            file_i: file_i
+        })
     }
 
-    /* menu config template */
+    const handleRenameChange = (e) => {
+        ifCanRename = validateFileName(renameRef.current.value, props.fileNames[index].names)
+        if (!ifCanRename) {
+            renameRef.current.style.color = "red"
+            renameRef.current.style.color = "red"
+            renameRef.current.focus()
+            return
+        } else {
+            renameRef.current.style.color = "black"
+            renameRef.current.style.color = "black"
+        }
+    }
 
+    const handleRenameKeyDown = (e) => {
+        if (e.keyCode === 13 && ifCanRename) {
+            let arg = getRenameArg()
+            console.log('old path is ', arg.oldPath)
+            console.log('new path is ', arg.newPath)
+        }
+    }
+
+    const handleRenameBlur = (e) => {
+        if (renameRef.current.value === '' || !ifCanRename) {
+            setifRename(ifRenameInit)
+        } else {
+            let arg = getRenameArg()
+            console.log('old path is ', arg.oldPath)
+            console.log('new path is ', arg.newPath)
+        }
+    }
+
+    const getRenameArg = () => {
+        let noteBook_i = index
+        let file_i = ifRename.file_i
+        let oldPath = '/' + props.notBookNames[noteBook_i] + '/' + props.fileNames[index].names[file_i]
+        let newPath = '/' + props.notBookNames[noteBook_i] + '/' + renameRef.current.value
+        let arg = {
+            type: "file",
+            oldPath: oldPath,
+            newPath: newPath
+        }
+        return arg
+    }
+    /* menu config template */
     const fileViewMenuTmp = [{
         label: 'rename',
-        click: renameHandler
+        click: handlerename
     }]
     return (
         <>
@@ -212,29 +279,54 @@ function FoldBlock(props) {
                         </li>) : <></>}
                     {props.fileNames[index].names.map((item, file_i) => {
                         return (
-                            <div
-                                key={file_i}
-                                className={fileli}
-                                onContextMenu={(e) => {
-                                    e.nativeEvent.stopPropagation()
-                                    //TODO 实现右键菜单
-                                    const fileViewMenu = electron_api.newCxtMenu(fileViewMenuTmp)
-                                    fileViewMenu.popup()
-                                }}
-                                onClick={(e) => {
-                                    change2True(file_i)
-                                    handleSwitchFile(e, file_i)
-                                }}
-                                style={
-                                    props.filelis[index] !== undefined && props.filelis[index][file_i] ? {
-                                        backgroundColor: "#ced4da"
-                                    } : {}
-                                }
-                            >
-                                <div className={indentation}></div>
-                                <span className={fileIcon}></span>
-                                {item}
-                            </div>
+                            ifRename.noteBook_i === index && ifRename.file_i === file_i ?
+                                <div
+                                    key={file_i}
+                                    className={newFileLi}
+                                >
+                                    <div className={indentation}></div>
+                                    <span className={fileIcon}></span>
+                                    <input type="text"
+                                        ref={renameRef}
+                                        onChange={(e) => {
+                                            handleRenameChange(e)
+                                        }}
+                                        onKeyDown={(e) => {
+                                            handleRenameKeyDown(e)
+                                        }}
+                                        onBlur={(e) => {
+                                            handleRenameBlur(e)
+                                        }
+                                        }
+                                    />
+                                </div>
+                                : <div
+                                    key={file_i}
+                                    className={fileli}
+                                    onContextMenu={(e) => {
+                                        const fileViewMenu = electron_api.newCxtMenu(fileViewMenuTmp)
+                                        fileViewMenu.popup({
+                                            callback: () => {
+                                                console.log('context menu closed')
+                                                renameHandler(index, file_i)
+                                            }
+                                        })
+
+                                    }}
+                                    onClick={(e) => {
+                                        change2True(file_i)
+                                        handleSwitchFile(e, file_i)
+                                    }}
+                                    style={
+                                        props.filelis[index] !== undefined && props.filelis[index][file_i] ? {
+                                            backgroundColor: "#ced4da"
+                                        } : {}
+                                    }
+                                >
+                                    <div className={indentation}></div>
+                                    <span className={fileIcon}></span>
+                                    {item}
+                                </div>
                         )
                     })}
                 </div> : <></>}

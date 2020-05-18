@@ -65,9 +65,11 @@ function FileView() {
             }
         }
     }, [])
+
     useEffect(() => {
         getCurrentFilePath()
     }, [filelis])
+    
     //handlers
     const handleDragStart = (e) => {
         setstartX(e.clientX)
