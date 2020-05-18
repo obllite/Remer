@@ -201,3 +201,16 @@ ipcMain.on('loadfile-send', (event, filePath) => {
 ipcMain.on('syncFilePath-send', (event, currentFilePath) => {
     lastViewedFilePath = '/noteBooks' + currentFilePath
 })
+
+/* HOOK FoldBlock 组件发送, 重命名文件 */
+ipcMain.on('rename-send', (event, arg) => {
+    let oldPath = path.join(__dirname, '/noteBooks' + arg.oldPath)
+    let newPath = path.join(__dirname, '/noteBooks' + arg.newPath)
+    console.log('old path is ', oldPath, ' new path is ', newPath)
+    let result = false
+    main_process_utils.rename(oldPath, newPath, ()=>{
+        result = true
+        console.log('rename result is ', result)
+        event.reply('rename-reply', result)
+    })
+})

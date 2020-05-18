@@ -57,7 +57,10 @@ function FoldBlock(props) {
             renameRef.current.focus()
         }
     }, [ifRename])
-
+    
+    useEffect(() => {
+        console.log('renameRef is update')
+    }, [renameRef])
     //handlers
     const handleFold = (e) => {
         switch (e.target.className) {
@@ -203,6 +206,32 @@ function FoldBlock(props) {
             let arg = getRenameArg()
             console.log('old path is ', arg.oldPath)
             console.log('new path is ', arg.newPath)
+            /* HOOK 重命名文件 */
+            window.ipcRenderer.send('rename-send', arg)
+            window.ipcRenderer.on('rename-reply', (event, result) => {
+                //此处更新视图中的信息
+                if(result) {
+                    let newFileName = renameRef.current.value
+                    let newFileIndex = ifRename.file_i
+                    //props.fileNames[index].names[] = newFileName
+                    console.log('new file naem is ',newFileName)
+                    console.log('new file index is', ifRename.file_i, 'type is ',ifRename.file_i)
+                    props.setfileNames(props.fileNames.map((item, i) => {
+                        if (i === index) {
+                            let tmpArr = item.names
+                            tmpArr[newFileIndex] = newFileName
+                            item.names = tmpArr
+                        }
+                        return item
+                    }))
+                } else {
+                    console.log('rename false')
+                }
+                setifRename({
+                    noteBook_i: -1,
+                    file_i: -1
+                })
+            })
         }
     }
 
@@ -224,7 +253,7 @@ function FoldBlock(props) {
         let arg = {
             type: "file",
             oldPath: oldPath,
-            newPath: newPath
+            newPath: newPath,
         }
         return arg
     }
@@ -308,10 +337,10 @@ function FoldBlock(props) {
                                         fileViewMenu.popup({
                                             callback: () => {
                                                 console.log('context menu closed')
+                                                //FIXME 应放到click函数中
                                                 renameHandler(index, file_i)
                                             }
                                         })
-
                                     }}
                                     onClick={(e) => {
                                         change2True(file_i)

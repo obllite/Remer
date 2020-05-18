@@ -121,7 +121,16 @@ function readNoteBookFile(filePath,filedata,event,callback) {
         callback(event,filedata)
     }) 
 }
-
+// 重命名 file
+function rename(oldPath, newPath, callback) {
+    fs.rename(oldPath, newPath, (err) => {
+        if (err) {
+            throw err
+        }
+        console.log('file rename success')
+        callback()
+    })
+}
 //consts
 exports.fileViewInfo = fileViewInfo
 //functions
@@ -129,3 +138,4 @@ exports.newFile = newFile
 exports.initFileViewInfo = initFileViewInfo
 exports.getDefaultFilePath = getDefaultFilePath
 exports.readNoteBookFile = readNoteBookFile
+exports.rename = rename
