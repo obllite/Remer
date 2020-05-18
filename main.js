@@ -13,13 +13,11 @@ const editCachePath = path.join(__dirname, "/noteBooks/editBlockCache.json")
 const fs = require("fs");
 let main_process_utils = null;
 let lastViewedFilePath = ''
-//Menu
-
 
 //http URL definition
 const httpURlCollins = "https://www.collinsdictionary.com/zh/dictionary/english/";
 const httpQue = [httpURlCollins];
-
+    
 function createWindow() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
@@ -44,6 +42,7 @@ function createWindow() {
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
 }
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -79,11 +78,27 @@ function loadUtils() {
 }
 
 // Main process ipc
+//new menu
+
+const fileViewMenu = new Menu()
+fileViewMenu.append(new MenuItem({
+    label: "rename", click: () => {
+        console.log("menu rename is clicked")
+        
+    }
+}))
 
 /* TODO 封装 new Menu，创建 listener 以及 arg 接口的参数类型 */
-ipcMain.on('show-context-menu', (event, arg) => {
-    //console.log(event)
+//NOTE 此处不能返回消息，原因未知。electron实际实现时会多次调用reply方法，最终导致爆栈
+//NOTE 暂时方案 在 menu 的 click 回调中发送消息
+ipcMain.on('fileViewMenu-send', (event, arg) => {
+    let reply = 'rename reply'
+    event.reply('fileViewMenu-reply',reply)
+    console.log('has replyed')
+    const win = BrowserWindow.fromWebContents(event.sender)
+    fileViewMenu.popup(win)
 })
+
 /* HOOK handler changeAvatorFile: 更换用户头像 */
 /* FIXME 存在没有调用的dialog， 可以删除然后重新封装async函数 */
 ipcMain.on('changeAvatorFile-send', async (event, arg) => {
@@ -146,10 +161,10 @@ ipcMain.on('saveEditBlocks-send', (event, arg) => {
     blocksDataJson = JSON.stringify(blocksDataJson)
     //console.log('blocksDataJson is --->', blocksDataJson)
     let writeLength = blocksDataJson.length
-    main_process_utils.saveEditBlocks(blocksDataJson,lastViewedFilePath,(filePath)=>{
-        filePath = path.join(__dirname,lastViewedFilePath)
+    main_process_utils.saveEditBlocks(blocksDataJson, lastViewedFilePath, (filePath) => {
+        filePath = path.join(__dirname, lastViewedFilePath)
         //NOTE 可以通过是否同步来检查文件是否保存
-        main_process_utils.syncCacheToFile(editCachePath,filePath)
+        main_process_utils.syncCacheToFile(editCachePath, filePath)
     })
     //NOTE 用于实现进度条
     event.reply('saveEditBlocks-reply', writeLength)
@@ -164,9 +179,9 @@ ipcMain.on('newFile-send', (event, arg) => {
 /* HOOK handler loadFileViewInfo 加载 fileView 数据 */
 ipcMain.on('loadFileViewInfo-send', (event, arg) => {
     let fileViewInfo = main_process_utils.fileViewInfo
-    if(lastViewedFilePath) {
+    if (lastViewedFilePath) {
         let splitFilePath = lastViewedFilePath.split('/')
-        let lastViewedFile  = splitFilePath.pop()
+        let lastViewedFile = splitFilePath.pop()
         let lastViewedNoteBook = splitFilePath.pop()
         console.log('lastViewFile is', lastViewedFile)
         fileViewInfo.lastViewedFile = lastViewedFile
@@ -206,5 +221,5 @@ ipcMain.on('loadfile-send', (event, filePath) => {
 })
 /* HOOK FilView 组件发送 同步当前的文件路径 */
 ipcMain.on('syncFilePath-send', (event, currentFilePath) => {
-    lastViewedFilePath = '/noteBooks'+ currentFilePath
+    lastViewedFilePath = '/noteBooks' + currentFilePath
 })

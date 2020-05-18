@@ -204,9 +204,11 @@ function FoldBlock(props) {
                                 onContextMenu={(e) => {
                                     e.nativeEvent.stopPropagation()
                                     //TODO 实现右键菜单
-                                    let IMenu = {}//menu 接口
                                     if (window.ipcRenderer) {
-                                        window.ipcRenderer.send('show-context-menu', IMenu)
+                                        window.ipcRenderer.send('fileViewMenu-send')
+                                        window.ipcRenderer.on('fileViewMenu-reply',(event,arg)=>{
+                                            console.log(arg)
+                                        })
                                     }
                                 }}
                                 onClick={(e) => {
