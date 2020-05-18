@@ -5,6 +5,8 @@ import EditDataCtx from './EditDataCtx'
 import electron_api from '../api/index'
 //FIXME rollback之后的 switch 可能存在内存泄漏
 //COMPONENT 组件用于显示一个NoteBook下的文件结构
+
+//git test
 function FoldBlock(props) {
     const {
         index,
