@@ -4,8 +4,6 @@ const {
     BrowserWindow,
     ipcMain,
     dialog,
-    Menu,
-    MenuItem
 } = require("electron");
 
 const path = require("path");
@@ -78,26 +76,6 @@ function loadUtils() {
 }
 
 // Main process ipc
-//new menu
-
-const fileViewMenu = new Menu()
-fileViewMenu.append(new MenuItem({
-    label: "rename", click: () => {
-        console.log("menu rename is clicked")
-        
-    }
-}))
-
-/* TODO 封装 new Menu，创建 listener 以及 arg 接口的参数类型 */
-//NOTE 此处不能返回消息，原因未知。electron实际实现时会多次调用reply方法，最终导致爆栈
-//NOTE 暂时方案 在 menu 的 click 回调中发送消息
-ipcMain.on('fileViewMenu-send', (event, arg) => {
-    let reply = 'rename reply'
-    event.reply('fileViewMenu-reply',reply)
-    console.log('has replyed')
-    const win = BrowserWindow.fromWebContents(event.sender)
-    fileViewMenu.popup(win)
-})
 
 /* HOOK handler changeAvatorFile: 更换用户头像 */
 /* FIXME 存在没有调用的dialog， 可以删除然后重新封装async函数 */

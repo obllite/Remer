@@ -1,7 +1,7 @@
 /* FIXME 不符合设计模式，应该重构为高级函数，根据参数返回函数并 push 到itemHandler数组中，可分为函数名拼接 和匿名函数创建，参数为全局变量 */
 import store from '../store/store'
 const itemHandler = [searchItemHandler, reviewItemHandler, bookItemHandler, configItemHandler]
-/* FUNCTION searchItemHandler 点击侧边栏的搜索， 显示search bar */
+
 function searchItemHandler() {
     store.dispatch({
         type: "showSearchBar",

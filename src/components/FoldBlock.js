@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react'
 import classnames from 'classnames'
 import handleNewFile, { validateFileName } from '../utils/fileViewHandler'
 import EditDataCtx from './EditDataCtx'
+import electron_api from '../api/index'
 //FIXME rollback之后的 switch 可能存在内存泄漏
 //COMPONENT 组件用于显示一个NoteBook下的文件结构
 function FoldBlock(props) {
@@ -23,7 +24,6 @@ function FoldBlock(props) {
     const indentation = classnames('indentation')
     //consts
     let ifCanNew = false
-
     //hooks
     const [ifNewFile, setifNewFile] = useState(false)
     const [ifPutDown, setifPutDown] = useState(true)
@@ -55,11 +55,13 @@ function FoldBlock(props) {
                 break;
         }
     }
+
     const handleaddFile = (e) => {
         foldIconRef.current.className = foldOpenIcon
         setifPutDown(true)
         setifNewFile(true)
     }
+
     const hanleNewFileChange = (e) => {
         if (fileNewRef.current.value !== '') {
             ifCanNew = validateFileName(fileNewRef.current.value, props.fileNames[index].names)
@@ -132,6 +134,7 @@ function FoldBlock(props) {
             handleLoadData(arg)
         })
     }
+
     const change2True = (change_i) => {
         let tmpArr = props.filelis
         tmpArr = tmpArr.map((tmp_item, tmp_i) => {
@@ -152,11 +155,22 @@ function FoldBlock(props) {
         })
         props.setfilelis(tmpArr)
     }
+
+    const renameHandler = () =>{
+
+    }
+
+    /* menu config template */
+
+    const fileViewMenuTmp = [{
+        label: 'rename',
+        click: renameHandler
+    }]
     return (
         <>
             <div
                 className={foldList}
-                style={ifPutDown||ifLast?{}:{
+                style={ifPutDown || ifLast ? {} : {
                     backgroundClip: "padding-box",
                     borderBottom: "2px dashed #65AD83"
                 }}
@@ -204,12 +218,8 @@ function FoldBlock(props) {
                                 onContextMenu={(e) => {
                                     e.nativeEvent.stopPropagation()
                                     //TODO 实现右键菜单
-                                    if (window.ipcRenderer) {
-                                        window.ipcRenderer.send('fileViewMenu-send')
-                                        window.ipcRenderer.on('fileViewMenu-reply',(event,arg)=>{
-                                            console.log(arg)
-                                        })
-                                    }
+                                    const fileViewMenu = electron_api.newCxtMenu(fileViewMenuTmp)
+                                    fileViewMenu.popup()
                                 }}
                                 onClick={(e) => {
                                     change2True(file_i)
