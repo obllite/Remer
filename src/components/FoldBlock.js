@@ -18,6 +18,10 @@ function FoldBlock(props) {
         console.log('rename clicked')
         renameHandler(index, currentFileIndex)
     }
+    const menuhandleDelete = () => {
+        console.log('delete clicked')
+        deleteHandler(index, currentFileIndex)
+    }
     //classnames
     const newFileLi = classnames('newFileLi')
     const foldList = classnames('foldList')
@@ -61,7 +65,7 @@ function FoldBlock(props) {
             renameRef.current.focus()
         }
     }, [ifRename])
-    
+
     useEffect(() => {
         console.log('renameRef is update')
     }, [renameRef])
@@ -185,7 +189,7 @@ function FoldBlock(props) {
     /* rename */
     // 显示输入的 input
     const renameHandler = (noteBook_i, file_i) => {
-        if(file_i === -1) {
+        if (file_i === -1) {
             console.log('rename err')
             return
         }
@@ -222,10 +226,10 @@ function FoldBlock(props) {
             window.ipcRenderer.send('rename-send', arg)
             window.ipcRenderer.on('rename-reply', (event, result) => {
                 //此处更新视图中的信息
-                if(result) {
+                if (result) {
                     //props.fileNames[index].names[] = newFileName
-                    console.log('new file naem is ',newFileName)
-                    console.log('new file index is', ifRename.file_i, 'type is ',ifRename.file_i)
+                    console.log('new file naem is ', newFileName)
+                    console.log('new file index is', ifRename.file_i, 'type is ', ifRename.file_i)
                     props.setfileNames(props.fileNames.map((item, i) => {
                         if (i === index) {
                             let tmpArr = item.names
@@ -257,10 +261,10 @@ function FoldBlock(props) {
             window.ipcRenderer.send('rename-send', arg)
             window.ipcRenderer.on('rename-reply', (event, result) => {
                 //此处更新视图中的信息
-                if(result) {
+                if (result) {
                     //props.fileNames[index].names[] = newFileName
-                    console.log('new file naem is ',newFileName)
-                    console.log('new file index is', ifRename.file_i, 'type is ',ifRename.file_i)
+                    console.log('new file naem is ', newFileName)
+                    console.log('new file index is', ifRename.file_i, 'type is ', ifRename.file_i)
                     props.setfileNames(props.fileNames.map((item, i) => {
                         if (i === index) {
                             let tmpArr = item.names
@@ -270,6 +274,7 @@ function FoldBlock(props) {
                         return item
                     }))
                 } else {
+                    //添加 notifier 警告
                     console.log('rename false')
                 }
                 setifRename({
@@ -292,10 +297,38 @@ function FoldBlock(props) {
         }
         return arg
     }
+
+    const deleteHandler = (noteBook_i, currentFileIndex) => {
+        let path = '/' + props.notBookNames[noteBook_i] + '/' + props.fileNames[index].names[currentFileIndex]
+        console.log('delete path is ',path)
+        /* HOOK delete file */
+        window.ipcRenderer.send('deletefile-send',path)
+        window.ipcRenderer.on('deletefile-reply',(event, result)=>{
+            console.log('delete file result is', result)
+            if(result){
+                console.log('delete currentFileIndex is ',currentFileIndex)
+                //更新视图中的信息
+                props.setfileNames(props.fileNames.map((item, i) => {
+                    if (i === index) {
+                        let tmpArr = item.names
+                        tmpArr.splice(currentFileIndex, 1)
+                        item.names = tmpArr
+                    }
+                    return item
+                }))
+            } else {
+                // 添加notifier 警告
+                console.log('delete file false')
+            }
+        })
+    }
     /* menu config template */
     const fileViewMenuTmp = [{
         label: 'rename',
         click: menuhandleRename
+    }, {
+        label: 'delete',
+        click: menuhandleDelete
     }]
     return (
         <>

@@ -214,3 +214,14 @@ ipcMain.on('rename-send', (event, arg) => {
         event.reply('rename-reply', result)
     })
 })
+/* HOOK FoldBlock 组件发送, 删除文件 */
+
+ipcMain.on('deletefile-send',(event, filePath)=>{
+    let result = false
+    console.log('delete file path is ', filePath)
+    main_process_utils.deletefile(filePath,()=>{
+        result = true
+        console.log('delete file success')
+        event.reply('deletefile-reply',result)
+    })
+})

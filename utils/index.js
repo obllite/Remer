@@ -14,3 +14,4 @@ exports.initFileViewInfo = fileViewHandler.initFileViewInfo
 exports.getDefaultFilePath = fileViewHandler.getDefaultFilePath
 exports.readNoteBookFile = fileViewHandler.readNoteBookFile
 exports.rename = fileViewHandler.rename
+exports.deletefile = fileViewHandler.deletefile

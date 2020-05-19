@@ -148,7 +148,20 @@ function rename(oldPath, newPath, callback) {
     })
 }
 
+function deletefile(filePath, callback){
+    filePath = path.join(rootPath, filePath)
+    console.log('delete file path is ', filePath)
+    fs.unlink(filePath, (err)=>{
+        if(err) {
+            throw err
+        }
+        //updateFileInfo
+        callback()
+    })
+}
+
 //NOTE 所有文件信息更改后都应该调用 updateFileInfo 更新文件信息
+//NOTE 所有 noteBooks 下path.join 都使用 rootPath
 //consts
 exports.fileViewInfo = fileViewInfo
 //functions
@@ -157,3 +170,4 @@ exports.initFileViewInfo = initFileViewInfo
 exports.getDefaultFilePath = getDefaultFilePath
 exports.readNoteBookFile = readNoteBookFile
 exports.rename = rename
+exports.deletefile = deletefile

@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import WordExplain from './WordExplain'
 import EditDataCtx from './EditDataCtx'
 //COMPONENT word block 组件 显示单词编辑的基本区域
-
+//FIXME new file 之后 wordblock 未更新, 怀疑是初始化数据未加载
 function WordBlock(props) {
     const {
         index,
@@ -33,6 +33,7 @@ function WordBlock(props) {
     }])
     const englishInputRef = useRef()
     const chineseInputRef = useRef()
+    
     useEffect(() => {
         updateData(index, english, chinese, meanings)
         return () => {
