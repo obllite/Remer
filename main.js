@@ -219,6 +219,8 @@ ipcMain.on('rename-send', (event, arg) => {
 ipcMain.on('deletefile-send',(event, filePath)=>{
     let result = false
     console.log('delete file path is ', filePath)
+    //更改lastViewFile
+    lastViewedFilePath = ''
     main_process_utils.deletefile(filePath,()=>{
         result = true
         console.log('delete file success')
