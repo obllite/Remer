@@ -8,6 +8,12 @@ const handleNewFile = (fileName, filePath) => {
     if (isElectron()) {
         window.ipcRenderer.on('newFile-reply', (event, ifNewFileSuc) => {
             if (ifNewFileSuc) {
+                let sucNotification = new Notification('创建文件成功', {
+                    body: '文件创建成功'
+                })
+                sucNotification.onclick = () => {
+                    console.log('通知被点击')
+                }
             } else {
                 let myNotification = new Notification('创建文件警告', {
                     body: '文件创建失败'
@@ -15,7 +21,6 @@ const handleNewFile = (fileName, filePath) => {
                 myNotification.onclick = () => {
                     console.log('通知被点击')
                 }
-                return false
             }
         })
     }

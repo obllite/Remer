@@ -15,7 +15,7 @@ let lastViewedFilePath = ''
 //http URL definition
 const httpURlCollins = "https://www.collinsdictionary.com/zh/dictionary/english/";
 const httpQue = [httpURlCollins];
-    
+
 function createWindow() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
@@ -128,16 +128,17 @@ ipcMain.on('searchWord-send', async (event, arg) => {
     const content = await main_process_utils.searchWord(arg, httpQue)
     event.reply('searchWord-reply', wordHeader += content)
 })
-//TODO 使用异步函数将cache与实际的file同步
+
+
 /* HOOK handler saveEditBlocks：将edit 区域的数据存入 notebooks/CeditBlockache.json */
 ipcMain.on('saveEditBlocks-send', (event, arg) => {
+    console.log('saveEditBlocks is called')
     let blocksDataJson = {}
     for (let i = 0; i < arg.length; i++) {
         let serial = 'block#' + i;
         blocksDataJson[serial] = arg[i]
     }
     blocksDataJson = JSON.stringify(blocksDataJson)
-    //console.log('blocksDataJson is --->', blocksDataJson)
     let writeLength = blocksDataJson.length
     main_process_utils.saveEditBlocks(blocksDataJson, lastViewedFilePath, (filePath) => {
         filePath = path.join(__dirname, lastViewedFilePath)
@@ -148,14 +149,10 @@ ipcMain.on('saveEditBlocks-send', (event, arg) => {
     event.reply('saveEditBlocks-reply', writeLength)
 })
 
-/* HOOK handler handleNewFile： file view 新建notebook 下文件 */
-ipcMain.on('newFile-send', (event, arg) => {
-    let ifNewFileSuc = main_process_utils.newFile(arg)
-    event.reply('newFile-reply', ifNewFileSuc)
-})
 
 /* HOOK handler loadFileViewInfo 加载 fileView 数据 */
 ipcMain.on('loadFileViewInfo-send', (event, arg) => {
+    console.log('load file vie info is called')
     let fileViewInfo = main_process_utils.fileViewInfo
     if (lastViewedFilePath) {
         let splitFilePath = lastViewedFilePath.split('/')
@@ -174,14 +171,18 @@ ipcMain.on('loadEditCache-send', (event, arg) => {
     if (lastViewedFilePath) {
         let rollbackFilePath = path.join(__dirname, lastViewedFilePath)
         main_process_utils.readNoteBookFile(rollbackFilePath, filedata, event, (event, filedata) => {
-            filedata = JSON.parse(filedata.toString('utf-8'))
-            event.reply('loadEditCache-reply', filedata)
+            if (filedata.toString('utf-8')) {
+                filedata = JSON.parse(filedata.toString('utf-8'))
+                event.reply('loadEditCache-reply', filedata)
+            }
         })
     } else {
         let initPath = path.join(__dirname, main_process_utils.getDefaultFilePath())
         main_process_utils.readNoteBookFile(initPath, filedata, event, (event, filedata) => {
-            filedata = JSON.parse(filedata.toString('utf-8'))
-            event.reply('loadEditCache-reply', filedata)
+            if (filedata.toString('utf-8')) {
+                filedata = JSON.parse(filedata.toString('utf-8'))
+                event.reply('loadEditCache-reply', filedata)
+            }
         })
     }
 })
@@ -193,8 +194,8 @@ ipcMain.on('loadfile-send', (event, filePath) => {
     main_process_utils.readNoteBookFile(filePath, filedata, event, (event, filedata) => {
         if (filedata.toString('utf-8')) {
             filedata = JSON.parse(filedata.toString('utf-8'))
+            event.reply('loadfile-reply', filedata)
         }
-        event.reply('loadfile-reply', filedata)
     })
 })
 /* HOOK FilView 组件发送 同步当前的文件路径 */
@@ -202,28 +203,38 @@ ipcMain.on('syncFilePath-send', (event, currentFilePath) => {
     lastViewedFilePath = '/noteBooks' + currentFilePath
 })
 
+/* HOOK handler handleNewFile： file view 新建notebook 下文件 */
+ipcMain.on('newFile-send', (event, arg) => {
+    let ifNewFileSuc = main_process_utils.newFile(arg)
+    event.reply('newFile-reply', ifNewFileSuc)
+})
+
 /* HOOK FoldBlock 组件发送, 重命名文件 */
 ipcMain.on('rename-send', (event, arg) => {
+    console.log('rename is called')
     let oldPath = path.join(__dirname, '/noteBooks' + arg.oldPath)
     let newPath = path.join(__dirname, '/noteBooks' + arg.newPath)
-    console.log('old path is ', oldPath, ' new path is ', newPath)
+    //console.log('old path is ', oldPath, ' new path is ', newPath)
     let result = false
-    main_process_utils.rename(oldPath, newPath, ()=>{
+    //更改lastViewFile
+    lastViewedFilePath = ''
+    main_process_utils.rename(oldPath, newPath, () => {
         result = true
-        console.log('rename result is ', result)
+        console.log('rename file success')
         event.reply('rename-reply', result)
     })
 })
-/* HOOK FoldBlock 组件发送, 删除文件 */
 
-ipcMain.on('deletefile-send',(event, filePath)=>{
+/* HOOK FoldBlock 组件发送, 删除文件 */
+ipcMain.on('deletefile-send', (event, filePath) => {
+    console.log('delete file is called')
     let result = false
-    console.log('delete file path is ', filePath)
+    //console.log('delete file path is ', filePath)
     //更改lastViewFile
     lastViewedFilePath = ''
-    main_process_utils.deletefile(filePath,()=>{
+    main_process_utils.deletefile(filePath, () => {
         result = true
         console.log('delete file success')
-        event.reply('deletefile-reply',result)
+        event.reply('deletefile-reply', result)
     })
 })

@@ -1,6 +1,6 @@
 /* this is notebook init template */
 const notebook_initTemplate = `{
-    "block0": {
+    "block#0": {
         "english": "",
         "chinese": "",
         "meanings": [

@@ -1,14 +1,1 @@
-{
-    "block#0": {
-        "english": "c.json",
-        "chinese": "test",
-        "meanings": [
-            {
-                "meaning": "c.json",
-                "collections": [
-                    "this is switch load test"
-                ]
-            }
-        ]
-    }
-}
+{"block#0":{"english":"a.json","chinese":"a chinese","meanings":[{"meaning":"a mean","collections":["a set collection"]}]}}

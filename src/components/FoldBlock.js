@@ -155,7 +155,7 @@ function FoldBlock(props) {
         //console.log('will switch to ', fileName)
         let filePath = '/noteBooks/' + props.notBookName + '/' + fileName
         //console.log('will switch file path is ', filePath)
-        /* HOOK加载 */
+        /* HOOK 加载 */
         window.ipcRenderer.send('loadfile-send', filePath)
         //下面应放在edit 中
         window.ipcRenderer.on('loadfile-reply', (event, arg) => {
@@ -407,7 +407,6 @@ function FoldBlock(props) {
                                         fileViewMenu.popup({
                                             callback: () => {
                                                 console.log('context menu closed')
-                                                //FIXME 应放到click函数中
                                                 //renameHandler(index, file_i)
                                             }
                                         })

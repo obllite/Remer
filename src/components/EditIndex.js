@@ -55,7 +55,6 @@ function EditIndex() {
     }, [])
     //handlers
     const handleLoadData = (cacheData) => {
-        //console.log('cache data is', cacheData)
         let tempArr = []
         let tempCount = []
         for (const key in cacheData) {

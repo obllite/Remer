@@ -68,7 +68,7 @@ function newFile(fileInfo) {
         fs.openSync(filePath, 'w')
         fs.writeFile(filePath, template.notebook_initTemplate, function (err) {
             if (err) {
-                return console.log(err);
+                throw err
             }
         });
         console.log('create file success, file path is ', filePath)
@@ -90,7 +90,6 @@ function updateFileInfo(type, oldPath, newPath) {
             break;
         case 'delete':
             fileViewInfo.fileNames[fold_index].names.splice(file_index, 1)
-            console.log('after delete file info is ', fileViewInfo.fileNames[fold_index].names)
             break;
         case 'rename':
             let newBaseInfo = newPath.split(path.sep)
@@ -140,12 +139,12 @@ function readNoteBookFile(filePath,filedata,event,callback) {
 }
 // 重命名 file
 function rename(oldPath, newPath, callback) {
+    console.log('rename file path is ', oldPath)
     fs.rename(oldPath, newPath, (err) => {
         if (err) {
             throw err
         }
         updateFileInfo('rename',oldPath,newPath)
-        console.log('file rename success')
         callback()
     })
 }
