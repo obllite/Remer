@@ -89,6 +89,8 @@ function updateFileInfo(type, oldPath, newPath) {
             fileViewInfo.fileNames[fold_index].names.push(fileName)
             break;
         case 'delete':
+            fileViewInfo.fileNames[fold_index].names.splice(file_index, 1)
+            console.log('after delete file info is ', fileViewInfo.fileNames[fold_index].names)
             break;
         case 'rename':
             let newBaseInfo = newPath.split(path.sep)
@@ -155,7 +157,7 @@ function deletefile(filePath, callback){
         if(err) {
             throw err
         }
-        //updateFileInfo
+        updateFileInfo('delete',filePath)
         callback()
     })
 }
