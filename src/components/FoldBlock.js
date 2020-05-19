@@ -16,6 +16,7 @@ function FoldBlock(props) {
     //menu notifier
     const menuhandleRename = () => {
         console.log('rename clicked')
+        renameHandler(index, currentFileIndex)
     }
     //classnames
     const newFileLi = classnames('newFileLi')
@@ -32,6 +33,7 @@ function FoldBlock(props) {
     let ifCanNew = false
     let ifCanRename = false
     const ifRenameInit = -1
+    let currentFileIndex = -1
     //hooks
     const [ifNewFile, setifNewFile] = useState(false)
     const [ifPutDown, setifPutDown] = useState(true)
@@ -183,6 +185,10 @@ function FoldBlock(props) {
     /* rename */
     // 显示输入的 input
     const renameHandler = (noteBook_i, file_i) => {
+        if(file_i === -1) {
+            console.log('rename err')
+            return
+        }
         console.log('renameHandler', noteBook_i, file_i)
         setifRename({
             noteBook_i: noteBook_i,
@@ -362,12 +368,14 @@ function FoldBlock(props) {
                                     key={file_i}
                                     className={fileli}
                                     onContextMenu={(e) => {
+                                        //更新current file index
+                                        currentFileIndex = file_i
                                         const fileViewMenu = electron_api.newCxtMenu(fileViewMenuTmp)
                                         fileViewMenu.popup({
                                             callback: () => {
                                                 console.log('context menu closed')
                                                 //FIXME 应放到click函数中
-                                                renameHandler(index, file_i)
+                                                //renameHandler(index, file_i)
                                             }
                                         })
                                     }}
