@@ -3,19 +3,20 @@ import classnames from 'classnames';
 import WordBlock from './WordBlock'
 import FileView from './FileView'
 import EditDataCtx from './EditDataCtx'
-
+import Preview from './Preview'
 import saveEditBlocks from '../utils/saveEditBlocks'
 //COMPONENT 创建，打开，编辑 notebook 文件的组件
 const maxlength = 25;
 function EditIndex() {
     const editIndex = classnames('editIndex')
+    const editAndPreview = classnames('editAndPreview')
+    const edit = classnames('edit')
     const addBlock = classnames('addBlock')
     const addBlockContainer = classnames('addBlockContainer')
     const submitEdit = classnames('submitEdit')
     const submitEditContainer = classnames('submitEditContainer')
     const bottomBtn = classnames('bottomBtn')
     const dividingLine = classnames('dividingLine')
-    const editAndPreview = classnames('editAndPreview')
     //consts
     let blockStatesTmp = [false, false, false]
     //blocks data temp 和 blocksData 为同步的两个相同的数据
@@ -41,7 +42,7 @@ function EditIndex() {
     useEffect(() => {
         let isMounted = true
         /* HOOK 加载cache 中暂存的 edit data*/
-        if(window.ipcRenderer&&isMounted) {
+        if (window.ipcRenderer && isMounted) {
             window.ipcRenderer.send('loadEditCache-send', 'loadEditCache')
             window.ipcRenderer.on('loadEditCache-reply', (event, arg) => {
                 if (isMounted) {
@@ -98,37 +99,42 @@ function EditIndex() {
         )
     })
     return (
-        <EditDataCtx.Provider value={{ updateData,handleLoadData,setcurrentFilePath }}>
+        <EditDataCtx.Provider value={{ updateData, handleLoadData, setcurrentFilePath }}>
             <div
                 className={editIndex}
             >
                 <FileView></FileView>
                 <div
                     className={editAndPreview}
-                    ref={(el) => {
-                        toBottom = el
-                    }}>
-                    {wordblock}
-                    <div className={bottomBtn}>
-                        <div className={dividingLine}><hr /></div>
-                        <div className={addBlockContainer}>
-                            <div
-                                className={addBlock}
-                                onClick={handleAddBlock}
-                            >
-                                +
+                >
+                    <div
+                        className={edit}
+                        ref={(el) => {
+                            toBottom = el
+                        }}>
+                        {wordblock}
+                        <div className={bottomBtn}>
+                            <div className={dividingLine}><hr /></div>
+                            <div className={addBlockContainer}>
+                                <div
+                                    className={addBlock}
+                                    onClick={handleAddBlock}
+                                >
+                                    +
                     </div>
+                            </div>
+                            <div className={submitEditContainer}>
+                                <div
+                                    className={submitEdit}
+                                    onClick={handleSubmitEdit}
+                                >
+                                    ↑
+                    </div>
+                            </div>
+                            <div className={dividingLine}><hr /></div>
                         </div>
-                        <div className={submitEditContainer}>
-                            <div
-                                className={submitEdit}
-                                onClick={handleSubmitEdit}
-                            >
-                                ↑
                     </div>
-                        </div>
-                        <div className={dividingLine}><hr /></div>
-                    </div>
+                    <Preview></Preview>
                 </div>
 
             </div>
