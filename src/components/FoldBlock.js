@@ -14,7 +14,7 @@ function FoldBlock(props) {
         ifLast
     } = props
     //menu notifier
-    const handlerename = () => {
+    const menuhandleRename = () => {
         console.log('rename clicked')
     }
     //classnames
@@ -191,6 +191,8 @@ function FoldBlock(props) {
     }
 
     const handleRenameChange = (e) => {
+        console.log('ref is', renameRef)
+        console.log('ref current is', renameRef.current)
         ifCanRename = validateFileName(renameRef.current.value, props.fileNames[index].names)
         if (!ifCanRename) {
             renameRef.current.style.color = "red"
@@ -205,6 +207,8 @@ function FoldBlock(props) {
 
     const handleRenameKeyDown = (e) => {
         if (e.keyCode === 13 && ifCanRename) {
+            let newFileName = renameRef.current.value
+            let newFileIndex = ifRename.file_i
             let arg = getRenameArg()
             console.log('old path is ', arg.oldPath)
             console.log('new path is ', arg.newPath)
@@ -213,8 +217,6 @@ function FoldBlock(props) {
             window.ipcRenderer.on('rename-reply', (event, result) => {
                 //此处更新视图中的信息
                 if(result) {
-                    let newFileName = renameRef.current.value
-                    let newFileIndex = ifRename.file_i
                     //props.fileNames[index].names[] = newFileName
                     console.log('new file naem is ',newFileName)
                     console.log('new file index is', ifRename.file_i, 'type is ',ifRename.file_i)
@@ -241,9 +243,34 @@ function FoldBlock(props) {
         if (renameRef.current.value === '' || !ifCanRename) {
             setifRename(ifRenameInit)
         } else {
+            let newFileName = renameRef.current.value
+            let newFileIndex = ifRename.file_i
             let arg = getRenameArg()
             console.log('old path is ', arg.oldPath)
             console.log('new path is ', arg.newPath)
+            window.ipcRenderer.send('rename-send', arg)
+            window.ipcRenderer.on('rename-reply', (event, result) => {
+                //此处更新视图中的信息
+                if(result) {
+                    //props.fileNames[index].names[] = newFileName
+                    console.log('new file naem is ',newFileName)
+                    console.log('new file index is', ifRename.file_i, 'type is ',ifRename.file_i)
+                    props.setfileNames(props.fileNames.map((item, i) => {
+                        if (i === index) {
+                            let tmpArr = item.names
+                            tmpArr[newFileIndex] = newFileName
+                            item.names = tmpArr
+                        }
+                        return item
+                    }))
+                } else {
+                    console.log('rename false')
+                }
+                setifRename({
+                    noteBook_i: -1,
+                    file_i: -1
+                })
+            })
         }
     }
 
@@ -262,7 +289,7 @@ function FoldBlock(props) {
     /* menu config template */
     const fileViewMenuTmp = [{
         label: 'rename',
-        click: handlerename
+        click: menuhandleRename
     }]
     return (
         <>

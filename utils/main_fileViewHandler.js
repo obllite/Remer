@@ -4,7 +4,7 @@ const template = require('./template')
 const rootPath = path.join(__dirname, "../noteBooks")
 //consts
 let index = 0;
-let fold_index = -1
+let foldIndex = -1
 let fileViewInfo = {
     noteBookNames: [],
     fileNames: [{
@@ -17,7 +17,7 @@ let fileViewInfo = {
 function initFileViewInfo() {
     //console.log('getFileViewInfo')
     dirTree(rootPath, () => {
-        fold_index = -1
+        foldIndex = -1
     })
 }
 /* PARAMS
@@ -34,9 +34,9 @@ async function dirTree(pathParams, callback) {
     if (!fs.statSync(pathParams).isFile()) {
         //index === 0 时为根目录
         if (!fileViewInfo.noteBookNames.includes(getName(pathParams)) && index !== 0) {
-            fold_index++
+            foldIndex++
             fileViewInfo.noteBookNames.push(getName(pathParams))
-            fileViewInfo.fileNames[fold_index] = { names: [] }
+            fileViewInfo.fileNames[foldIndex] = { names: [] }
         }
         let dirList = fs.readdirSync(pathParams);
         index++;
@@ -46,7 +46,7 @@ async function dirTree(pathParams, callback) {
         index--;
     } else {
         if (index !== 0 && index !== 1) {
-            fileViewInfo.fileNames[fold_index].names.push(getName(pathParams))
+            fileViewInfo.fileNames[foldIndex].names.push(getName(pathParams))
         }
     }
     if(callback !== undefined) {
@@ -72,18 +72,33 @@ function newFile(fileInfo) {
             }
         });
         console.log('create file success, file path is ', filePath)
-        updateFileInfo(filePath)
+        updateFileInfo('new',filePath)
         return true
     }
 
 }
 //更新文件信息
-function updateFileInfo(filePath) {
-    let foldName = filePath.split(path.sep)
-    let fileName = foldName[foldName.length - 1]
-    foldName = foldName[foldName.length - 2]
-    fold_index = fileViewInfo.noteBookNames.indexOf(foldName)
-    fileViewInfo.fileNames[fold_index].names.push(fileName)
+function updateFileInfo(type, oldPath, newPath) {
+    let oldBaseInfo = oldPath.split(path.sep)
+    let foldName = oldBaseInfo[oldBaseInfo.length - 2]
+    let fileName = oldBaseInfo[oldBaseInfo.length - 1]
+    let fold_index = fileViewInfo.noteBookNames.indexOf(foldName)
+    let file_index = fileViewInfo.fileNames[fold_index].names.indexOf(fileName)
+    switch (type) {
+        case 'new':
+            fileViewInfo.fileNames[fold_index].names.push(fileName)
+            break;
+        case 'delete':
+            break;
+        case 'rename':
+            let newBaseInfo = newPath.split(path.sep)
+            let newFileName = newBaseInfo[newBaseInfo.length - 1]
+            fileViewInfo.fileNames[fold_index].names[file_index] = newFileName
+            break;
+        default:
+            break;
+    }
+
     //console.log('new file info is', fileViewInfo.fileNames)
 }
 function getName(pathParams) {
@@ -127,10 +142,13 @@ function rename(oldPath, newPath, callback) {
         if (err) {
             throw err
         }
+        updateFileInfo('rename',oldPath,newPath)
         console.log('file rename success')
         callback()
     })
 }
+
+//NOTE 所有文件信息更改后都应该调用 updateFileInfo 更新文件信息
 //consts
 exports.fileViewInfo = fileViewInfo
 //functions
