@@ -10,7 +10,7 @@ const path = require("path");
 const editCachePath = path.join(__dirname, "/noteBooks/editBlockCache.json")
 const fs = require("fs");
 let main_process_utils = null;
-let lastViewedFilePath = ''
+let currentViewedFilePath = ''
 
 //http URL definition
 const httpURlCollins = "https://www.collinsdictionary.com/zh/dictionary/english/";
@@ -140,9 +140,10 @@ ipcMain.on('saveEditBlocks-send', (event, arg) => {
     }
     blocksDataJson = JSON.stringify(blocksDataJson)
     let writeLength = blocksDataJson.length
-    main_process_utils.saveEditBlocks(blocksDataJson, lastViewedFilePath, (filePath) => {
-        filePath = path.join(__dirname, lastViewedFilePath)
+    main_process_utils.saveEditBlocks(blocksDataJson, currentViewedFilePath, (filePath) => {
+        filePath = path.join(__dirname, currentViewedFilePath)
         //NOTE 可以通过是否同步来检查文件是否保存
+        //FIXME
         main_process_utils.syncCacheToFile(editCachePath, filePath)
     })
     //NOTE 用于实现进度条
@@ -154,8 +155,8 @@ ipcMain.on('saveEditBlocks-send', (event, arg) => {
 ipcMain.on('loadFileViewInfo-send', (event, arg) => {
     console.log('load file vie info is called')
     let fileViewInfo = main_process_utils.fileViewInfo
-    if (lastViewedFilePath) {
-        let splitFilePath = lastViewedFilePath.split('/')
+    if (currentViewedFilePath) {
+        let splitFilePath = currentViewedFilePath.split('/')
         let lastViewedFile = splitFilePath.pop()
         let lastViewedNoteBook = splitFilePath.pop()
         console.log('lastViewFile is', lastViewedFile)
@@ -168,8 +169,8 @@ ipcMain.on('loadFileViewInfo-send', (event, arg) => {
 /* HOOK 加载 load edit cache */
 ipcMain.on('loadEditCache-send', (event, arg) => {
     let filedata
-    if (lastViewedFilePath) {
-        let rollbackFilePath = path.join(__dirname, lastViewedFilePath)
+    if (currentViewedFilePath) {
+        let rollbackFilePath = path.join(__dirname, currentViewedFilePath)
         main_process_utils.readNoteBookFile(rollbackFilePath, filedata, event, (event, filedata) => {
             if (filedata.toString('utf-8')) {
                 filedata = JSON.parse(filedata.toString('utf-8'))
@@ -189,18 +190,22 @@ ipcMain.on('loadEditCache-send', (event, arg) => {
 
 /* HOOK 加载 noteBook file */
 ipcMain.on('loadfile-send', (event, filePath) => {
-    filePath = path.join(__dirname, filePath)
+    let loadfilePath = path.join(__dirname, filePath)
     let filedata
-    main_process_utils.readNoteBookFile(filePath, filedata, event, (event, filedata) => {
+    main_process_utils.readNoteBookFile(loadfilePath, filedata, event, (event, filedata) => {
         if (filedata.toString('utf-8')) {
             filedata = JSON.parse(filedata.toString('utf-8'))
+            //FIXME
+            currentViewedFilePath = filePath
+            console.log('load file called, current path is ', currentViewedFilePath)
             event.reply('loadfile-reply', filedata)
         }
     })
 })
 /* HOOK FilView 组件发送 同步当前的文件路径 */
 ipcMain.on('syncFilePath-send', (event, currentFilePath) => {
-    lastViewedFilePath = '/noteBooks' + currentFilePath
+    currentViewedFilePath = '/noteBooks' + currentFilePath
+    console.log('syncFilePath called ', currentViewedFilePath)
 })
 
 /* HOOK handler handleNewFile： file view 新建notebook 下文件 */
@@ -217,7 +222,7 @@ ipcMain.on('rename-send', (event, arg) => {
     //console.log('old path is ', oldPath, ' new path is ', newPath)
     let result = false
     //更改lastViewFile
-    lastViewedFilePath = ''
+    currentViewedFilePath = ''
     main_process_utils.rename(oldPath, newPath, () => {
         result = true
         console.log('rename file success')
@@ -231,7 +236,7 @@ ipcMain.on('deletefile-send', (event, filePath) => {
     let result = false
     //console.log('delete file path is ', filePath)
     //更改lastViewFile
-    lastViewedFilePath = ''
+    currentViewedFilePath = ''
     main_process_utils.deletefile(filePath, () => {
         result = true
         console.log('delete file success')
