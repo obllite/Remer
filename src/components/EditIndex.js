@@ -5,6 +5,8 @@ import FileView from './FileView'
 import EditDataCtx from './EditDataCtx'
 import Preview from './Preview'
 import saveEditBlocks from '../utils/saveEditBlocks'
+
+import emitter from '../utils/events'
 //COMPONENT 创建，打开，编辑 notebook 文件的组件
 const maxlength = 25;
 function EditIndex() {
@@ -28,6 +30,7 @@ function EditIndex() {
             chinese: chinese,
             meanings: meanings
         }
+        emitter.emit('updatePreviewData',[...blocksDataTmp])
     }
 
     //hooks
