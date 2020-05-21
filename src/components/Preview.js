@@ -16,11 +16,12 @@ function Preview() {
     const [previewWidth, setpreviewWidth] = useState(400)
     //consts
     const maxWidth = 600
-    const minWidth = 400
+    const minWidth = 100
     //hooks
     const [ifDrag, setifDrag] = useState(false)
     const [startX, setstartX] = useState(0)
     const [previewData, setpreviewData] = useState([])
+    const [preViewVisible, setpreViewVisible] = useState('visible')
     useEffect(() => {
         document.addEventListener('mousemove', handleDrag)
         document.addEventListener('mouseup', handelDragEnd)
@@ -50,13 +51,13 @@ function Preview() {
         if (ifDrag) {
             let newWidth = startWidth + (startX - e.clientX);
             //console.log('new width is',newWidth)
-            //setfileViewVisible('visible')
+            setpreViewVisible('visible')
             if (newWidth > maxWidth) {
                 newWidth = maxWidth
                 setpreviewWidth(newWidth)
             } else if (newWidth < minWidth) {
-                //setfileViewVisible('hidden')
-                setpreviewWidth(minWidth)
+                setpreViewVisible('hidden')
+                setpreviewWidth(0)
             } else {
                 setpreviewWidth(newWidth)
             }
@@ -69,9 +70,7 @@ function Preview() {
     return (
         <div
             className={preview}
-            style={{
-                width: previewWidth + 'px'
-            }}
+
         >
             <div
                 className={previewControler}
@@ -84,48 +83,56 @@ function Preview() {
             >
             </div>
             {/* this is preview */}
-            {
-                previewData[0] !== undefined ? previewData.map((block_item, block_index) => {
-                    return (
-                        <div
-                            key={block_index}
-                            className={preBlock}
-                        >
-                            <div className={preEnglish}>
-                                {block_item.english}
-                            </div>
-                            <div className={preChinese}>
-                                {block_item.chinese}
-                            </div>
-                            {
-                                block_item.meanings.map((meaning_item, meaning_index) => {
-                                    return (
-                                        <div key={meaning_index}>
-                                            <div
-                                                className={preMeaning}
-                                            >
-                                                {meaning_item.meaning}
+            <div
+                style={{
+                    width: previewWidth + 'px',
+                    visibility: preViewVisible
+                }}
+            >
+
+                {
+                    previewData[0] !== undefined ? previewData.map((block_item, block_index) => {
+                        return (
+                            <div
+                                key={block_index}
+                                className={preBlock}
+                            >
+                                <div className={preEnglish}>
+                                    {block_item.english}
+                                </div>
+                                <div className={preChinese}>
+                                    {block_item.chinese}
+                                </div>
+                                {
+                                    block_item.meanings.map((meaning_item, meaning_index) => {
+                                        return (
+                                            <div key={meaning_index}>
+                                                <div
+                                                    className={preMeaning}
+                                                >
+                                                    {meaning_item.meaning}
+                                                </div>
+                                                {
+                                                    meaning_item.collections.map((collection_item, collection_index) => {
+                                                        return (
+                                                            <div
+                                                                key={collection_index}
+                                                                className={preCollection}
+                                                            >
+                                                                {collection_item}
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
                                             </div>
-                                            {
-                                                meaning_item.collections.map((collection_item, collection_index) => {
-                                                    return (
-                                                        <div
-                                                            key={collection_index}
-                                                            className={preCollection}
-                                                        >
-                                                            {collection_item}
-                                                        </div>
-                                                    )
-                                                })
-                                            }
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    )
-                }) : 'no data'
-            }
+                                        )
+                                    })
+                                }
+                            </div>
+                        )
+                    }) : 'no data'
+                }
+            </div>
         </div>
     )
 }

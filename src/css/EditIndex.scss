@@ -8,9 +8,9 @@
     width: auto;
     //width: calc(#{$full-vw} - 270px);
     height: 100%;
-    background-color: rgba($color: #eef0ed, $alpha: 1);
+    //background-color: rgba($color: #eef0ed, $alpha: 1);
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: hidden;
     display: flex;
 }
 .edit {

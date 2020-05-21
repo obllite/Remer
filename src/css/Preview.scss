@@ -1,14 +1,13 @@
 .preview {
     height: $full-vh;
-    border: 1px solid $teal;
     background-color: #eef0ed;
     flex: 0 0 auto;
+    user-select: none;
 }
 .previewControler {
     width: 10px;
     height: 100%;
     background-color: #eef0ed;
-    margin-right: 20px;
     border-left: 2px solid rgba($color: $background-color, $alpha: 1);
     /*border-right: 2px solid rgba($color: $teal, $alpha: 0.5); */
     box-sizing: border-box;
@@ -18,5 +17,5 @@
 }
 
 .preBlock {
-    user-select: none;
+
 }
