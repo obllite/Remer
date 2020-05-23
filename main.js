@@ -4,11 +4,13 @@ const {
     BrowserWindow,
     ipcMain,
     dialog,
+    Menu
 } = require("electron");
 
 const path = require("path");
 const editCachePath = path.join(__dirname, "/noteBooks/editBlockCache.json")
 const fs = require("fs");
+const url = require('url')
 let main_process_utils = null;
 let currentViewedFilePath = ''
 
@@ -16,13 +18,15 @@ let currentViewedFilePath = ''
 const httpURlCollins = "https://www.collinsdictionary.com/zh/dictionary/english/";
 const httpQue = [httpURlCollins];
 
+
+let mainWindow = null
 function createWindow() {
     // Create the browser window.
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1200,
         height: 740,
-        minWidth: 400,
-        alwaysOnTop: true,
+        minWidth: 370,
+        //alwaysOnTop: true,
         //icon: path.join(__dirname, 'assets/images/sakurajima.jpg'),
         webPreferences: {
             nodeIntegration: true,
@@ -50,6 +54,19 @@ app.whenReady().then(() => {
     loadUtils()
     main_process_utils.initFileViewInfo()
     createWindow()
+})
+
+app.on('ready',()=>{
+    const appMenu = Menu.buildFromTemplate([{
+        label: 'Electron',
+        submenu:[{
+            label: 'print PDF',
+            click: ()=>{
+                main_process_utils.printPdfHandler(mainWindow)
+            }
+        }]
+    }])
+    Menu.setApplicationMenu(appMenu)
 })
 app.on('browser-window-created', (event, win) => {
 
@@ -242,4 +259,15 @@ ipcMain.on('deletefile-send', (event, filePath) => {
         console.log('delete file success')
         event.reply('deletefile-reply', result)
     })
+})
+
+//打印 pdf 的预处理, 主要为 获取操作系统的类型和pdf文件保存路径
+//考虑由应用程序菜单、 或是上下文菜单发送消息
+/* HOOK 由 preview context menu发送 */
+ipcMain.on("printPdf-send", async (event, data) => {
+    //调用 print pdf handler
+    console.log('print pdf is called', data)
+    //TODO 此处新建一个透明的窗口用于打印
+    main_process_utils.newPrintWin()
+    event.reply('printPdf-reply', data)
 })

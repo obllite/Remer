@@ -8,7 +8,7 @@ function WordBlock(props) {
     const {
         index,
     } = props
-    const wordBlock = classnames('wordBlock')
+    const wordBlock = classnames('noprint','wordBlock')
     const wordCount = classnames('wordCount')
     const englishInput = classnames('englishInput')
     const chineseInput = classnames('chineseInput')

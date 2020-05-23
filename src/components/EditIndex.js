@@ -12,7 +12,7 @@ const maxlength = 25;
 function EditIndex() {
     const editIndex = classnames('editIndex')
     const editAndPreview = classnames('editAndPreview')
-    const edit = classnames('edit')
+    const edit = classnames('noprint','edit')
     const addBlock = classnames('addBlock')
     const addBlockContainer = classnames('addBlockContainer')
     const submitEdit = classnames('submitEdit')

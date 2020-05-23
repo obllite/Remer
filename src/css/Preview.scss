@@ -1,14 +1,16 @@
 .preview {
     height: $full-vh;
     background-color: #eef0ed;
+    border-left: 2px solid rgba($color: $background-color, $alpha: 1);
+    overflow-y: auto;
     flex: 0 0 auto;
     user-select: none;
+    display: flex;
 }
-.previewControler {
+.previewController {
     width: 10px;
-    height: 100%;
+    //height: 100%;
     background-color: #eef0ed;
-    border-left: 2px solid rgba($color: $background-color, $alpha: 1);
     /*border-right: 2px solid rgba($color: $teal, $alpha: 0.5); */
     box-sizing: border-box;
     float: left;
@@ -17,5 +19,38 @@
 }
 
 .preBlock {
+    width: 300px;
+    margin: 20px 20px 20px 10px;
+    padding: 10px 0 20px 0;
+    border: 1px solid $teal;
+    box-sizing: border-box;
+    background-color: #f2f2f7;
+    flex: 1 0 auto;
+}
 
+.pre {
+    &:hover {
+        background-color: $yellow;
+    }
+    padding: 5px 20px;
+}
+.preBlockHead {
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.preEnglish {
+    margin: auto;
+}
+.preChinese {
+    margin: auto;
+}
+.preMeaning {
+    font-size: 16px;
+    font-weight: 500;
+}
+.preCollection {
+    padding-left: 50px;
 }

@@ -24,3 +24,16 @@
 .hide {
     display: none;
 }
+.App {
+    //background-color: rgba($color: #eef0ed, $alpha: 1);
+}
+@media print {
+    .noprint {
+        display: none;
+    }
+    .print {
+        width: 986px;
+        margin: 0;
+        border: 1px solid $black;
+    }
+}

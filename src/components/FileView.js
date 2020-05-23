@@ -5,10 +5,10 @@ import FoldBlock from './FoldBlock'
 //COMPONENT fileview 组件 用于展示NoteBook文件结构
 function FileView() {
     //classnames
-    const fileView = classnames('fileView')
-    const fileViewControler = classnames('fileViewControler')
+    const fileView = classnames('noprint','fileView')
+    const fileViewController = classnames('noprint','fileViewController')
     //consts
-    const maxWidth = 400
+    const maxWidth = 300
     const minWidth = 50
     let currentFilePath = ''
     //hooks
@@ -146,7 +146,7 @@ function FileView() {
                 }
             </div>
             <div
-                className={fileViewControler}
+                className={fileViewController}
                 onMouseDown={(e) => {
                     handleDragStart(e)
                 }}

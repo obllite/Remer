@@ -10,7 +10,7 @@ class Navbar extends React.Component {
         super(props)
         this.state = {
             CSSclass: {
-                navbar: "navbar",
+                navbar: "navbar noprint",
                 avatorCircle: "avatorCircle",
                 logoTop: "logoTop",
                 logoBottom: "logoBottom"
