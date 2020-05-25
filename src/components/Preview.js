@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import classnames from 'classnames'
 import emitter from '../utils/events'
 
@@ -15,6 +15,7 @@ function Preview() {
     const preChinese = classnames('pre preChinese')
     const preMeaning = classnames('pre preMeaning')
     const preCollection = classnames('pre preCollection')
+    const previewContent = classnames('previewContent')
 
     const [startWidth, setstartWidth] = useState(0)
     const [previewWidth, setpreviewWidth] = useState(400)
@@ -26,6 +27,8 @@ function Preview() {
     const [startX, setstartX] = useState(0)
     const [previewData, setpreviewData] = useState([])
     const [preViewVisible, setpreViewVisible] = useState('visible')
+    const previewRef = useRef()
+
     useEffect(() => {
         document.addEventListener('mousemove', handleDrag)
         document.addEventListener('mouseup', handelDragEnd)
@@ -73,7 +76,14 @@ function Preview() {
     }
 
     const menuHandlePDF = () => {
-        let data = [...previewData]
+        let realHeight = previewRef.current.scrollHeight
+        let realWidth = previewRef.current.scrollWidth
+        let data = {
+            previewData: [...previewData],
+            realHeight: realHeight,
+            realWidth: realWidth
+        }
+        console.log('print pdf data is ', data)
         window.ipcRenderer.send('printPdf-send', data)
         window.ipcRenderer.on('printPdf-reply',(event, result)=>{
             console.log('printPdf result is ', result)
@@ -98,6 +108,7 @@ function Preview() {
                     }
                 })
             }}
+            ref={previewRef}
         >
             <div
                 className={previewController}
@@ -111,12 +122,12 @@ function Preview() {
             </div>
             {/* this is preview */}
             <div
+                className={previewContent}
                 style={{
                     width: previewWidth + 'px',
                     visibility: preViewVisible
                 }}
             >
-
                 {
                     previewData[0] !== undefined ? previewData.map((block_item, block_index) => {
                         return (

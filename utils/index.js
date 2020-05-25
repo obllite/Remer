@@ -1,7 +1,7 @@
 const searchHandler = require('./main_searchHandler')
 const saveFileHandler = require('./main_saveEditBlocks')
 const fileViewHandler = require('./main_fileViewHandler')
-const pdfHandler = require('./main_pdf')
+const exportFileHandler = require('./main_exportFile')
 //consts
 exports.fileViewInfo = fileViewHandler.fileViewInfo
 //functions
@@ -17,5 +17,6 @@ exports.readNoteBookFile = fileViewHandler.readNoteBookFile
 exports.rename = fileViewHandler.rename
 exports.deletefile = fileViewHandler.deletefile
 
-exports.printPdfHandler = pdfHandler.printPdfHandler
-exports.newPrintWin = pdfHandler.newPrintWin
+exports.printPdfHandler = exportFileHandler.printPdfHandler
+exports.exportMarkDown = exportFileHandler.exportMarkDown
+

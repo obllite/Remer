@@ -1,1 +1,159 @@
-{"block#0":{"english":"a.json","chinese":"a chinese","meanings":[{"meaning":"a mean","collections":["a set collection","collection2","collection3","collection4"]}]}}
+{
+    "block#0": {
+        "english": "drag",
+        "chinese": "拖动",
+        "meanings": [
+            {
+                "meaning": "拖动 V",
+                "collections": [
+                    "touch the ground",
+                    "pull along the ground"
+                ]
+            },
+            {
+                "meaning": "令人厌倦的事物 N",
+                "collections": [
+                    "something boring or tedious"
+                ]
+            },
+            {
+                "meaning": "拖沓",
+                "collections": [
+                    "pass slowly"
+                ]
+            }
+        ]
+    },
+    "block#1": {
+        "english": "overflow",
+        "chinese": "溢出",
+        "meanings": [
+            {
+                "meaning": "溢出",
+                "collections": [
+                    "liquid: spill out of"
+                ]
+            },
+            {
+                "meaning": "容纳不下, 外流",
+                "collections": [
+                    "figurative( with people. cars)"
+                ]
+            }
+        ]
+    },
+    "block#2": {
+        "english": "margin",
+        "chinese": "边缘; 差数",
+        "meanings": [
+            {
+                "meaning": "边缘",
+                "collections": [
+                    "at edge"
+                ]
+            },
+            {
+                "meaning": "差数",
+                "collections": [
+                    "amount, value"
+                ]
+            }
+        ]
+    },
+    "block#3": {
+        "english": "charm",
+        "chinese": "魅力; 迷住",
+        "meanings": [
+            {
+                "meaning": "魅力 N",
+                "collections": [
+                    "likeability"
+                ]
+            },
+            {
+                "meaning": "迷住 V",
+                "collections": [
+                    "make [sb] like you"
+                ]
+            }
+        ]
+    },
+    "block#4": {
+        "english": "sharp",
+        "chinese": "锋利的",
+        "meanings": [
+            {
+                "meaning": "锋利的 adj",
+                "collections": [
+                    "able to cut or pierce"
+                ]
+            },
+            {
+                "meaning": "清晰度 adj",
+                "collections": [
+                    "vision: not blurry"
+                ]
+            },
+            {
+                "meaning": "思维敏捷的 adj; 精明的 adj",
+                "collections": [
+                    "intelligent"
+                ]
+            },
+            {
+                "meaning": "寒冷的, 刺骨的 adj",
+                "collections": [
+                    "figurative (brisk, cold)"
+                ]
+            },
+            {
+                "meaning": "collections ",
+                "collections": [
+                    "card sharp 老千",
+                    "look sharp 赶紧, 赶快",
+                    "look sharp + adj 赶紧, 赶快",
+                    "sharp-witted 机敏的",
+                    "sharp as a tack 聪明的",
+                    "sharp-tempered 暴躁的"
+                ]
+            }
+        ]
+    },
+    "block#5": {
+        "english": "blurry",
+        "chinese": "模糊不清的",
+        "meanings": [
+            {
+                "meaning": "模糊不清的",
+                "collections": [
+                    "(vision: unclear)",
+                    "(photo, object: indistinct)"
+                ]
+            }
+        ]
+    },
+    "block#6": {
+        "english": "tack",
+        "chinese": "图钉, 马鞍, 缝上",
+        "meanings": [
+            {
+                "meaning": "图钉",
+                "collections": [
+                    "(thumb tack)"
+                ]
+            },
+            {
+                "meaning": "马鞍",
+                "collections": [
+                    "horseriding equipment"
+                ]
+            },
+            {
+                "meaning": "松松的缝上 V",
+                "collections": [
+                    "tack [sth]"
+                ]
+            }
+        ]
+    }
+}

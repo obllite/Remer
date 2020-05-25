@@ -8,11 +8,15 @@ const {
 } = require("electron");
 
 const path = require("path");
-const editCachePath = path.join(__dirname, "/noteBooks/editBlockCache.json")
 const fs = require("fs");
 const url = require('url')
+const applicationTmp = require('./assets/template/index')
+
+//consts
+const editCachePath = path.join(__dirname, "/noteBooks/editBlockCache.json")
 let main_process_utils = null;
 let currentViewedFilePath = ''
+let noteData = ''
 
 //http URL definition
 const httpURlCollins = "https://www.collinsdictionary.com/zh/dictionary/english/";
@@ -21,7 +25,6 @@ const httpQue = [httpURlCollins];
 
 let mainWindow = null
 function createWindow() {
-    // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 1200,
         height: 740,
@@ -34,21 +37,16 @@ function createWindow() {
             /* webSecurity: false */
         }
     })
-
     if (process.platform === 'darwin') {
         app.dock.setIcon(path.join(__dirname, 'assets/images/sakurajima.jpg'));
     }
-    // and load the index.html of the app.
-    //mainWindow.loadFile('index.html')
+    
     mainWindow.loadURL('http://localhost:3000/');
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
+    exports.mainWindow = mainWindow
 }
 
-
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
     //导入所有所需的模块
     loadUtils()
@@ -57,21 +55,14 @@ app.whenReady().then(() => {
 })
 
 app.on('ready',()=>{
-    const appMenu = Menu.buildFromTemplate([{
-        label: 'Electron',
-        submenu:[{
-            label: 'print PDF',
-            click: ()=>{
-                main_process_utils.printPdfHandler(mainWindow)
-            }
-        }]
-    }])
+    const appMenu = Menu.buildFromTemplate(applicationTmp.appMenuTmp)
     Menu.setApplicationMenu(appMenu)
 })
+
 app.on('browser-window-created', (event, win) => {
 
 })
-// Quit when all windows are closed.
+
 app.on('window-all-closed', function () {
     // On macOS it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
@@ -92,8 +83,9 @@ function loadUtils() {
     main_process_utils = require(file)
 }
 
-// Main process ipc
 
+
+// Main process ipc
 /* HOOK handler changeAvatorFile: 更换用户头像 */
 /* FIXME 存在没有调用的dialog， 可以删除然后重新封装async函数 */
 ipcMain.on('changeAvatorFile-send', async (event, arg) => {
@@ -156,6 +148,8 @@ ipcMain.on('saveEditBlocks-send', (event, arg) => {
         blocksDataJson[serial] = arg[i]
     }
     blocksDataJson = JSON.stringify(blocksDataJson)
+    noteData = blocksDataJson
+    exports.noteData = noteData
     let writeLength = blocksDataJson.length
     main_process_utils.saveEditBlocks(blocksDataJson, currentViewedFilePath, (filePath) => {
         filePath = path.join(__dirname, currentViewedFilePath)
@@ -191,6 +185,8 @@ ipcMain.on('loadEditCache-send', (event, arg) => {
         main_process_utils.readNoteBookFile(rollbackFilePath, filedata, event, (event, filedata) => {
             if (filedata.toString('utf-8')) {
                 filedata = JSON.parse(filedata.toString('utf-8'))
+                noteData = filedata
+                exports.noteData = noteData
                 event.reply('loadEditCache-reply', filedata)
             }
         })
@@ -199,6 +195,8 @@ ipcMain.on('loadEditCache-send', (event, arg) => {
         main_process_utils.readNoteBookFile(initPath, filedata, event, (event, filedata) => {
             if (filedata.toString('utf-8')) {
                 filedata = JSON.parse(filedata.toString('utf-8'))
+                noteData = filedata
+                exports.noteData = noteData
                 event.reply('loadEditCache-reply', filedata)
             }
         })
@@ -264,10 +262,11 @@ ipcMain.on('deletefile-send', (event, filePath) => {
 //打印 pdf 的预处理, 主要为 获取操作系统的类型和pdf文件保存路径
 //考虑由应用程序菜单、 或是上下文菜单发送消息
 /* HOOK 由 preview context menu发送 */
+/* PARAMS data = {previewData: [], realHeight: number, realWidth: number} */
 ipcMain.on("printPdf-send", async (event, data) => {
     //调用 print pdf handler
-    console.log('print pdf is called', data)
-    //TODO 此处新建一个透明的窗口用于打印
-    main_process_utils.newPrintWin()
+    //console.log('print pdf is called', data)
+    //TODO 通过 scrollHeight 来打印多张 pdf
+    main_process_utils.mutiPrintPdf()
     event.reply('printPdf-reply', data)
 })
