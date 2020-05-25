@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import emitter from '../utils/events'
 
 import electron_api from '../api/index'
-
+//TODO 优化 preview 的样式, 实现流式网格布局
 function Preview() {
     //classnames
     const preview = classnames('print','preview')
@@ -45,6 +45,9 @@ function Preview() {
                 setpreviewData(data)
             }
         })
+        if( ifMounted && localStorage.getItem("preview-drag")) {
+            setpreviewWidth(parseInt(localStorage.getItem("preview-drag")))
+        }
         return () => {
             ifMounted = false
         }

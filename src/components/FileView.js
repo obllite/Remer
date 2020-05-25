@@ -5,8 +5,8 @@ import FoldBlock from './FoldBlock'
 //COMPONENT fileview 组件 用于展示NoteBook文件结构
 function FileView() {
     //classnames
-    const fileView = classnames('noprint','fileView')
-    const fileViewController = classnames('noprint','fileViewController')
+    const fileView = classnames('noprint', 'fileView')
+    const fileViewController = classnames('noprint', 'fileViewController')
     //consts
     const maxWidth = 300
     const minWidth = 50
@@ -31,6 +31,10 @@ function FileView() {
     })
     useEffect(() => {
         let loadFlag = 'file view init'
+
+        if (loadFlag && !ifDrag && localStorage.getItem("scalable_width")) {
+            setfileViewWidth(parseInt(localStorage.getItem("scalable_width")))
+        }
         /* HOOK 加载file View 的信息 */
         if (window.ipcRenderer && loadFlag) {
             window.ipcRenderer.send('loadFileViewInfo-send', loadFlag)
@@ -69,7 +73,7 @@ function FileView() {
     useEffect(() => {
         getCurrentFilePath()
     }, [filelis])
-    
+
     //handlers
     const handleDragStart = (e) => {
         setstartX(e.clientX)
@@ -83,7 +87,7 @@ function FileView() {
             if (newWidth > maxWidth) {
                 newWidth = maxWidth
                 setfileViewWidth(newWidth)
-            }else if (newWidth < minWidth) {
+            } else if (newWidth < minWidth) {
                 setfileViewVisible('hidden')
                 setfileViewWidth(0)
             } else {
@@ -131,7 +135,7 @@ function FileView() {
                     return (
                         <FoldBlock
                             ifFirst={fold_index === 0 ? true : false}
-                            ifLast={fold_index === noteBookNames.length-1? true:false}
+                            ifLast={fold_index === noteBookNames.length - 1 ? true : false}
                             key={fold_index}
                             index={fold_index}
                             notBookName={fold_item}
