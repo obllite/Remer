@@ -57,6 +57,7 @@ app.whenReady().then(() => {
 app.on('ready',()=>{
     const appMenu = Menu.buildFromTemplate(applicationTmp.appMenuTmp)
     Menu.setApplicationMenu(appMenu)
+    exports.appMenu = appMenu
 })
 
 app.on('browser-window-created', (event, win) => {
