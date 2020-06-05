@@ -12,13 +12,13 @@
     background-color: #eef0ed;
     border-right: 2px solid rgba($color: $background-color, $alpha: 1.0);
     box-sizing: border-box;
-    float: left;
-    position: relative;
     cursor: col-resize;
 }
+//FIXME columns 会导致overflow scroll 失效
 .previewContent{
     overflow-y: auto;
     overflow-x: hidden;
+    //columns: 2;
 }
 .preBlock {
     width: 300px;
@@ -28,8 +28,12 @@
     box-sizing: border-box;
     background-color: #f2f2f7;
     //flex: 1 0 auto;
-    float: left;
-    position: relative;
+/*     float: left;
+    position: relative; */
+
+/*     -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid; */
 }
 
 .pre {

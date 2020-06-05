@@ -63,6 +63,9 @@ function createWindow() {
     })
     printWindow.webContents.openDevTools()
     
+    mainWindow.on("close", ()=>{
+        printWindow.close()
+    })
     exports.mainWindow = mainWindow
     exports.printWindow = printWindow
 }
