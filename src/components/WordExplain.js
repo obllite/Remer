@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import classnames from 'classnames'
 //COMPONENT word explain 组件，编辑单词的详细意思和固定搭配
 

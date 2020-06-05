@@ -10,7 +10,6 @@ import electron_api from '../api/index'
 function FoldBlock(props) {
     const {
         index,
-        ifFirst,
         ifLast
     } = props
     //menu notifier
@@ -67,7 +66,7 @@ function FoldBlock(props) {
     }, [ifRename])
 
     useEffect(() => {
-        console.log('renameRef is update')
+        //console.log('renameRef is update')
     }, [renameRef])
     //handlers
     const handleFold = (e) => {
@@ -148,7 +147,7 @@ function FoldBlock(props) {
     const handleSwitchFile = (e, file_index) => {
         //console.log('fillis is', props.filelis[index])
         //save current file content to cache
-        let currentIndex = props.filelis[index].indexOf(true)
+        //let currentIndex = props.filelis[index].indexOf(true)
         //console.log('current file is ', props.fileNames[index].names[currentIndex])
         //laod new file to edit
         let fileName = props.fileNames[index].names[file_index]

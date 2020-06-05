@@ -1,12 +1,10 @@
 const fs = require('fs')
-const os = require('os')
 const path = require('path')
-const url = require('url')
-const { dialog, BrowserWindow } = require('electron')
 
-const templatePath = path.join(__dirname, '../assets/template/previewPDF.html')
+const { dialog, Notification } = require('electron')
+
 //NOTE 考虑将文件名变成默认参数
-async function printPdfHandler(mainWindow) {
+async function printPdfHandler(printWin) {
     dialog.showOpenDialog({
         properties: ['openDirectory']
     })
@@ -14,14 +12,19 @@ async function printPdfHandler(mainWindow) {
             const pdfRootPath = value.filePaths[0]
             console.log('pdf root path is ', pdfRootPath)
             const pdfPath = path.join(pdfRootPath, 'Note.pdf')
-            console.log(mainWindow.webContents)
-            mainWindow.webContents.printToPDF({
+            console.log(printWin.webContents)
+            printWin.webContents.printToPDF({
                 pageSize: 'A3',
                 marginType: 1,
                 printBackground: true
             }).then(data => {
                 console.log('path is ', pdfPath)
                 fs.writeFile(pdfPath, data, (err) => {
+                    let pdfNotification = new Notification({
+                        title: "Notification",
+                        body: err? "print pdf failed!" : "print pdf success!"
+                    })
+                    pdfNotification.show()
                     if (err) {
                         throw err
                     }
@@ -30,11 +33,7 @@ async function printPdfHandler(mainWindow) {
             }).catch(err => {
                 console.log(err)
             })
-        }).catch(err => console.log(err))
-}
-
-async function mutiPrintPdf(data) {
-    console.log('print pdf is called', data)
+        }).catch(err => console.log('pdf print cancel: ', err))
 }
 
 function exportMarkDown(data) {
@@ -55,10 +54,9 @@ function exportMarkDown(data) {
                     content += convertEl2MD(element)
                 }
             }
-            
             //写入文件
-            fs.writeFile(mdPath, content, (err)=>{
-                if(err) {
+            fs.writeFile(mdPath, content, (err) => {
+                if (err) {
                     throw err
                 }
                 console.log('export mark down file success')

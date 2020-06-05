@@ -1,14 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>preview PDF</title>
     <style>
-        
+        .wrapper {
+            /* height: 1200px; */
+            columns: 2;
+        }
+
+        .block {
+            border: 1px solid #000;
+            padding: 5px 10px;
+            margin: 10px 0px;
+
+            background: pink;
+            padding: 1em;
+            margin: 0 0 1.3em;
+            -webkit-column-break-inside: avoid;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
     </style>
 </head>
+
 <body>
-    this is preview pdf
+    <div class="pdfContain">
+        <div class="wrapper">
+        </div>
+    </div>
 </body>
+<script>
+    console.log('pdf template is laoded')
+    const { ipcRenderer } = require('electron');
+    const maxHeight = 500;
+    let pdfWrapper = document.querySelector('.wrapper')
+
+    ipcRenderer.on('print-edit', (event, data) => {
+        console.log('pdf data is ', data)
+        init(pdfWrapper)
+        data.previewData.forEach(element => {
+            parse2El(element)
+        });
+    })
+
+    const init = (pdfWrapper) => {
+        console.log("init")
+        while (pdfWrapper.hasChildNodes()) {
+            pdfWrapper.removeChild(pdfWrapper.firstChild)
+        }
+    }
+    const parse2El = (data) => {
+        //生成每个单词的 block
+        let block = document.createElement("div")
+        block.className = "block"
+        //添加english
+        let english = document.createElement("div")
+        english.innerHTML = data.english
+        block.appendChild(english)
+        //添加chinese
+        let chinese = document.createElement("div")
+        chinese.innerHTML = data.chinese
+        block.appendChild(chinese)
+        //添加meanings
+        data.meanings.forEach(meaning_item => {
+            let meaning = document.createElement("div")
+            meaning.innerHTML = meaning_item.meaning
+            //添加 collections
+            meaning_item.collections.forEach(collection_item => {
+                let collection = document.createElement("div")
+                collection.innerHTML = collection_item
+                meaning.appendChild(collection)
+            })
+            block.appendChild(meaning)
+        });
+        pdfWrapper.appendChild(block)
+    }
+</script>
+
 </html>

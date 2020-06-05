@@ -1,23 +1,25 @@
 .preview {
     height: $full-vh;
     background-color: #eef0ed;
-    border-left: 2px solid rgba($color: $background-color, $alpha: 1);
-    overflow-y: auto;
+    //border-left: 2px solid rgba($color: $background-color, $alpha: 1);
     flex: 0 0 auto;
     user-select: none;
     display: flex;
 }
 .previewController {
     width: 10px;
-    //height: 100%;
+    height: 100%;
     background-color: #eef0ed;
-    /*border-right: 2px solid rgba($color: $teal, $alpha: 0.5); */
+    border-right: 2px solid rgba($color: $background-color, $alpha: 1.0);
     box-sizing: border-box;
     float: left;
     position: relative;
     cursor: col-resize;
 }
-
+.previewContent{
+    overflow-y: auto;
+    overflow-x: hidden;
+}
 .preBlock {
     width: 300px;
     margin: 20px 20px 20px 10px;
@@ -25,7 +27,9 @@
     border: 1px solid $teal;
     box-sizing: border-box;
     background-color: #f2f2f7;
-    flex: 1 0 auto;
+    //flex: 1 0 auto;
+    float: left;
+    position: relative;
 }
 
 .pre {

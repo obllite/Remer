@@ -7,12 +7,13 @@ import Preview from './Preview'
 import saveEditBlocks from '../utils/saveEditBlocks'
 
 import emitter from '../utils/events'
+import electron_api from '../api';
 //COMPONENT 创建，打开，编辑 notebook 文件的组件
 const maxlength = 25;
 function EditIndex() {
     const editIndex = classnames('editIndex')
     const editAndPreview = classnames('editAndPreview')
-    const edit = classnames('noprint','edit')
+    const edit = classnames('noprint', 'edit')
     const addBlock = classnames('addBlock')
     const addBlockContainer = classnames('addBlockContainer')
     const submitEdit = classnames('submitEdit')
@@ -30,13 +31,14 @@ function EditIndex() {
             chinese: chinese,
             meanings: meanings
         }
-        emitter.emit('updatePreviewData',[...blocksDataTmp])
+        emitter.emit('updatePreviewData', [...blocksDataTmp])
     }
 
     //hooks
     const [blocksData, setblocksData] = useState([])
     const [count, setcount] = useState([1])
     const [blockStates, setblockStates] = useState(blockStatesTmp)
+    // eslint-disable-next-line no-unused-vars
     const [currentFilePath, setcurrentFilePath] = useState('')
     let toBottom = useRef()
     useEffect(() => {
@@ -101,6 +103,23 @@ function EditIndex() {
             </WordBlock>
         )
     })
+
+    // edit menu template
+    const editMenuTmp = [{
+        label: '撤销',
+    }, {
+        type: 'separator'
+    }, {
+        label: '剪切'
+    }, {
+        label: '复制'
+    }, {
+        label: '粘贴'
+    },{
+        type: 'separator'
+    },{
+        label: '删除'
+    }]
     return (
         <EditDataCtx.Provider value={{ updateData, handleLoadData, setcurrentFilePath }}>
             <div
@@ -114,7 +133,16 @@ function EditIndex() {
                         className={edit}
                         ref={(el) => {
                             toBottom = el
-                        }}>
+                        }}
+                        onContextMenu={() => {
+                            const editMenu = electron_api.newCxtMenu(editMenuTmp)
+                            editMenu.popup({
+                                callback: () => {
+                                    console.log('edit menu is closed!')
+                                }
+                            })
+                        }}
+                    >
                         {wordblock}
                         <div className={bottomBtn}>
                             <div className={dividingLine}><hr /></div>

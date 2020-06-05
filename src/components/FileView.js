@@ -43,9 +43,9 @@ function FileView() {
                     let flag = false
                     if (arg.hasOwnProperty("lastViewedFile")) {
                         flag = true
-                        console.log('arg is', arg)
-                        console.log('last time viewed file is', arg.lastViewedFile)
-                        console.log('last time viewed notebook is', arg.lastViewedNoteBook)
+                        //console.log('arg is', arg)
+                        //console.log('last time viewed file is', arg.lastViewedFile)
+                        //console.log('last time viewed notebook is', arg.lastViewedNoteBook)
                     }
                     setfileNames(arg.fileNames)
                     setnoteBookNames(arg.noteBookNames)
@@ -68,10 +68,12 @@ function FileView() {
                 loadFlag = false
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
         getCurrentFilePath()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filelis])
 
     //handlers

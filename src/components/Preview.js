@@ -41,7 +41,7 @@ function Preview() {
         let ifMounted = true
         emitter.addListener('updatePreviewData', (data) => {
             if (ifMounted && data[0] !== undefined) {
-                console.log('preview data is ', data)
+                //console.log('preview data is ', data)
                 setpreviewData(data)
             }
         })

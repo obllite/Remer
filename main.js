@@ -11,9 +11,9 @@ const path = require("path");
 const fs = require("fs");
 const url = require('url')
 const applicationTmp = require('./assets/template/index')
-
 //consts
 const editCachePath = path.join(__dirname, "/noteBooks/editBlockCache.json")
+const pdfTmpPath = path.join(__dirname, './assets/template/previewPDF.html')
 let main_process_utils = null;
 let currentViewedFilePath = ''
 let noteData = ''
@@ -24,6 +24,7 @@ const httpQue = [httpURlCollins];
 
 
 let mainWindow = null
+let printWindow = null
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1200,
@@ -44,7 +45,26 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:3000/');
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
+
+    printWindow = new BrowserWindow({
+        width: 1200,
+        height: 740,
+        minWidth: 370,
+        show: false,
+        webPreferences: {
+            nodeIntegration: true, 
+            webSecurity: false
+        }
+    })
+    console.log('pdftemp is ', pdfTmpPath)
+    printWindow.loadFile(pdfTmpPath)
+    .then(result => {
+        console.log('pdf window load result', result)
+    })
+    printWindow.webContents.openDevTools()
+    
     exports.mainWindow = mainWindow
+    exports.printWindow = printWindow
 }
 
 app.whenReady().then(() => {
@@ -55,8 +75,10 @@ app.whenReady().then(() => {
 })
 
 app.on('ready',()=>{
+    //实例化全局菜单
     const appMenu = Menu.buildFromTemplate(applicationTmp.appMenuTmp)
     Menu.setApplicationMenu(appMenu)
+    //TODO注册全局快捷键
     exports.appMenu = appMenu
 })
 
@@ -266,8 +288,8 @@ ipcMain.on('deletefile-send', (event, filePath) => {
 /* PARAMS data = {previewData: [], realHeight: number, realWidth: number} */
 ipcMain.on("printPdf-send", async (event, data) => {
     //调用 print pdf handler
-    //console.log('print pdf is called', data)
-    //TODO 通过 scrollHeight 来打印多张 pdf
-    main_process_utils.mutiPrintPdf()
+    console.log('print pdf is called', data)
+    printWindow.webContents.send('print-edit', data);
+    main_process_utils.printPdfHandler(printWindow);
     event.reply('printPdf-reply', data)
 })

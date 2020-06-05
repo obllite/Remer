@@ -47,12 +47,15 @@ const appMenuTmp = [{
     label: '导出',
     submenu: [{
         label: '导出markdown',
+        //icon: ,
+        accelerator: 'Cmd+M',
         click: () => {
             console.log(mainProcess.noteData)
             main_process_utils.exportMarkDown(mainProcess.noteData)
         }
     }, {
         label: '导出PDF',
+        accelerator: 'Cmd+P',
         click: () => {
             console.log(mainProcess.mainWindow)
             main_process_utils.printPdfHandler(mainProcess.mainWindow)
