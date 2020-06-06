@@ -171,6 +171,7 @@ function WordExplain(props) {
         }))
     }
     return (
+        !props.meanings ? <div></div>: 
         <ul
             className={props.ifPutDown ? explainContainer : hideClass}
         >

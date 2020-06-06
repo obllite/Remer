@@ -3,7 +3,6 @@ import classnames from 'classnames'
 import emitter from '../utils/events'
 
 import electron_api from '../api/index'
-//TODO 优化 preview 的样式, 实现流式网格布局
 function Preview() {
     //classnames
     const preview = classnames('print','preview')
@@ -147,7 +146,7 @@ function Preview() {
                                     </div>
                                 </div>
                                 {
-                                    block_item.meanings.map((meaning_item, meaning_index) => {
+                                    !block_item.meanings? <></>:block_item.meanings.map((meaning_item, meaning_index) => {
                                         return (
                                             <div key={meaning_index}>
                                                 <div

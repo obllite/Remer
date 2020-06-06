@@ -4,7 +4,6 @@ const searchBarInitState = {
     ifSearchBarDisplay: false,
     ifInputFocus: false,
     wordContent: '',
-    
 }
 const reducer = (state = searchBarInitState, action) => {
     switch (action.type) {

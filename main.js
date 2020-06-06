@@ -4,7 +4,8 @@ const {
     BrowserWindow,
     ipcMain,
     dialog,
-    Menu
+    Menu,
+    globalShortcut
 } = require("electron");
 
 const path = require("path");
@@ -41,10 +42,33 @@ function createWindow() {
     if (process.platform === 'darwin') {
         app.dock.setIcon(path.join(__dirname, 'assets/images/sakurajima.jpg'));
     }
-    
+
     mainWindow.loadURL('http://localhost:3000/');
     // Open the DevTools.
     mainWindow.webContents.openDevTools()
+
+    //NOTE 考虑封装注册全局快捷键
+    mainWindow.on('focus', () => {
+        // mac下快捷键失效的问题
+        if (process.platform === 'darwin') {
+            let contents = mainWindow.webContents
+            globalShortcut.register('CommandOrControl+C', () => {
+                contents.copy()
+            })
+            globalShortcut.register('CommandOrControl+V', () => {
+                contents.paste()
+            })
+            globalShortcut.register('CommandOrControl+X', () => {
+                contents.cut()
+            })
+            globalShortcut.register('CommandOrControl+A', () => {
+                contents.selectAll()
+            })
+        }
+    })
+    mainWindow.on('blur', () => {
+        globalShortcut.unregisterAll() // 注销键盘事件
+    })
 
     printWindow = new BrowserWindow({
         width: 1200,
@@ -52,18 +76,18 @@ function createWindow() {
         minWidth: 370,
         show: false,
         webPreferences: {
-            nodeIntegration: true, 
+            nodeIntegration: true,
             webSecurity: false
         }
     })
     console.log('pdftemp is ', pdfTmpPath)
     printWindow.loadFile(pdfTmpPath)
-    .then(result => {
-        console.log('pdf window load result', result)
-    })
+        .then(result => {
+            console.log('pdf window load result', result)
+        })
     printWindow.webContents.openDevTools()
-    
-    mainWindow.on("close", ()=>{
+
+    mainWindow.on("close", () => {
         printWindow.close()
     })
     exports.mainWindow = mainWindow
@@ -77,11 +101,10 @@ app.whenReady().then(() => {
     createWindow()
 })
 
-app.on('ready',()=>{
+app.on('ready', () => {
     //实例化全局菜单
     const appMenu = Menu.buildFromTemplate(applicationTmp.appMenuTmp)
     Menu.setApplicationMenu(appMenu)
-    //TODO注册全局快捷键
     exports.appMenu = appMenu
 })
 
@@ -180,7 +203,7 @@ ipcMain.on('saveEditBlocks-send', (event, arg) => {
     main_process_utils.saveEditBlocks(blocksDataJson, currentViewedFilePath, (filePath) => {
         filePath = path.join(__dirname, currentViewedFilePath)
         //NOTE 可以通过是否同步来检查文件是否保存
-        //FIXME
+
         main_process_utils.syncCacheToFile(editCachePath, filePath)
     })
     //NOTE 用于实现进度条
@@ -236,7 +259,6 @@ ipcMain.on('loadfile-send', (event, filePath) => {
     main_process_utils.readNoteBookFile(loadfilePath, filedata, event, (event, filedata) => {
         if (filedata.toString('utf-8')) {
             filedata = JSON.parse(filedata.toString('utf-8'))
-            //FIXME
             currentViewedFilePath = filePath
             console.log('load file called, current path is ', currentViewedFilePath)
             event.reply('loadfile-reply', filedata)

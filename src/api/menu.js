@@ -4,7 +4,7 @@
 const remote = window.require("electron").remote;
 const { Menu } = remote;
 
-//FUNCTION 动态创建 context menu
+
 const newCxtMenu = (config) => {
     if(config) {
         const contextMenu = Menu.buildFromTemplate(config)
