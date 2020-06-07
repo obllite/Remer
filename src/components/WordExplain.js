@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import classnames from 'classnames'
 //COMPONENT word explain 组件，编辑单词的详细意思和固定搭配
 
@@ -24,7 +24,10 @@ function WordExplain(props) {
         refList: []
     }
     //hooks
-
+    const newCollectionIndex = useRef({
+        index_m: -1,
+        index_c: -1
+    })
     //inner handler
     const addMeaning = (e, index) => {
         e.nativeEvent.stopImmediatePropagation();
@@ -33,6 +36,8 @@ function WordExplain(props) {
     }
 
     const addSetCollection = (e, index_m, index_c) => {
+        //console.log(index_m, index_c)
+        //console.log("key code ", e.keyCode)
         e.nativeEvent.stopImmediatePropagation();
         if (e.keyCode === undefined) {
             props.setmeanings(props.meanings.map((item, i) => {
@@ -90,6 +95,7 @@ function WordExplain(props) {
                     }
                 }
                 break;
+            //left
             case 37:
                 if (props.inputRefList[index_m].refList[index_c].selectionStart === 0) {
                     if (index_c - 1 > -1) {
@@ -106,6 +112,7 @@ function WordExplain(props) {
                     }
                 }
                 break;
+            //enter
             case 13:
                 props.setmeanings(props.meanings.map((item, i) => {
                     if (i === index_m) {
@@ -113,6 +120,9 @@ function WordExplain(props) {
                     }
                     return item
                 }))
+                console.log(index_m, index_c)
+                newCollectionIndex.current.index_m = index_m
+                newCollectionIndex.current.index_c = index_c + 1
                 break;
             default:
                 break;
@@ -171,65 +181,72 @@ function WordExplain(props) {
         }))
     }
     return (
-        !props.meanings ? <div></div>: 
-        <ul
-            className={props.ifPutDown ? explainContainer : hideClass}
-        >
-            {
-                props.meanings.map((item_m, index_m) => {
-                    return (
-                        <li key={index_m}>
-                            <div className={wordExplain}>
-                                <div
-                                    className={addExplain}
-                                    onClick={(e) => { addMeaning(e, index_m) }}
-                                >+</div>
-                                <input
-                                    type="text"
-                                    className={meaning}
-                                    placeholder={explainPlaceHolder}
-                                    value={item_m.meaning}
-                                    onChange={(e) => { handleMeaningChange(e, item_m, index_m) }}
-                                    onKeyDown={(e) => {
-                                        handleMeaning2focus(e, index_m)
-                                    }}
-                                    ref={meaning => {
-                                        props.meaningRefList.splice(index_m, 0, meaning)
-                                    }}
-                                />
-                            </div >
-                            <ul>
-                                {item_m.collections.map((item_c, index_c) => {
-                                    return (
-                                        <li className={wordExplain} key={index_c}>
-                                            <div
-                                                className={addExplain}
-                                                onClick={(e) => { addSetCollection(e, index_m, index_c) }}
-                                            >+</div>
-                                            <input
-                                                type="text"
-                                                className={setCollection}
-                                                placeholder={setCollectionPlaceHolder}
-                                                value={item_c}
-                                                onChange={(e) => { handelSetColectionChange(e, index_m, index_c) }}
-                                                onKeyDown={(e) => { addSetCollection(e, index_m, index_c) }}
-                                                //autoFocus={true}
-                                                ref={input => {
-                                                    if (props.inputRefList[index_m] === undefined) {
-                                                        props.inputRefList.push(inputInit)
-                                                    }
-                                                    props.inputRefList[index_m].refList.splice(index_c, 0, input)
-                                                }}
-                                            />
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        </li>
-                    )
-                })
-            }
-        </ul>
+        !props.meanings ? <div></div> :
+            <ul
+                className={props.ifPutDown ? explainContainer : hideClass}
+            >
+                {
+                    props.meanings.map((item_m, index_m) => {
+                        return (
+                            <li key={index_m}>
+                                <div className={wordExplain}>
+                                    <div
+                                        className={addExplain}
+                                        onClick={(e) => { addMeaning(e, index_m) }}
+                                    >+</div>
+                                    <input
+                                        type="text"
+                                        className={meaning}
+                                        placeholder={explainPlaceHolder}
+                                        value={item_m.meaning}
+                                        onChange={(e) => { handleMeaningChange(e, item_m, index_m) }}
+                                        onKeyDown={(e) => {
+                                            handleMeaning2focus(e, index_m)
+                                        }}
+                                        ref={meaning => {
+                                            props.meaningRefList.splice(index_m, 0, meaning)
+                                        }}
+                                    />
+                                </div >
+                                <ul>
+                                    {item_m.collections.map((item_c, index_c) => {
+                                        return (
+                                            <li className={wordExplain} key={index_c}>
+                                                <div
+                                                    className={addExplain}
+                                                    onClick={(e) => { addSetCollection(e, index_m, index_c) }}
+                                                >+</div>
+                                                <input
+                                                    type="text"
+                                                    className={setCollection}
+                                                    placeholder={setCollectionPlaceHolder}
+                                                    value={item_c}
+                                                    onChange={(e) => { handelSetColectionChange(e, index_m, index_c) }}
+                                                    onKeyDown={(e) => { addSetCollection(e, index_m, index_c) }}
+                                                    //autoFocus={true}
+                                                    ref={input => {
+                                                        if (input) {
+                                                            if (props.inputRefList[index_m] === undefined) {
+                                                                props.inputRefList.push(inputInit)
+                                                            }
+                                                            props.inputRefList[index_m].refList.splice(index_c, 0, input)
+                                                            if (newCollectionIndex.current.index_m === index_m && newCollectionIndex.current.index_c === index_c) {
+                                                                input.focus()
+                                                                newCollectionIndex.current.index_m = -1
+                                                                newCollectionIndex.current.index_c = -1
+                                                            }
+                                                        }
+                                                    }}
+                                                />
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                            </li>
+                        )
+                    })
+                }
+            </ul>
     )
 }
 
