@@ -135,7 +135,6 @@ function WordBlock(props) {
                 meanings={meanings}
                 meaningRefList={meaningRefList}
                 setmeanings={setmeanings}
-                inputRefList={inputRefList}
             ></WordExplain>
         </div>
     )

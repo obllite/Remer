@@ -28,6 +28,9 @@ function WordExplain(props) {
         index_m: -1,
         index_c: -1
     })
+    const inputRefList = useRef([{
+        refList: []
+    }])
     //inner handler
     const addMeaning = (e, index) => {
         e.nativeEvent.stopImmediatePropagation();
@@ -51,9 +54,9 @@ function WordExplain(props) {
             //up
             case 38:
                 if (index_c - 1 > -1) {
-                    props.inputRefList[index_m].refList[index_c - 1].focus()
+                    inputRefList.current[index_m].refList[index_c - 1].focus()
                     setTimeout(() => {
-                        props.inputRefList[index_m].refList[index_c - 1].setSelectionRange(-1, -1)
+                        inputRefList.current[index_m].refList[index_c - 1].setSelectionRange(-1, -1)
                     }, 0);
                 }
                 if (index_c - 1 === -1) {
@@ -65,13 +68,13 @@ function WordExplain(props) {
                 break;
             //down    
             case 40:
-                if (index_c + 1 < props.inputRefList[index_m].refList.length) {
-                    props.inputRefList[index_m].refList[index_c + 1].focus()
+                if (index_c + 1 < inputRefList.current[index_m].refList.length) {
+                    inputRefList.current[index_m].refList[index_c + 1].focus()
                     setTimeout(() => {
-                        props.inputRefList[index_m].refList[index_c + 1].setSelectionRange(-1, -1)
+                        inputRefList.current[index_m].refList[index_c + 1].setSelectionRange(-1, -1)
                     }, 0);
                 }
-                if (index_c + 1 === props.inputRefList[index_m].refList.length && props.inputRefList[index_m + 1] !== undefined) {
+                if (index_c + 1 === inputRefList.current[index_m].refList.length && inputRefList.current[index_m + 1] !== undefined) {
                     props.meaningRefList[index_m + 1].focus();
                     setTimeout(() => {
                         props.meaningRefList[index_m + 1].setSelectionRange(-1, -1)
@@ -80,14 +83,14 @@ function WordExplain(props) {
                 break;
             // right
             case 39:
-                if (props.inputRefList[index_m].refList[index_c].selectionStart === props.inputRefList[index_m].refList[index_c].value.length) {
-                    if (index_c + 1 < props.inputRefList[index_m].refList.length) {
-                        props.inputRefList[index_m].refList[index_c + 1].focus()
+                if (inputRefList.current[index_m].refList[index_c].selectionStart === inputRefList.current[index_m].refList[index_c].value.length) {
+                    if (index_c + 1 < inputRefList.current[index_m].refList.length) {
+                        inputRefList.current[index_m].refList[index_c + 1].focus()
                         setTimeout(() => {
-                            props.inputRefList[index_m].refList[index_c + 1].setSelectionRange(-1, -1)
+                            inputRefList.current[index_m].refList[index_c + 1].setSelectionRange(-1, -1)
                         }, 0);
                     }
-                    if (index_c + 1 === props.inputRefList[index_m].refList.length && props.inputRefList[index_m + 1] !== undefined) {
+                    if (index_c + 1 === inputRefList.current[index_m].refList.length && inputRefList.current[index_m + 1] !== undefined) {
                         props.meaningRefList[index_m + 1].focus();
                         setTimeout(() => {
                             props.meaningRefList[index_m + 1].setSelectionRange(-1, -1)
@@ -97,11 +100,11 @@ function WordExplain(props) {
                 break;
             //left
             case 37:
-                if (props.inputRefList[index_m].refList[index_c].selectionStart === 0) {
+                if (inputRefList.current[index_m].refList[index_c].selectionStart === 0) {
                     if (index_c - 1 > -1) {
-                        props.inputRefList[index_m].refList[index_c - 1].focus()
+                        inputRefList.current[index_m].refList[index_c - 1].focus()
                         setTimeout(() => {
-                            props.inputRefList[index_m].refList[index_c - 1].setSelectionRange(-1, -1)
+                            inputRefList.current[index_m].refList[index_c - 1].setSelectionRange(-1, -1)
                         }, 0);
                     }
                     if (index_c - 1 === -1) {
@@ -144,30 +147,30 @@ function WordExplain(props) {
                 if (index_m - 1 < 0) {
                     return
                 }
-                let length = props.inputRefList[index_m - 1].refList.length;
-                props.inputRefList[index_m - 1].refList[length - 1].focus()
+                let length = inputRefList.current[index_m - 1].refList.length;
+                inputRefList.current[index_m - 1].refList[length - 1].focus()
                 setTimeout(() => {
-                    props.inputRefList[index_m - 1].refList[length - 1].setSelectionRange(-1, -1)
+                    inputRefList.current[index_m - 1].refList[length - 1].setSelectionRange(-1, -1)
                 }, 0);
                 break;
             //down    
             case 40:
-                props.inputRefList[index_m].refList[0].focus()
+                inputRefList.current[index_m].refList[0].focus()
                 setTimeout(() => {
-                    props.inputRefList[index_m].refList[0].setSelectionRange(-1, -1)
+                    inputRefList.current[index_m].refList[0].setSelectionRange(-1, -1)
                 }, 0);
                 break;
             case 39:
-                props.inputRefList[index_m].refList[0].focus()
+                inputRefList.current[index_m].refList[0].focus()
                 setTimeout(() => {
-                    props.inputRefList[index_m].refList[0].setSelectionRange(-1, -1)
+                    inputRefList.current[index_m].refList[0].setSelectionRange(-1, -1)
                 }, 0);
                 break;
             default:
                 break
         }
         if (e.keyCode === 13) {
-            props.inputRefList[index_m].refList[0].focus()
+            inputRefList.current[index_m].refList[0].focus()
         }
     }
     const handelSetColectionChange = (e, index_m, index_c) => {
@@ -226,10 +229,13 @@ function WordExplain(props) {
                                                     //autoFocus={true}
                                                     ref={input => {
                                                         if (input) {
-                                                            if (props.inputRefList[index_m] === undefined) {
-                                                                props.inputRefList.push(inputInit)
+                                                            if (inputRefList.current[index_m] === undefined) {
+                                                                inputRefList.current.push(inputInit)
+                                                                console.log("push into inputRefList", inputRefList)
                                                             }
-                                                            props.inputRefList[index_m].refList.splice(index_c, 0, input)
+                                                            if(inputRefList.current[index_m].refList.length <= index_c) {
+                                                                inputRefList.current[index_m].refList.splice(index_c, 0, input)
+                                                            }
                                                             if (newCollectionIndex.current.index_m === index_m && newCollectionIndex.current.index_c === index_c) {
                                                                 input.focus()
                                                                 newCollectionIndex.current.index_m = -1
