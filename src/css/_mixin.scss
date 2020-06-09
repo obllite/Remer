@@ -9,6 +9,9 @@
         &::-webkit-input-placeholder{
             color: $teal;
         }
+        & {
+            border-bottom: 1px solid $background-color;
+        }
     }
 }
 @mixin edit_bottom_btn() {

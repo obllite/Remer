@@ -10,7 +10,7 @@ function WordExplain(props) {
     const meaning = classnames('meaning')
     const setCollection = classnames('setCollection')
     const hideClass = classnames('hide')
-    const deleteExplan = classnames('deleteExplan')
+    const deleteIcon = classnames('deleteIcon')
     //const
     const explainPlaceHolder = "Meaning"
     const setCollectionPlaceHolder = "Set Collection"
@@ -39,6 +39,13 @@ function WordExplain(props) {
         props.setmeanings(props.meanings)
     }
 
+    const deleteMeaning = (index_m) => {
+        console.log("delete Meaning called", index_m)
+        //props.meanings.splice(index_m, 1)
+        //inputRefList.current.pop()
+        //console.log(props.meanings)
+        console.log(inputRefList.current)
+    }
     const addSetCollection = (e, index_m, index_c) => {
         //console.log(index_m, index_c)
         //console.log("key code ", e.keyCode)
@@ -140,6 +147,7 @@ function WordExplain(props) {
         inputRefList.current[index_m].refList.pop()
         //console.log(inputRefList.current[index_m].refList)
     }
+
     const handleMeaningChange = (e, item, index) => {
         props.setmeanings(props.meanings.map((element, i) => {
             if (i === index) {
@@ -217,6 +225,12 @@ function WordExplain(props) {
                                             props.meaningRefList.splice(index_m, 0, meaning)
                                         }}
                                     />
+                                    <div className={deleteIcon}
+                                        onClick={() => {
+                                            deleteMeaning(index_m)
+                                        }}
+                                    >
+                                    </div>
                                 </div >
                                 <ul>
                                     {item_m.collections.map((item_c, index_c) => {
@@ -236,11 +250,14 @@ function WordExplain(props) {
                                                     //autoFocus={true}
                                                     ref={input => {
                                                         if (input) {
-                                                            if (inputRefList.current[index_m] === undefined) {
-                                                                inputRefList.current.push(inputInit)
-                                                                //console.log("push into inputRefList", inputRefList)
+                                                            if (inputRefList.current.length <= index_m) {
+                                                                inputRefList.current.push({
+                                                                    refList: []
+                                                                })
+                                                                console.log("push into inputRefList", inputRefList)
                                                             }
-                                                            if(inputRefList.current[index_m].refList.length <= index_c) {
+                                                            //if (!inputRefList.current[index_m].refList.includes(input)) {
+                                                            if (inputRefList.current[index_m].refList.length <= index_c) {
                                                                 inputRefList.current[index_m].refList.splice(index_c, 0, input)
                                                             }
                                                             if (newCollectionIndex.current.index_m === index_m && newCollectionIndex.current.index_c === index_c) {
@@ -251,12 +268,12 @@ function WordExplain(props) {
                                                         }
                                                     }}
                                                 />
-                                                <div className={deleteExplan}
-                                                    onClick={()=>{
+                                                <div className={deleteIcon}
+                                                    onClick={() => {
                                                         deletSetCollection(index_m, index_c)
                                                     }}
                                                 >
-                                                    -
+
                                                 </div>
                                             </li>
                                         )
