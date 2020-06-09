@@ -22,6 +22,7 @@ function FoldBlock(props) {
         deleteHandler(index, currentFileIndex)
     }
     //classnames
+    const foldBlock = classnames('foldBlock')
     const newFileLi = classnames('newFileLi')
     const foldList = classnames('foldList')
     const fileList = classnames('fileList')
@@ -323,6 +324,9 @@ function FoldBlock(props) {
     }
     /* menu config template */
     const fileViewMenuTmp = [{
+        label: 'new',
+        click: (e)=>{handleaddFile(e)}
+    },{
         label: 'rename',
         click: menuhandleRename
     }, {
@@ -330,7 +334,8 @@ function FoldBlock(props) {
         click: menuhandleDelete
     }]
     return (
-        <>
+        <div className={foldBlock}
+        >
             <div
                 className={foldList}
                 style={ifPutDown || ifLast ? {} : {
@@ -427,7 +432,7 @@ function FoldBlock(props) {
                         )
                     })}
                 </div> : <></>}
-        </>)
+        </div>)
 }
 
 export default FoldBlock
