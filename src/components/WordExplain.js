@@ -10,6 +10,7 @@ function WordExplain(props) {
     const meaning = classnames('meaning')
     const setCollection = classnames('setCollection')
     const hideClass = classnames('hide')
+    const deleteExplan = classnames('deleteExplan')
     //const
     const explainPlaceHolder = "Meaning"
     const setCollectionPlaceHolder = "Set Collection"
@@ -132,7 +133,13 @@ function WordExplain(props) {
         }
     }
 
-
+    const deletSetCollection = (index_m, index_c) => {
+        //删除meaning下的collection
+        props.meanings[index_m].collections.splice(index_c, 1)
+        //删除inputRef
+        inputRefList.current[index_m].refList.pop()
+        //console.log(inputRefList.current[index_m].refList)
+    }
     const handleMeaningChange = (e, item, index) => {
         props.setmeanings(props.meanings.map((element, i) => {
             if (i === index) {
@@ -231,7 +238,7 @@ function WordExplain(props) {
                                                         if (input) {
                                                             if (inputRefList.current[index_m] === undefined) {
                                                                 inputRefList.current.push(inputInit)
-                                                                console.log("push into inputRefList", inputRefList)
+                                                                //console.log("push into inputRefList", inputRefList)
                                                             }
                                                             if(inputRefList.current[index_m].refList.length <= index_c) {
                                                                 inputRefList.current[index_m].refList.splice(index_c, 0, input)
@@ -244,6 +251,13 @@ function WordExplain(props) {
                                                         }
                                                     }}
                                                 />
+                                                <div className={deleteExplan}
+                                                    onClick={()=>{
+                                                        deletSetCollection(index_m, index_c)
+                                                    }}
+                                                >
+                                                    -
+                                                </div>
                                             </li>
                                         )
                                     })}

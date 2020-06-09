@@ -20,6 +20,19 @@
     user-select: none;
 }
 
+.deleteExplan {
+    height: 30px;
+    width: 50px;
+    box-sizing: border-box;
+    font-size: 24px;
+    text-align: center;
+    line-height: 30px;
+    user-select: none;
+    opacity: 0;
+    &:hover{
+        opacity: 10;
+    }
+}
 .setCollection {
     display: block;
 }
