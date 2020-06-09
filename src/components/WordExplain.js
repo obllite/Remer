@@ -41,8 +41,8 @@ function WordExplain(props) {
 
     const deleteMeaning = (index_m) => {
         console.log("delete Meaning called", index_m)
-        //props.meanings.splice(index_m, 1)
-        //inputRefList.current.pop()
+        props.meanings.splice(index_m, 1)
+        inputRefList.current.pop()
         //console.log(props.meanings)
         console.log(inputRefList.current)
     }
