@@ -18,9 +18,6 @@ function WordBlock(props) {
     const chinesePlaceHolder = "Chinese"
     
     const meaningRefList = []
-    let inputRefList = [{
-        refList: []
-    }]
 
     //hooks
     const { updateData } = useContext(EditDataCtx)

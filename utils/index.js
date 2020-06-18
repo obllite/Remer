@@ -11,6 +11,7 @@ exports.searchWord = searchHandler.searchWord
 exports.saveEditBlocks = saveFileHandler.saveEditBlocks
 exports.syncCacheToFile = saveFileHandler.syncCacheToFile
 
+exports.newFold = fileViewHandler.newFold
 exports.newFile = fileViewHandler.newFile
 exports.initFileViewInfo = fileViewHandler.initFileViewInfo
 exports.getDefaultFilePath = fileViewHandler.getDefaultFilePath

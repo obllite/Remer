@@ -140,8 +140,9 @@ function FileView() {
                             ifLast={fold_index === noteBookNames.length - 1 ? true : false}
                             key={fold_index}
                             index={fold_index}
-                            notBookName={fold_item}
-                            notBookNames={noteBookNames}
+                            noteBookName={fold_item}
+                            noteBookNames={noteBookNames}
+                            setnoteBookNames={setnoteBookNames}
                             fileNames={fileNames}
                             setfileNames={setfileNames}
                             filelis={filelis}

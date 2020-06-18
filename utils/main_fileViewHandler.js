@@ -49,20 +49,49 @@ async function dirTree(pathParams, callback) {
             fileViewInfo.fileNames[foldIndex].names.push(getName(pathParams))
         }
     }
-    if(callback !== undefined) {
+    if (callback !== undefined) {
         //console.log('noteBookNames is ',fileViewInfo.noteBookNames)
         //console.log('fileNames is ',fileViewInfo.fileNames)
         callback()
     }
 }
+// 新建文件夹
+function newFold(newFoldPath, foldInfo) {
+    // 新建fold
+    fs.mkdir(newFoldPath, (err) => {
+        if (err) {
+            throw err
+        }
+        console.log("fold new suc!")
+    })
+    //更新 file view info
+    fileViewInfo.noteBookNames.splice(foldInfo.index, 0, foldInfo.name)
+    fileViewInfo.fileNames.splice(foldInfo.index, 0, { names: [] })
+    // 初始化untitled file
+    foldInfo.fileconfig.names.forEach((element, index) => {
+        console.log('element is', element, index)
+        let path = '/' + foldInfo.name + '/' + element
+        let fileInfo = {
+            path: path,
+            name: foldInfo.fileconfig.names[index]
+        }
+        //再新建文件
+        newFile(fileInfo)
+    });
+
+    console.log(fileViewInfo.fileNames[0])
+    console.log(fileViewInfo.fileNames[1])
+    console.log(fileViewInfo.fileNames[2])
+}
 
 // 新建文件
 function newFile(fileInfo) {
+    console.log('new file is ', fileInfo)
     let filePath = path.join(rootPath, fileInfo.path)
     //console.log('file path is ', filePath)
     //console.log('file name is ', fileName);
     if (fs.existsSync(filePath)) {
-       // console.log('file is exist!')
+        // console.log('file is exist!')
         return false
     } else {
         fs.openSync(filePath, 'w')
@@ -72,7 +101,7 @@ function newFile(fileInfo) {
             }
         });
         console.log('create file success, file path is ', filePath)
-        updateFileInfo('new',filePath)
+        updateFileInfo('new', filePath)
         return true
     }
 
@@ -109,9 +138,9 @@ function getName(pathParams) {
 //组合文件路径
 function combinePath(foldName, fileName) {
     let fold_index = fileViewInfo.noteBookNames.indexOf(foldName)
-    if(fold_index !== -1 ){
-        if(fileViewInfo.fileNames[fold_index].names.includes(fileName)) {
-            return path.resolve(rootPath,foldName,fileName)
+    if (fold_index !== -1) {
+        if (fileViewInfo.fileNames[fold_index].names.includes(fileName)) {
+            return path.resolve(rootPath, foldName, fileName)
         } else {
             return false
         }
@@ -122,20 +151,20 @@ function combinePath(foldName, fileName) {
 
 //获取第一个 noteBook 中第一个 file 的路径
 function getDefaultFilePath() {
-    let defaultPath = '/noteBooks/' + fileViewInfo.noteBookNames[0] + '/'+ fileViewInfo.fileNames[0].names[0]
+    let defaultPath = '/noteBooks/' + fileViewInfo.noteBookNames[0] + '/' + fileViewInfo.fileNames[0].names[0]
     return defaultPath
 }
 
 //读noteBook 文件
-function readNoteBookFile(filePath,filedata,event,callback) {
+function readNoteBookFile(filePath, filedata, event, callback) {
     console.log('load notbook file path is', filePath)
-    fs.readFile(filePath,(err,data)=>{
-        if(err) {
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
             throw err
         }
         filedata = data
-        callback(event,filedata)
-    }) 
+        callback(event, filedata)
+    })
 }
 // 重命名 file
 function rename(oldPath, newPath, callback) {
@@ -144,19 +173,19 @@ function rename(oldPath, newPath, callback) {
         if (err) {
             throw err
         }
-        updateFileInfo('rename',oldPath,newPath)
+        updateFileInfo('rename', oldPath, newPath)
         callback()
     })
 }
 
-function deletefile(filePath, callback){
+function deletefile(filePath, callback) {
     filePath = path.join(rootPath, filePath)
     console.log('delete file path is ', filePath)
-    fs.unlink(filePath, (err)=>{
-        if(err) {
+    fs.unlink(filePath, (err) => {
+        if (err) {
             throw err
         }
-        updateFileInfo('delete',filePath)
+        updateFileInfo('delete', filePath)
         callback()
     })
 }
@@ -166,6 +195,7 @@ function deletefile(filePath, callback){
 //consts
 exports.fileViewInfo = fileViewInfo
 //functions
+exports.newFold = newFold
 exports.newFile = newFile
 exports.initFileViewInfo = initFileViewInfo
 exports.getDefaultFilePath = getDefaultFilePath

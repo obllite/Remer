@@ -1,4 +1,22 @@
 import isElectron from 'is-electron';
+import notifier from './notifier'
+/* HOOK 新建fold, 参数 foldname, fold path */
+export const handleNewFold = (foldInfo) => {
+    if(isElectron()) {
+        window.ipcRenderer.on('newFold-reply', (event, ifNewFoldSuc)=>{
+            if(ifNewFoldSuc) {
+                notifier({
+                    head: 'new Fold suc', 
+                    body: 'new Fold suc',
+                    callback: ()=>{
+                        console.log('通知被点击')
+                    }
+                })
+            }
+        })
+        window.ipcRenderer.send('newFold-send', foldInfo)
+    }
+}
 /* HOOK 新建notebook 下的文件 参数filename  */
 const handleNewFile = (fileName, filePath) => {
     let fileInfo = {
@@ -8,19 +26,21 @@ const handleNewFile = (fileName, filePath) => {
     if (isElectron()) {
         window.ipcRenderer.on('newFile-reply', (event, ifNewFileSuc) => {
             if (ifNewFileSuc) {
-                let sucNotification = new Notification('创建文件成功', {
-                    body: '文件创建成功'
+                notifier({
+                    head: '创建文件成功', 
+                    body: 'new file suc!',
+                    callback: ()=>{
+                        console.log('通知被点击')
+                    }
                 })
-                sucNotification.onclick = () => {
-                    console.log('通知被点击')
-                }
             } else {
-                let myNotification = new Notification('创建文件警告', {
-                    body: '文件创建失败'
+                notifier({
+                    head: '创建文件失败', 
+                    body: 'new file failed!',
+                    callback: ()=>{
+                        console.log('通知被点击')
+                    }
                 })
-                myNotification.onclick = () => {
-                    console.log('通知被点击')
-                }
             }
         })
     }
@@ -36,4 +56,7 @@ export const validateFileName = (fileName, filelist) => {
     return !filelist.includes(fileName)
 }
 
+export const validateFoldName = (foldName, foldNames) => {
+    return !foldName.includes(foldName)
+}
 export default handleNewFile

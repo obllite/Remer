@@ -21,9 +21,6 @@ function WordExplain(props) {
         meaning: '',
         collections: ['']
     }
-    const inputInit = {
-        refList: []
-    }
     //hooks
     const newCollectionIndex = useRef({
         index_m: -1,
@@ -254,7 +251,7 @@ function WordExplain(props) {
                                                                 inputRefList.current.push({
                                                                     refList: []
                                                                 })
-                                                                console.log("push into inputRefList", inputRefList)
+                                                                //console.log("push into inputRefList", inputRefList)
                                                             }
                                                             //if (!inputRefList.current[index_m].refList.includes(input)) {
                                                             if (inputRefList.current[index_m].refList.length <= index_c) {

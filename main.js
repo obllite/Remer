@@ -271,6 +271,13 @@ ipcMain.on('syncFilePath-send', (event, currentFilePath) => {
     console.log('syncFilePath called ', currentViewedFilePath)
 })
 
+/* HOOK handler handleNewFold: file view 新建fold */
+ipcMain.on("newFold-send", (event, foldInfo)=>{
+    let newFoldPath = path.join(__dirname,'/noteBooks' + foldInfo.path)
+    main_process_utils.newFold(newFoldPath,foldInfo)
+    event.reply('newFold-reply', 'suc')
+})
+
 /* HOOK handler handleNewFile： file view 新建notebook 下文件 */
 ipcMain.on('newFile-send', (event, arg) => {
     let ifNewFileSuc = main_process_utils.newFile(arg)

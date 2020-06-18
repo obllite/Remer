@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import classnames from 'classnames'
-import handleNewFile, { validateFileName } from '../utils/fileViewHandler'
+import handleNewFile, { validateFileName, handleNewFold } from '../utils/fileViewHandler'
 import EditDataCtx from './EditDataCtx'
 import electron_api from '../api/index'
 
@@ -15,14 +15,16 @@ function FoldBlock(props) {
     //menu notifier
     const menuhandleRename = () => {
         console.log('rename clicked')
-        renameHandler(index, currentFileIndex)
+        renameHandler(index, currentFileIndex.current)
     }
     const menuhandleDelete = () => {
         console.log('delete clicked')
-        deleteHandler(index, currentFileIndex)
+        deleteHandler(index, currentFileIndex.current)
     }
     //classnames
     const foldBlock = classnames('foldBlock')
+
+    const newFoldInput = classnames('newFoldInput')
     const newFileLi = classnames('newFileLi')
     const foldList = classnames('foldList')
     const fileList = classnames('fileList')
@@ -34,11 +36,15 @@ function FoldBlock(props) {
     const fileli = classnames('fileli')
     const indentation = classnames('indentation')
     //consts
-    let ifCanNew = false
+    let ifCanNewFold = false
+    let ifCanNewFile = false
     let ifCanRename = false
     const ifRenameInit = -1
-    let currentFileIndex = -1
+    const foldInitConfig = {
+        names: ['Untitled.json', 'Untitiled2.json']
+    }
     //hooks
+    const [ifNewFold, setifNewFold] = useState(false)
     const [ifNewFile, setifNewFile] = useState(false)
     const [ifPutDown, setifPutDown] = useState(true)
     const [ifRename, setifRename] = useState({
@@ -49,9 +55,17 @@ function FoldBlock(props) {
     const { handleLoadData } = useContext(EditDataCtx)
 
     const foldIconRef = useRef()
+    const foldNewRef = useRef()
     const fileNewRef = useRef()
     const fileNewLiRef = useRef()
     const renameRef = useRef(null)
+    const currentFileIndex = useRef(0)
+
+    useEffect(() => {
+        if (ifNewFold) {
+            foldNewRef.current.focus()
+        }
+    }, [ifNewFold])
 
     useEffect(() => {
         if (ifNewFile) {
@@ -61,14 +75,11 @@ function FoldBlock(props) {
 
     useEffect(() => {
         if (renameRef.current) {
-            console.log('rename effect inner')
+            //console.log('rename effect inner')
             renameRef.current.focus()
         }
     }, [ifRename])
 
-    useEffect(() => {
-        //console.log('renameRef is update')
-    }, [renameRef])
     //handlers
     const handleFold = (e) => {
         switch (e.target.className) {
@@ -93,8 +104,8 @@ function FoldBlock(props) {
 
     const hanleNewFileChange = (e) => {
         if (fileNewRef.current.value !== '') {
-            ifCanNew = validateFileName(fileNewRef.current.value, props.fileNames[index].names)
-            if (!ifCanNew) {
+            ifCanNewFile = validateFileName(fileNewRef.current.value, props.fileNames[index].names)
+            if (!ifCanNewFile) {
                 fileNewLiRef.current.style.color = "red"
                 fileNewRef.current.style.color = "red"
                 fileNewRef.current.focus()
@@ -110,14 +121,14 @@ function FoldBlock(props) {
         if (fileNewRef.current.value === '') {
             setifNewFile(false)
         } else {
-            ifCanNew = validateFileName(fileNewRef.current.value, props.fileNames[index].names)
-            if (!ifCanNew) {
+            ifCanNewFile = validateFileName(fileNewRef.current.value, props.fileNames[index].names)
+            if (!ifCanNewFile) {
                 setifNewFile(false)
                 return
             }
             setifNewFile(false)
             let fileName = fileNewRef.current.value
-            let filePath = '/' + props.notBookNames[index] + '/' + fileName
+            let filePath = '/' + props.noteBookNames[index] + '/' + fileName
             handleNewFile(fileName, filePath)
             let newNames = [...props.fileNames[index].names, fileName]
             props.setfileNames(props.fileNames.map((item, i) => {
@@ -130,10 +141,10 @@ function FoldBlock(props) {
     }
 
     const handleNewFileKeyDown = (e) => {
-        if (e.keyCode === 13 && ifCanNew) {
+        if (e.keyCode === 13 && ifCanNewFile) {
             setifNewFile(false)
             let fileName = fileNewRef.current.value
-            let filePath = '/' + props.notBookNames[index] + '/' + fileName
+            let filePath = '/' + props.noteBookNames[index] + '/' + fileName
             handleNewFile(fileName, filePath)
             let newNames = [...props.fileNames[index].names, fileName]
             props.setfileNames(props.fileNames.map((item, i) => {
@@ -153,7 +164,7 @@ function FoldBlock(props) {
         //laod new file to edit
         let fileName = props.fileNames[index].names[file_index]
         //console.log('will switch to ', fileName)
-        let filePath = '/noteBooks/' + props.notBookName + '/' + fileName
+        let filePath = '/noteBooks/' + props.noteBookName + '/' + fileName
         //console.log('will switch file path is ', filePath)
         /* HOOK 加载 */
         window.ipcRenderer.send('loadfile-send', filePath)
@@ -193,7 +204,7 @@ function FoldBlock(props) {
             console.log('rename err')
             return
         }
-        console.log('renameHandler', noteBook_i, file_i)
+        //console.log('renameHandler', noteBook_i, file_i)
         setifRename({
             noteBook_i: noteBook_i,
             file_i: file_i
@@ -288,8 +299,8 @@ function FoldBlock(props) {
     const getRenameArg = () => {
         let noteBook_i = index
         let file_i = ifRename.file_i
-        let oldPath = '/' + props.notBookNames[noteBook_i] + '/' + props.fileNames[index].names[file_i]
-        let newPath = '/' + props.notBookNames[noteBook_i] + '/' + renameRef.current.value
+        let oldPath = '/' + props.noteBookNames[noteBook_i] + '/' + props.fileNames[index].names[file_i]
+        let newPath = '/' + props.noteBookNames[noteBook_i] + '/' + renameRef.current.value
         let arg = {
             type: "file",
             oldPath: oldPath,
@@ -299,14 +310,14 @@ function FoldBlock(props) {
     }
 
     const deleteHandler = (noteBook_i, currentFileIndex) => {
-        let path = '/' + props.notBookNames[noteBook_i] + '/' + props.fileNames[index].names[currentFileIndex]
-        console.log('delete path is ',path)
+        let path = '/' + props.noteBookNames[noteBook_i] + '/' + props.fileNames[index].names[currentFileIndex]
+        console.log('delete path is ', path)
         /* HOOK delete file */
-        window.ipcRenderer.send('deletefile-send',path)
-        window.ipcRenderer.on('deletefile-reply',(event, result)=>{
+        window.ipcRenderer.send('deletefile-send', path)
+        window.ipcRenderer.on('deletefile-reply', (event, result) => {
             console.log('delete file result is', result)
-            if(result){
-                console.log('delete currentFileIndex is ',currentFileIndex)
+            if (result) {
+                console.log('delete currentFileIndex is ', currentFileIndex)
                 //更新视图中的信息
                 props.setfileNames(props.fileNames.map((item, i) => {
                     if (i === index) {
@@ -322,19 +333,80 @@ function FoldBlock(props) {
             }
         })
     }
+
+    const handleNewFoldBlur = (e) => {
+        if (foldNewRef.current.value === '') {
+            setifNewFold(false)
+        } else {
+            //add validation
+            ifCanNewFold = true
+        }
+    }
+    const handleNewFoldChange = (e) => {
+        //add validation
+        ifCanNewFold = true
+    }
+    const handleNewFoldKeyDown = (e) => {
+        if(e.keyCode === 13 && ifCanNewFold) {
+            //insert new notebook
+            let noteBookNamesTmp = props.noteBookNames
+            let fileNamesTmp = props.fileNames
+            fileNamesTmp.splice(index+1,0, foldInitConfig)
+            props.setfileNames([...fileNamesTmp])
+            noteBookNamesTmp.splice(index+1, 0, foldNewRef.current.value)
+            props.setnoteBookNames([...noteBookNamesTmp])
+            setifNewFold(false)
+            //send to main process to 
+            let foldPath = '/' + foldNewRef.current.value
+            let foldInfo = {
+                name: foldNewRef.current.value,
+                path: foldPath,
+                fileconfig: foldInitConfig,
+                index: index+1
+            }
+            handleNewFold(foldInfo)
+        }
+    }
+
+    const getFoldArg = () => {
+
+    }
     /* menu config template */
     const fileViewMenuTmp = [{
         label: 'new',
-        click: (e)=>{handleaddFile(e)}
-    },{
+        click: (e) => { handleaddFile(e) }
+    }, {
         label: 'rename',
         click: menuhandleRename
     }, {
         label: 'delete',
         click: menuhandleDelete
+    }, {
+        type: 'separator'
+    }, {
+        label: "new fold",
+        click: (e) => {
+            setifNewFold(true)
+            console.log("new fold")
+        }
+    }, {
+        label: "rename fold",
+        click: () => { }
+    }, {
+        label: "delete fold"
     }]
     return (
         <div className={foldBlock}
+            onContextMenu={(e) => {
+                //更新current file index
+                const fileViewMenu = electron_api.newCxtMenu(fileViewMenuTmp)
+                fileViewMenu.popup({
+                    callback: () => {
+                        console.log('context menu closed')
+                        //renameHandler(index, file_i)
+                    }
+                })
+            }}
         >
             <div
                 className={foldList}
@@ -350,7 +422,7 @@ function FoldBlock(props) {
                     }}
                     ref={foldIconRef}
                 ></span>
-                {props.notBookName}
+                {props.noteBookName}
                 <span
                     className={addFileIcon}
                     onClick={(e) => {
@@ -358,6 +430,27 @@ function FoldBlock(props) {
                     }}
                 ></span>
             </div>
+            {ifNewFold ?
+                <div
+                    className={foldList}
+                    style={ifPutDown || ifLast ? {} : {
+                        backgroundClip: "padding-box",
+                        borderBottom: "2px dashed #65AD83"
+                    }}
+                >
+                    <input type="text" className={newFoldInput}
+                        ref={foldNewRef}
+                        onBlur={(e) => {
+                            handleNewFoldBlur(e)
+                        }}
+                        onKeyDown={(e) => { 
+                            handleNewFoldKeyDown(e)
+                        }}
+                        onChange={(e)=>{
+                            handleNewFoldChange(e)
+                        }}
+                    />
+                </div> : <></>}
             {ifPutDown ?
                 <div className={fileList}>
                     {ifNewFile ?
@@ -404,18 +497,8 @@ function FoldBlock(props) {
                                 : <div
                                     key={file_i}
                                     className={fileli}
-                                    onContextMenu={(e) => {
-                                        //更新current file index
-                                        currentFileIndex = file_i
-                                        const fileViewMenu = electron_api.newCxtMenu(fileViewMenuTmp)
-                                        fileViewMenu.popup({
-                                            callback: () => {
-                                                console.log('context menu closed')
-                                                //renameHandler(index, file_i)
-                                            }
-                                        })
-                                    }}
                                     onClick={(e) => {
+                                        currentFileIndex.current = file_i
                                         change2True(file_i)
                                         handleSwitchFile(e, file_i)
                                     }}
