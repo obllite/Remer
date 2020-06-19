@@ -368,9 +368,6 @@ function FoldBlock(props) {
         }
     }
 
-    const getFoldArg = () => {
-
-    }
     /* menu config template */
     const fileViewMenuTmp = [{
         label: 'new',

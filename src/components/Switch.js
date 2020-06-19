@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import classnames from 'classnames'
 
 /* PARAMS state: string enum('on' 或 'off'), onChange: function 用于改变state */
