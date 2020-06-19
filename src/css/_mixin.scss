@@ -32,3 +32,15 @@
     user-select: none;
     cursor: pointer;
 }
+
+@mixin configItem() {
+    height: 40px;
+    border: 0.5px solid $gray-200;
+    padding-left: 20px;
+    font-size: 13px;
+    line-height: 40px;
+    user-select: none;
+    &:hover{
+        background-color: darken($gray-200, 4%);
+    }
+}

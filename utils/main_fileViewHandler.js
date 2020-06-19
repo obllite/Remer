@@ -79,9 +79,6 @@ function newFold(newFoldPath, foldInfo) {
         newFile(fileInfo)
     });
 
-    console.log(fileViewInfo.fileNames[0])
-    console.log(fileViewInfo.fileNames[1])
-    console.log(fileViewInfo.fileNames[2])
 }
 
 // 新建文件

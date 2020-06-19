@@ -1,0 +1,23 @@
+.switchContainer {
+    width: 36px;
+    height: 20px;
+    border-radius: 10px;
+    padding: 2px;
+}
+
+.switch-on{
+    .switchIcon {
+        transform: translateX(16px);
+    }
+}
+
+.switch-off{
+    background-color: $gray-200;
+}
+/* icon 的color 用 inline 的形式设置, 方便用户更换theme */
+.switchIcon{
+    width: 16px;
+    height: 16px;
+    border-radius: 16px;
+    background-color: $white;
+}

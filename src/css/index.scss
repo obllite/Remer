@@ -21,6 +21,13 @@
 @import "./WordExplain.scss";
 @import "./FileView.scss";
 @import "./Preview.scss";
+
+/* config page样式 */
+@import "./RemerConfig.scss";
+@import "./Avator.scss";
+
+/* 自用 component 样式 */
+@import "./Switch.scss";
 .hide {
     display: none;
 }
