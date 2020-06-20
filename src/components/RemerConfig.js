@@ -73,6 +73,7 @@ function RemerConfig() {
 
     const configli = classnames('configli')
     const configliSwitch = classnames('configliSwitch')
+    const configIcon = classnames('configIcon','iconfont','arrow_right', 'icon-icon-test')
 
     /* hooks */
     const [profileState, setprofileState] = useState()
@@ -144,6 +145,7 @@ function RemerConfig() {
             /* 分页 */
             case 'anchor':
                 let aConfigli = classnames(configli, 'anchor-configli')
+                suffixNode = <div className={configIcon}></div>
                 leafNode = React.createElement('div', { key: key, className: aConfigli, value: el.value }, [content, suffixNode])
                 break;
             /* 按钮 */

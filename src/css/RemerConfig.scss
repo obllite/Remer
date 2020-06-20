@@ -48,6 +48,14 @@
 .anchor-configli {
     //background-color: $background-pink;
 }
+.configIcon {
+    float: right;
+    position: relative;
+    color: darken($gray-500, 4%);
+    margin-right: 10px;
+    font-size: 16px;
+    font-weight: $font-weight-bold;
+}
 .colorSelect-configli {
     //background-color: $indigo;
 }
