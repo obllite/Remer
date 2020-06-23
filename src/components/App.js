@@ -64,7 +64,7 @@ function App() {
             <Route path='/config'>
               <RemerConfig></RemerConfig>
             </Route>
-            <Redirect path="/" to={{ pathname: '/edit' }} />
+            <Redirect path="/" to={{ pathname: '/config' }} />
           </Switch>
         </div>
       </Router>

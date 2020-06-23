@@ -2,7 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 
 /* PARAMS state: string enum('on' 或 'off'), onChange: function 用于改变state */
-function Switch(props) {
+function SwitchIcon(props) {
     const {
         value,
         onChange,
@@ -30,4 +30,4 @@ function Switch(props) {
         </div>
     )
 }
-export default Switch
+export default SwitchIcon

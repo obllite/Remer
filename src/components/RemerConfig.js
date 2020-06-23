@@ -1,10 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import Avator from './Avator'
-import Switch from './Switch'
 import classnames from 'classnames'
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link,
+    Redirect
+} from 'react-router-dom';
+
+import Avator from './Avator'
+import SwitchIcon from './SwitchIcon'
+import Plan from './Plan';
+import Message from './Message'
+import Account from './Account'
+
 import emitter from '../utils/events.js'
 import newNotifier from '../utils/notifier'
 import getNetWorkChack, { getSignout, getSignin } from '../api/http'
+
 //COMPONENT 创建，打开，编辑 notebook 文件的组件
 // 此处加载配置
 //PARAMS concrete config = { type: enum['radio', 'anchor', 'btn','colorSelect'], value: any}
@@ -23,7 +36,7 @@ const config = {
         }
     },
     memory: {
-        plane: {
+        plan: {
             type: 'anchor',
             alias: '我的计划',
             value: ''
@@ -77,6 +90,17 @@ const config = {
     }
 }
 const configHandlers = {
+    messages: () => {
+        //加载message
+        console.log("message is called")
+    },
+    plan: () => {
+        //加载plan
+        console.log('plan is called')
+    },
+    accountBind: () => {
+        console.log('account bind called')
+    },
     netWorkCheck: getNetWorkChack,
     signin: getSignin,
     signout: () => {
@@ -89,6 +113,7 @@ function RemerConfig() {
 
     /* classnames */
     const remerConfig = classnames('remerConfig')
+    const configContainer = classnames('configContainer')
     const profile = classnames('profile')
     const username = classnames('username')
     //concrete config
@@ -150,7 +175,7 @@ function RemerConfig() {
             } else {
                 newNotifier({ head: "登 陆 成 功", body: "用 户 登 陆 成 功" })
                 setifSign(true)
-                setprofileState({username: data["UserName"]})
+                setprofileState({ username: data["UserName"] })
                 localStorage.setItem('ifSign', true)
             }
         })
@@ -199,7 +224,7 @@ function RemerConfig() {
             case 'radio':
                 let rConfigli = classnames(configli, 'radio-configli')
                 //此处换用复选框
-                suffixNode = <Switch
+                suffixNode = <SwitchIcon
                     key={key}
                     value={el.value}
                     className={configliSwitch}
@@ -213,14 +238,19 @@ function RemerConfig() {
                         }
                         configMountObj[parentKey]({ ...tmpItem })
                     }}
-                ></Switch>
+                ></SwitchIcon>
                 leafNode = React.createElement('div', { key: key, className: rConfigli, value: el.value }, [content, suffixNode])
                 break;
             /* 分页 */
             case 'anchor':
                 let aConfigli = classnames(configli, 'anchor-configli')
                 suffixNode = <div key={key} className={configIcon}></div>
-                leafNode = React.createElement('div', { key: key, className: aConfigli, value: el.value }, [content, suffixNode])
+                let routePath = '/config/' + key
+                leafNode = <Link to={routePath} key={key}>
+                    {
+                        React.createElement('div', { key: key, className: aConfigli, value: el.value }, [content, suffixNode])
+                    }
+                </Link>
                 break;
             /* 按钮 */
             case 'btn':
@@ -240,17 +270,31 @@ function RemerConfig() {
     }
     return (
         <div className={remerConfig}>
-            <div className={profile}>
-                <Avator></Avator>
-                <div className={username}>
-                    {profileState ? profileState.username : ""}
+            <div className={configContainer}>
+                <div className={profile}>
+                    <Avator></Avator>
+                    <div className={username}>
+                        {profileState ? profileState.username : ""}
+                    </div>
                 </div>
+                {genConfigBlock(messageState, message)}
+                {genConfigBlock(memoryState, memory)}
+                {genConfigBlock(preferenceState, preference)}
+                {genConfigBlock(outlookState, outlook)}
+                {genConfigBlock(logState, log)}
             </div>
-            {genConfigBlock(messageState, message)}
-            {genConfigBlock(memoryState, memory)}
-            {genConfigBlock(preferenceState, preference)}
-            {genConfigBlock(outlookState, outlook)}
-            {genConfigBlock(logState, log)}
+                <Switch>
+                    <Route path='/config/messages'>
+                        <Message></Message>
+                    </Route>
+                    <Route path='/config/plan'>
+                        <Plan></Plan>
+                    </Route>
+                    <Route path='/config/accountBind'>
+                    <Account></Account>
+                    </Route>
+                    <Redirect path="/config" to={{ pathname: '/config/plan' }} />
+                </Switch>
         </div>
     )
 }
