@@ -35,8 +35,8 @@ function createWindow() {
         //icon: path.join(__dirname, 'assets/images/sakurajima.jpg'),
         webPreferences: {
             nodeIntegration: true,
-            preload: path.join(__dirname, 'preload.js')
-            /* webSecurity: false */
+            preload: path.join(__dirname, 'preload.js'),
+            webSecurity: false 
         }
     })
     if (process.platform === 'darwin') {

@@ -2,14 +2,18 @@ import React, { useState, useEffect } from 'react'
 import Avator from './Avator'
 import Switch from './Switch'
 import classnames from 'classnames'
+import emitter from '../utils/events.js'
+import newNotifier from '../utils/notifier'
+import getNetWorkChack, { getSignout, getSignin } from '../api/http'
 //COMPONENT 创建，打开，编辑 notebook 文件的组件
 // 此处加载配置
 //PARAMS concrete config = { type: enum['radio', 'anchor', 'btn','colorSelect'], value: any}
 
 const bgc = '#65AD83'
+
 const config = {
     profile: {
-        username: 'Tachish'
+        username: '未 登 陆'
     },
     message: {
         messages: {
@@ -58,9 +62,31 @@ const config = {
             alias: '主题配色',
             value: 'green'
         }
+    },
+    log: {
+        signin: {
+            type: 'btn',
+            alias: '用 户 登 陆',
+            value: ''
+        },
+        signout: {
+            type: 'btn',
+            alias: '退 出 登 陆',
+            value: ''
+        }
+    }
+}
+const configHandlers = {
+    netWorkCheck: getNetWorkChack,
+    signin: getSignin,
+    signout: () => {
+        console.log("sign out called")
+        localStorage.setItem('ifSign', false)
+        getSignout()
     }
 }
 function RemerConfig() {
+
     /* classnames */
     const remerConfig = classnames('remerConfig')
     const profile = classnames('profile')
@@ -70,10 +96,11 @@ function RemerConfig() {
     const preference = classnames('preference', 'concreteConfig')
     const outlook = classnames('outlook', 'concreteConfig')
     const memory = classnames('memory', 'concreteConfig')
+    const log = classnames('log', 'concreteConfig')
 
     const configli = classnames('configli')
     const configliSwitch = classnames('configliSwitch')
-    const configIcon = classnames('configIcon','iconfont','arrow_right', 'icon-icon-test')
+    const configIcon = classnames('configIcon', 'iconfont', 'arrow_right', 'icon-icon-test')
 
     /* hooks */
     const [profileState, setprofileState] = useState()
@@ -81,6 +108,10 @@ function RemerConfig() {
     const [memoryState, setmemoryState] = useState()
     const [preferenceState, setpreferenceState] = useState()
     const [outlookState, setoutlookState] = useState()
+    const [logState, setlogState] = useState(false)
+
+    //用 session 保持登陆会话
+    const [ifSign, setifSign] = useState()
     // load config to state
     useEffect(() => {
         setprofileState(config.profile)
@@ -88,16 +119,60 @@ function RemerConfig() {
         setmemoryState(config.memory)
         setpreferenceState(config.preference)
         setoutlookState(config.outlook)
+        setifSign(localStorage.getItem("ifSign"))
     }, [])
 
+    useEffect(() => {
+        if (!ifSign) {
+            setlogState({
+                signin: {
+                    type: 'btn',
+                    alias: '用 户 登 陆',
+                    value: ''
+                }
+            })
+        } else {
+            setlogState({
+                signout: {
+                    type: 'btn',
+                    alias: '退 出 登 陆',
+                    value: ''
+                }
+            })
+        }
+    }, [ifSign])
+
+    useEffect(() => {
+        emitter.addListener('signin-emit', (data) => {
+            //或许有错误码检查
+            if (data === "failed") {
+                newNotifier({ head: "登 陆 失 败", body: "用 户 登 陆 失 败" })
+            } else {
+                newNotifier({ head: "登 陆 成 功", body: "用 户 登 陆 成 功" })
+                setifSign(true)
+                setprofileState({username: data["UserName"]})
+                localStorage.setItem('ifSign', true)
+            }
+        })
+        emitter.addListener("signout-emit", () => {
+            //清除状态
+            setifSign(false)
+            setprofileState(config.profile)
+        })
+        return () => {
+            emitter.removeListener('signin-emit', (data) => { })
+        }
+    }, [])
     /* consts */
     // config挂载对象, 用于实现 setState 函数的字典功能
     const configMountObj = {
         message: setmessageState,
         memory: setmemoryState,
         preference: setpreferenceState,
-        outlook: setoutlookState
+        outlook: setoutlookState,
+        log: setlogState
     }
+
     /* functions */
     const genConfigBlock = (concreteConfig, rootClassname) => {
         let childrenlis = []
@@ -117,9 +192,7 @@ function RemerConfig() {
     const genConfigli = (key, el, parentKey) => {
         let leafNode
         let suffixNode
-        let callback = () => {
-            console.log('btn is clicked')
-        }
+        let callback = configHandlers[key]
         let content = el.alias ? el.alias : key.replace(/^\S/, s => s.toUpperCase())
         switch (el.type) {
             /* 单选框 */
@@ -127,6 +200,7 @@ function RemerConfig() {
                 let rConfigli = classnames(configli, 'radio-configli')
                 //此处换用复选框
                 suffixNode = <Switch
+                    key={key}
                     value={el.value}
                     className={configliSwitch}
                     color={bgc}
@@ -145,7 +219,7 @@ function RemerConfig() {
             /* 分页 */
             case 'anchor':
                 let aConfigli = classnames(configli, 'anchor-configli')
-                suffixNode = <div className={configIcon}></div>
+                suffixNode = <div key={key} className={configIcon}></div>
                 leafNode = React.createElement('div', { key: key, className: aConfigli, value: el.value }, [content, suffixNode])
                 break;
             /* 按钮 */
@@ -156,6 +230,7 @@ function RemerConfig() {
             /* 颜色选择 */
             case 'colorSelect':
                 let cConfigli = classnames(configli, 'colorSelect-configli')
+                suffixNode = <div key={key}></div>
                 leafNode = React.createElement('div', { key: key, className: cConfigli, value: el.value }, [content, suffixNode])
                 break;
             default:
@@ -168,13 +243,14 @@ function RemerConfig() {
             <div className={profile}>
                 <Avator></Avator>
                 <div className={username}>
-                    {config.profile.username}
+                    {profileState ? profileState.username : ""}
                 </div>
             </div>
             {genConfigBlock(messageState, message)}
             {genConfigBlock(memoryState, memory)}
             {genConfigBlock(preferenceState, preference)}
             {genConfigBlock(outlookState, outlook)}
+            {genConfigBlock(logState, log)}
         </div>
     )
 }

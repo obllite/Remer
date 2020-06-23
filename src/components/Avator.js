@@ -4,7 +4,6 @@ import avatorURL from "../img/avactor.jpg"
 import changeAvator from '../utils/changeAvator'
 
 /* COMPONENT 用户头像组件*/
-/* FIXME 更换avator img 之后会导致页面刷新 */
 
 class Avator extends React.Component {
     // eslint-disable-next-line no-useless-constructor

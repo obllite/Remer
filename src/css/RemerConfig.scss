@@ -1,4 +1,3 @@
-
 .remerConfig {
     height: $full-vh;
     width: calc(#{$full-vw} - 60px);
@@ -46,7 +45,9 @@
     margin: 10px;
 }
 .anchor-configli {
-    //background-color: $background-pink;
+    &:active {
+        background-image: linear-gradient(90deg, darken($gray-300, 4%), darken($gray-200,4%), darken($gray-300, 4%));
+    }
 }
 .configIcon {
     float: right;
@@ -60,5 +61,11 @@
     //background-color: $indigo;
 }
 .btn-configli {
-    
+    &:active {
+        background-image: linear-gradient(90deg, darken($gray-300, 4%), darken($gray-200,4%), darken($gray-300, 4%));
+    }
+}
+
+.log {
+    color: darken($red, 4%);
 }
