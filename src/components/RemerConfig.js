@@ -180,6 +180,7 @@ function RemerConfig() {
             emitter.removeListener('signin-emit', (data) => { })
         }
     }, [])
+
     /* consts */
     // config挂载对象, 用于实现 setState 函数的字典功能
     const configMountObj = {
@@ -189,7 +190,8 @@ function RemerConfig() {
         outlook: setoutlookState,
         log: setlogState
     }
-
+    
+    // config回调函数挂载对象, 用于实现点击时的回调函数
     const configHandlers = {
         messages: () => {
             //加载message
@@ -206,17 +208,17 @@ function RemerConfig() {
         // NOTE signin 是异步任务, 而 signout 是同步任务
         signin: getSignin,
         signout: () => {
-            //清除状态
+            // TODO 封装清除状态
             console.log("sign out called")
             setifSign("false")
             localStorage.setItem('ifSign', "false")
             let profileTmp = {...profileState}
             profileTmp.username = ""
-            console.log("profileTmp is ",profileTmp)
             localStorage.setItem('profile', JSON.stringify(profileTmp))
             getSignout()
         }
     }
+
     /* functions */
     const genConfigBlock = (concreteConfig, rootClassname) => {
         let childrenlis = []

@@ -1,13 +1,26 @@
 import axios from 'axios'
 import emitter from '../utils/events';
+import newNotifer from '../utils/notifier';
+
 const serverURL = 'http://localhost:9090'
 export const getNetWorkChack = () => {
     axios.get(`${serverURL}/test`, {
     })
         .then(function (response) {
             console.log(response);
+            let noticonfig = {
+                head: "网 络 检 查",
+                body: "网络连接正常!"
+            }
+            newNotifer(noticonfig)
+            
         })
         .catch(function (error) {
+            let noticonfig = {
+                head: "网 络 检 查",
+                body: "网络连接已断开!"
+            }
+            newNotifer(noticonfig)
             console.log(error);
         });
 }
