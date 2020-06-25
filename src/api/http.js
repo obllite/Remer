@@ -1,8 +1,8 @@
 import axios from 'axios'
 import emitter from '../utils/events';
-const rootURL = 'http://localhost:9090'
+const serverURL = 'http://localhost:9090'
 export const getNetWorkChack = () => {
-    axios.get(`${rootURL}/test`, {
+    axios.get(`${serverURL}/test`, {
     })
         .then(function (response) {
             console.log(response);
@@ -16,7 +16,7 @@ export default getNetWorkChack
 
 export const getSignin = () => {
     // 为给定 ID 的 user 创建请求
-    axios.get(`${rootURL}/sign`, {
+    axios.get(`${serverURL}/sign`, {
         params: {
             username: 'Tachish'
         }
@@ -25,6 +25,7 @@ export const getSignin = () => {
             // 登陆成功
             // emit to remer config component
             if(response.data["UserName"]){
+                console.log("sign data is: ",response.data)
                 emitter.emit('signin-emit', response.data)
             }
         })

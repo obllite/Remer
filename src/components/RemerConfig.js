@@ -89,26 +89,7 @@ const config = {
         }
     }
 }
-const configHandlers = {
-    messages: () => {
-        //加载message
-        console.log("message is called")
-    },
-    plan: () => {
-        //加载plan
-        console.log('plan is called')
-    },
-    accountBind: () => {
-        console.log('account bind called')
-    },
-    netWorkCheck: getNetWorkChack,
-    signin: getSignin,
-    signout: () => {
-        console.log("sign out called")
-        localStorage.setItem('ifSign', false)
-        getSignout()
-    }
-}
+
 function RemerConfig() {
 
     /* classnames */
@@ -139,7 +120,15 @@ function RemerConfig() {
     const [ifSign, setifSign] = useState()
     // load config to state
     useEffect(() => {
-        setprofileState(config.profile)
+        if (localStorage.getItem("profile")) {
+            let username = JSON.parse(localStorage.getItem("profile")).username
+            if (username) {
+                console.log(username)
+                setprofileState(JSON.parse(localStorage.getItem("profile")))
+            } else {
+                setprofileState(config.profile)
+            }
+        }
         setmessageState(config.message)
         setmemoryState(config.memory)
         setpreferenceState(config.preference)
@@ -148,22 +137,25 @@ function RemerConfig() {
     }, [])
 
     useEffect(() => {
-        if (!ifSign) {
-            setlogState({
-                signin: {
-                    type: 'btn',
-                    alias: '用 户 登 陆',
-                    value: ''
-                }
-            })
-        } else {
-            setlogState({
-                signout: {
-                    type: 'btn',
-                    alias: '退 出 登 陆',
-                    value: ''
-                }
-            })
+        if (ifSign) {
+            if (ifSign === "false") {
+                console.log("in not sign in", ifSign, typeof ifSign)
+                setlogState({
+                    signin: {
+                        type: 'btn',
+                        alias: '用 户 登 陆',
+                        value: ''
+                    }
+                })
+            } else {
+                setlogState({
+                    signout: {
+                        type: 'btn',
+                        alias: '退 出 登 陆',
+                        value: ''
+                    }
+                })
+            }
         }
     }, [ifSign])
 
@@ -174,14 +166,14 @@ function RemerConfig() {
                 newNotifier({ head: "登 陆 失 败", body: "用 户 登 陆 失 败" })
             } else {
                 newNotifier({ head: "登 陆 成 功", body: "用 户 登 陆 成 功" })
-                setifSign(true)
+                setifSign("true")
                 setprofileState({ username: data["UserName"] })
-                localStorage.setItem('ifSign', true)
+                localStorage.setItem('ifSign', "true")
+                localStorage.setItem('profile', JSON.stringify({ username: data["UserName"] }))
             }
         })
         emitter.addListener("signout-emit", () => {
             //清除状态
-            setifSign(false)
             setprofileState(config.profile)
         })
         return () => {
@@ -198,6 +190,33 @@ function RemerConfig() {
         log: setlogState
     }
 
+    const configHandlers = {
+        messages: () => {
+            //加载message
+            console.log("message is called")
+        },
+        plan: () => {
+            //加载plan
+            console.log('plan is called')
+        },
+        accountBind: () => {
+            console.log('account bind called')
+        },
+        netWorkCheck: getNetWorkChack,
+        // NOTE signin 是异步任务, 而 signout 是同步任务
+        signin: getSignin,
+        signout: () => {
+            //清除状态
+            console.log("sign out called")
+            setifSign("false")
+            localStorage.setItem('ifSign', "false")
+            let profileTmp = {...profileState}
+            profileTmp.username = ""
+            console.log("profileTmp is ",profileTmp)
+            localStorage.setItem('profile', JSON.stringify(profileTmp))
+            getSignout()
+        }
+    }
     /* functions */
     const genConfigBlock = (concreteConfig, rootClassname) => {
         let childrenlis = []
@@ -283,18 +302,18 @@ function RemerConfig() {
                 {genConfigBlock(outlookState, outlook)}
                 {genConfigBlock(logState, log)}
             </div>
-                <Switch>
-                    <Route path='/config/messages'>
-                        <Message></Message>
-                    </Route>
-                    <Route path='/config/plan'>
-                        <Plan></Plan>
-                    </Route>
-                    <Route path='/config/accountBind'>
+            <Switch>
+                <Route path='/config/messages'>
+                    <Message></Message>
+                </Route>
+                <Route path='/config/plan'>
+                    <Plan></Plan>
+                </Route>
+                <Route path='/config/accountBind'>
                     <Account></Account>
-                    </Route>
-                    <Redirect path="/config" to={{ pathname: '/config/plan' }} />
-                </Switch>
+                </Route>
+                <Redirect path="/config" to={{ pathname: '/config/plan' }} />
+            </Switch>
         </div>
     )
 }
