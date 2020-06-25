@@ -56,7 +56,7 @@ const config = {
         remoteSync: {
             type: 'radio',
             alias: '远程同步',
-            value: 'on'
+            value: 'off'
         },
         accountBind: {
             type: 'anchor',
@@ -190,7 +190,7 @@ function RemerConfig() {
         outlook: setoutlookState,
         log: setlogState
     }
-    
+
     // config回调函数挂载对象, 用于实现点击时的回调函数
     const configHandlers = {
         messages: () => {
@@ -201,10 +201,18 @@ function RemerConfig() {
             //加载plan
             console.log('plan is called')
         },
+        localSync: () => { },
+        remoteSync: async () => {
+            console.log("reomte sync is called!")
+            // 首先检查网络连接
+            let result = await getNetWorkChack()
+            return result
+        },
         accountBind: () => {
             console.log('account bind called')
         },
         netWorkCheck: getNetWorkChack,
+        nightMode: () => { },
         // NOTE signin 是异步任务, 而 signout 是同步任务
         signin: getSignin,
         signout: () => {
@@ -212,7 +220,7 @@ function RemerConfig() {
             console.log("sign out called")
             setifSign("false")
             localStorage.setItem('ifSign', "false")
-            let profileTmp = {...profileState}
+            let profileTmp = { ...profileState }
             profileTmp.username = ""
             localStorage.setItem('profile', JSON.stringify(profileTmp))
             getSignout()
@@ -244,12 +252,14 @@ function RemerConfig() {
             /* 单选框 */
             case 'radio':
                 let rConfigli = classnames(configli, 'radio-configli')
+                console.log(callback.constructor.name)
                 //此处换用复选框
                 suffixNode = <SwitchIcon
                     key={key}
                     value={el.value}
                     className={configliSwitch}
                     color={bgc}
+                    preprocess={callback.constructor.name === "AsyncFunction" ? callback : () => { return true }} // 异步函数就传入, 等待调用后的值; 同步函数就直接运行
                     onChange={() => {
                         let tmpItem = config[parentKey]
                         if (tmpItem[key].value === 'off') {

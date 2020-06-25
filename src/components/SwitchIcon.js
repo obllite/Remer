@@ -7,7 +7,8 @@ function SwitchIcon(props) {
         value,
         onChange,
         color,
-        className
+        className,
+        preprocess
     } = props
 
     const switchContainer = classnames('switchContainer')
@@ -15,15 +16,19 @@ function SwitchIcon(props) {
     const on = classnames('switch-on')
     const off = classnames('switch-off')
 
-    const switchHandler = () => {
+    const switchHandler = async () => {
         console.log("value is ", value)
-        onChange()
+        let result = await preprocess()
+        console.log("result is ", result)
+        if (result) {
+            onChange()
+        }
     }
     return (
         <div
-            className={value === 'on' ? classnames(switchContainer, className, on) : classnames(switchContainer, className,off)}
+            className={value === 'on' ? classnames(switchContainer, className, on) : classnames(switchContainer, className, off)}
             onClick={switchHandler}
-            style={{ backgroundColor: value === 'on' ? color :  "#dee2e6"}}
+            style={{ backgroundColor: value === 'on' ? color : "#dee2e6" }}
         >
             <div className={switchIcon}
             ></div>
