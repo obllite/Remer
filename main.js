@@ -49,7 +49,6 @@ function createWindow() {
 
     //NOTE 考虑封装注册全局快捷键
     mainWindow.on('focus', () => {
-        // mac下快捷键失效的问题
         if (process.platform === 'darwin') {
             let contents = mainWindow.webContents
             globalShortcut.register('CommandOrControl+C', () => {
@@ -67,7 +66,8 @@ function createWindow() {
         }
     })
     mainWindow.on('blur', () => {
-        globalShortcut.unregisterAll() // 注销键盘事件
+        // 注销键盘事件
+        globalShortcut.unregisterAll() 
     })
 
     printWindow = new BrowserWindow({

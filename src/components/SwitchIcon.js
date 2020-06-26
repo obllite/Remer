@@ -17,9 +17,9 @@ function SwitchIcon(props) {
     const off = classnames('switch-off')
 
     const switchHandler = async () => {
-        console.log("value is ", value)
+        //console.log("value is ", value)
         let result = await preprocess()
-        console.log("result is ", result)
+        //console.log("result is ", result)
         if (result) {
             onChange()
         }

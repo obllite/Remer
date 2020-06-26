@@ -1,0 +1,68 @@
+.progressCantainer {
+    width: calc(#{$full-vw} - 60px);
+    float: right;
+    position: fixed;
+    z-index: 10;
+    right: 0;
+    bottom: 0px;
+}
+
+.progressBar {
+    height: 20px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    margin: -1px;
+    display: flex;
+}
+
+.progressBarName {
+    border-radius: 4px;
+    margin-left: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    color: $pink;
+    float: left;
+    position: fixed;
+    z-index: inherit;
+}
+// 此两项的宽度控制在组件内部进行
+.progressed {
+    height: 100%;
+    border-radius: 4px;
+    background-color: $background-color;
+    color: $white;
+}
+
+.unprogress {
+    height: 100%;
+    border-radius: 4px;
+    background-color: $gray-200;
+    color: $black;
+}
+
+.cancelTask {
+    height: 18px;
+    width: 18px;
+    border-radius: 18px;
+    background-color: transparent;
+    line-height: 18px;
+    text-align: center;
+    //color: $gray-200;
+    color: transparent;
+    float: right;
+    position: fixed;
+    right: 10px;
+    z-index: inherit;
+    user-select: none;
+    &:hover {
+        cursor: pointer;
+        background-color: rgba($gray-200, $alpha: 0.6);
+        border: 1px solid $black;
+        box-sizing: border-box;
+        color: $black;
+        filter: brightness(90%);
+    }
+    &:active {
+        filter: brightness(60%);
+    }
+}

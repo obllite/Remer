@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import classnames from 'classnames'
 import {
-    BrowserRouter as Router,
     Switch,
     Route,
     Link,
@@ -51,7 +50,7 @@ const config = {
         localSync: {
             type: 'radio',
             alias: '本地同步',
-            value: 'off'
+            value: 'on'
         },
         remoteSync: {
             type: 'radio',
@@ -68,7 +67,7 @@ const config = {
         nightMode: {
             type: 'radio',
             alias: '夜间模式',
-            value: 'on'
+            value: 'off'
         },
         theme: {
             type: 'colorSelect',
@@ -252,7 +251,6 @@ function RemerConfig() {
             /* 单选框 */
             case 'radio':
                 let rConfigli = classnames(configli, 'radio-configli')
-                console.log(callback.constructor.name)
                 //此处换用复选框
                 suffixNode = <SwitchIcon
                     key={key}

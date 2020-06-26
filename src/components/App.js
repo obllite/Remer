@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -9,6 +9,7 @@ import {
 import store from '../store/store';
 
 /* import '../css/App.scss'; */
+import ProgressBar from './ProgressBar';
 
 import Navbar from './Navbar';
 import SearchBar from './SearchBar'
@@ -46,13 +47,19 @@ let wordSet = [
   { newIndex: 24, ifCollected: false, english: 'accumulate', pronunciation: '/ ə’kju:mjuleit/', speech: 'vt', chinese: '积累' },
   { newIndex: 25, ifCollected: false, english: 'accumulate', pronunciation: '/ ə’kju:mjuleit/', speech: 'vt', chinese: '积累' }
 ];
+
 function App() {
+
   return (
     <Provider store={store}>
       <Router>
         <div className="App">
           <Navbar></Navbar>
           <SearchBar></SearchBar>
+          <ProgressBar
+          tasks={['upload file1', 'upload file2']}
+          >
+          </ProgressBar>
           <Switch>
             <Route path="/index">
               <Wordlist data={wordSet}></Wordlist>
@@ -66,6 +73,7 @@ function App() {
             </Route>
             <Redirect path="/" to={{ pathname: '/config' }} />
           </Switch>
+
         </div>
       </Router>
     </Provider>

@@ -29,12 +29,14 @@ const appMenuTmp = [{
     submenu: [{
         label: '悬浮',
         id: 'setsuspended',
+        accelerator: "Cmd+E",
         enabled: true,
         click: () => {
             main_process_utils.setSuspended(mainProcess.mainWindow)
         }
     }, {
         label: '取消悬浮',
+        accelerator: "Cmd+D",
         id: 'cancelsuspended',
         enabled: false,
         click: () => {
@@ -59,6 +61,24 @@ const appMenuTmp = [{
         click: () => {
             console.log(mainProcess.mainWindow)
             main_process_utils.printPdfHandler(mainProcess.mainWindow)
+        }
+    }]
+}, {
+    label: '远程',
+    submenu: [{
+        label: '上传到服务器',
+        click: () => {
+            main_process_utils.uploadFileHandler()
+        }
+    }, {
+        label: '从服务器下载',
+        click: () => {
+            main_process_utils.downloadFileHandler()
+        }
+    }, {
+        label: '同步文件',
+        click: () => {
+            console.log("sync file called")
         }
     }]
 }]

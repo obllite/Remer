@@ -7,9 +7,12 @@
 @import "../iconfont/wordlistIcon/iconfont.css";
 @import "../iconfont/fileViewIcon/iconfont.css";
 @import "../iconfont/configIcon/iconfont.css";
+
+
 /* Nav 样式 */
 @import "./Navbar.scss";
 @import "./SearchBar.scss";
+
 
 /* word page样式 */
 @import "./Wordlist.scss";
@@ -30,7 +33,9 @@
 @import "./Plan.scss";
 @import "./AccountBind.scss";
 /* 自用 component 样式 */
-@import "./Switch.scss";
+@import "./SwitchIcon.scss";// SwitchIcon 组件样式
+@import "./ProgressBar.scss";
+
 .hide {
     display: none;
 }
