@@ -325,3 +325,4 @@ ipcMain.on("printPdf-send", async (event, data) => {
     main_process_utils.printPdfHandler(printWindow);
     event.reply('printPdf-reply', data)
 })
+

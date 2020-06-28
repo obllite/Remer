@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const axios = require('axios');
 const FormData = require('form-data')
+
 const main_process_utils = require('./index')
 
 const serverURL = 'http://localhost:9090'
@@ -25,7 +26,17 @@ function generatePath(config, name) {
 //`${serverURL}/upload`
 async function uploadHandler() {
     console.log("up load file called")
-    console.log(main_process_utils.fileViewInfo)
+    // 获取 slice num
+    let sliceNum = 0
+    main_process_utils.fileViewInfo.fileNames.forEach((fold_item, fold_index)=>{
+        fold_item.names.forEach((file_item, file_index)=>{
+            sliceNum++
+        })
+    })
+    console.log('sliceNum is ', sliceNum)
+    // 创建进度条
+    main_process_utils.createTask('Upload file', sliceNum)
+    // 上传文件到服务器
     main_process_utils.fileViewInfo.noteBookNames.forEach((item, index) => {
         let gpath = generatePath("fold", item)
         uploadFold(gpath)
@@ -37,7 +48,7 @@ async function uploadHandler() {
             uploadAFile(gpath, relative)
         })
     })
-    //uploadAFile(gpath)
+
 }
 
 function uploadFold(foldPath) {
@@ -54,6 +65,7 @@ function uploadFold(foldPath) {
             console.log(err)
         })
 }
+
 function uploadAFile(filePath, relative) {
     var localFile = fs.createReadStream(filePath)
     var formData = new FormData();
@@ -67,6 +79,7 @@ function uploadAFile(filePath, relative) {
         await axios.post(`${serverURL}/upload?relative=${relative}`, formData, { headers })
             .then(result => {
                 console.log(result.data, "upload success")
+                main_process_utils.updateTask('Upload file', 1)
             }).catch(res => {
                 console.log(res.data);
             })
@@ -75,6 +88,7 @@ function uploadAFile(filePath, relative) {
 
 function downloadHandler() {
     console.log("down load from server called")
+    main_process_utils.updateTask()
 }
 
 function syncFileHandler() {

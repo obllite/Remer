@@ -4,6 +4,7 @@ const fileViewHandler = require('./main_fileViewHandler')
 const exportFileHandler = require('./main_exportFile')
 const viewHandler = require('./main_viewHandler')
 const remoteHandler = require('./main_remote');
+const progressHandler = require('./main_progressBar')
 //consts
 exports.fileViewInfo = fileViewHandler.fileViewInfo
 //functions
@@ -29,3 +30,6 @@ exports.cancelSuspended = viewHandler.cancelSuspended
 exports.uploadHandler = remoteHandler.uploadHandler
 exports.downloadHandler = remoteHandler.downloadHandler
 exports.syncFileHandler = remoteHandler.syncFileHandler
+
+exports.createTask = progressHandler.createTask
+exports.updateTask = progressHandler.updateTask
