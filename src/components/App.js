@@ -50,7 +50,7 @@ let wordSet = [
 
 function App() {
 
-  const [tasks, settest] = useState([])
+  const [tasks, settest] = useState(['test', 'test1'])
   useEffect(() => {
     //TODO 添加task listener
     return () => {

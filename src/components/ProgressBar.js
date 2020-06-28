@@ -10,13 +10,16 @@ function ProgressBar(props) {
     const cancelTask = classnames('cancelTask')
 
     /* hooks */
-    const progressedWidth = useRef([100, 50])
-    const unprogressWidth = useRef([0, 50])
+    const progressedWidth = useRef([80, 50])
+    const unprogressWidth = useRef([20, 50])
     /* hooks */
     const [tasks, settasks] = useState(props.tasks)
     /* functions */
     const cancelHandler = (index) => {
+        console.log('index is ', index)
         let tasksTmp = [...tasks]
+        progressedWidth.current.splice(index, 1)
+        unprogressWidth.current.splice(index, 1)
         tasksTmp.splice(index, 1)
         console.log("cancel task", tasks, index, tasksTmp)
         settasks(tasksTmp)

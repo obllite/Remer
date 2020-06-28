@@ -48,7 +48,7 @@ function uploadFold(foldPath) {
         }
     })
         .then((response) => {
-            console.log(response.data + " upload success!")
+            console.log(response.data, "upload success!")
         })
         .catch((err) => {
             console.log(err)
@@ -66,7 +66,7 @@ function uploadAFile(filePath, relative) {
         headers['content-length'] = length;
         await axios.post(`${serverURL}/upload?relative=${relative}`, formData, { headers })
             .then(result => {
-                console.log("upload success",result.data)
+                console.log(result.data, "upload success")
             }).catch(res => {
                 console.log(res.data);
             })
