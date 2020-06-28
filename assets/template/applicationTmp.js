@@ -68,12 +68,12 @@ const appMenuTmp = [{
     submenu: [{
         label: '上传到服务器',
         click: () => {
-            main_process_utils.uploadFileHandler()
+            main_process_utils.uploadHandler()
         }
     }, {
         label: '从服务器下载',
         click: () => {
-            main_process_utils.downloadFileHandler()
+            main_process_utils.downloadHandler()
         }
     }, {
         label: '同步文件',

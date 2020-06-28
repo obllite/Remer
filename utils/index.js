@@ -26,6 +26,6 @@ exports.exportMarkDown = exportFileHandler.exportMarkDown
 exports.setSuspended = viewHandler.setSuspended
 exports.cancelSuspended = viewHandler.cancelSuspended
 
-exports.uploadFileHandler = remoteHandler.uploadFileHandler
-exports.downloadFileHandler = remoteHandler.downloadFileHandler
+exports.uploadHandler = remoteHandler.uploadHandler
+exports.downloadHandler = remoteHandler.downloadHandler
 exports.syncFileHandler = remoteHandler.syncFileHandler

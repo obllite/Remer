@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -50,6 +50,12 @@ let wordSet = [
 
 function App() {
 
+  const [tasks, settest] = useState([])
+  useEffect(() => {
+    //TODO 添加task listener
+    return () => {
+    }
+  }, [])
   return (
     <Provider store={store}>
       <Router>
@@ -57,7 +63,7 @@ function App() {
           <Navbar></Navbar>
           <SearchBar></SearchBar>
           <ProgressBar
-          tasks={['upload file1', 'upload file2']}
+            tasks={tasks}
           >
           </ProgressBar>
           <Switch>
