@@ -1,0 +1,86 @@
+//$highlight-color: $word-color;
+//$highlight-color: darken($teal, 10%);
+$highlight-color: $teal;
+@mixin dotted-bottom {
+    border-bottom: 1px dashed #111;
+    text-decoration:none;
+    &:hover{
+        color: $highlight-color;
+    }
+}
+h1{
+    font-weight: bolder !important;
+    color: $highlight-color;
+}
+b{
+    font-family: sans-serif;
+    font-weight: bolder;
+}
+/*modify hom*/
+.hom{
+    padding-top: 1rem;
+    .sense{
+        padding-left: 1.2rem;
+        line-height: 2rem;
+    }
+    .inline{
+        display: inline;
+        padding-left: 0 !important;
+    }
+    a{
+        @include dotted-bottom;
+        color: black;
+    }
+    /*quote*/
+    .quote{
+        font-style: italic;
+    }
+    /*highlight*/
+    .hi{
+        font-weight: bolder;
+        color: $highlight-color;
+    }
+    /**/
+    .type-syntax{
+        font-size: small;
+        color: gray;
+        font-style: italic;
+        &:hover{
+            color: $highlight-color;
+        }
+    }
+    .type-geo{
+        font-style: italic;
+    }
+    /**/
+    .sensenum{
+        font-family: 'Times New Roman', Times, serif;
+        font-size: large;
+        color: black;
+        font-weight: bolder;
+    }
+    .gramGrp{
+        font-weight: bold;
+        color: $highlight-color;
+    }
+}
+
+
+.thes{
+    padding-top: 1rem;
+    a{
+        @include dotted-bottom;
+        font-weight: lighter;
+        color: black;
+    }
+    
+}
+
+
+/*Part to be removed*/
+.mpuslot_b-container{
+    display: none;
+}
+.copyright{
+    display: none;
+}

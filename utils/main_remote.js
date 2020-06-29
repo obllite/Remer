@@ -28,8 +28,8 @@ async function uploadHandler() {
     console.log("up load file called")
     // 获取 slice num
     let sliceNum = 0
-    main_process_utils.fileViewInfo.fileNames.forEach((fold_item, fold_index)=>{
-        fold_item.names.forEach((file_item, file_index)=>{
+    main_process_utils.fileViewInfo.fileNames.forEach((fold_item, fold_index) => {
+        fold_item.names.forEach((file_item, file_index) => {
             sliceNum++
         })
     })
@@ -41,9 +41,9 @@ async function uploadHandler() {
         let gpath = generatePath("fold", item)
         uploadFold(gpath)
     })
-    main_process_utils.fileViewInfo.fileNames.forEach((fold_item, fold_index)=>{
-        fold_item.names.forEach((file_item, file_index)=>{
-            let relative = "/" + main_process_utils.fileViewInfo.noteBookNames[fold_index] + "/" +file_item
+    main_process_utils.fileViewInfo.fileNames.forEach((fold_item, fold_index) => {
+        fold_item.names.forEach((file_item, file_index) => {
+            let relative = "/" + main_process_utils.fileViewInfo.noteBookNames[fold_index] + "/" + file_item
             let gpath = generatePath("file", relative)
             uploadAFile(gpath, relative)
         })
@@ -88,13 +88,39 @@ function uploadAFile(filePath, relative) {
 
 function downloadHandler() {
     console.log("down load from server called")
-    main_process_utils.updateTask()
+    axios.get(`${serverURL}/download`)
+        .then((response) => {
+            console.log("down load success")
+            let newFileInfo = genFileInfo(response.data["RelativePath"])
+            main_process_utils.diffFileInfo(newFileInfo)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
 }
 
 function syncFileHandler() {
     console.log("sync file called")
 }
 
+function genFileInfo(relativePath) {
+    let fileInfo = {
+        noteBookNames: [],
+        fileNames: []
+    }
+    relativePath.forEach(item => {
+        if (!fileInfo.noteBookNames.includes(item.split('/')[1])) {
+            fileInfo.noteBookNames.push(item.split('/')[1])
+            let tmp = { names: [] }
+            fileInfo.fileNames.push({ ...tmp })
+        }
+    })
+    relativePath.forEach(item => {
+        let fold_i = fileInfo.noteBookNames.indexOf(item.split('/')[1])
+        fileInfo.fileNames[fold_i].names.push(item.split('/')[2])
+    })
+    return fileInfo
+}
 exports.connectSever = connectSever
 exports.uploadHandler = uploadHandler
 exports.downloadHandler = downloadHandler

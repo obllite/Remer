@@ -9,7 +9,7 @@
 }
 .dragTag {
     margin: 0;
-    background-color: $teal;
+    background-color: darken($teal, 4%);
     grid-area: 1 / 3 / 3 / 4;
     align-self: stretch;
 }

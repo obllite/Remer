@@ -10,7 +10,7 @@ const {
 
 const path = require("path");
 const fs = require("fs");
-const url = require('url')
+
 const applicationTmp = require('./assets/template/index')
 //consts
 const editCachePath = path.join(__dirname, "/noteBooks/editBlockCache.json")

@@ -3,8 +3,9 @@ const saveFileHandler = require('./main_saveEditBlocks')
 const fileViewHandler = require('./main_fileViewHandler')
 const exportFileHandler = require('./main_exportFile')
 const viewHandler = require('./main_viewHandler')
-const remoteHandler = require('./main_remote');
+const remoteHandler = require('./main_remote')
 const progressHandler = require('./main_progressBar')
+const diffHandler = require('./main_diff')
 //consts
 exports.fileViewInfo = fileViewHandler.fileViewInfo
 //functions
@@ -33,3 +34,5 @@ exports.syncFileHandler = remoteHandler.syncFileHandler
 
 exports.createTask = progressHandler.createTask
 exports.updateTask = progressHandler.updateTask
+
+exports.diffFileInfo = diffHandler.diffFileInfo

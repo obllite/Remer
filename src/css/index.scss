@@ -7,12 +7,12 @@
 @import "../iconfont/wordlistIcon/iconfont.css";
 @import "../iconfont/fileViewIcon/iconfont.css";
 @import "../iconfont/configIcon/iconfont.css";
-
+/* search 单词列表样式 */
+@import "./collinsPage.scss"; // 柯林斯字典
 
 /* Nav 样式 */
 @import "./Navbar.scss";
 @import "./SearchBar.scss";
-
 
 /* word page样式 */
 @import "./Wordlist.scss";
