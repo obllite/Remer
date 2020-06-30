@@ -11,8 +11,10 @@ function searchHandler(word) {
                 type: "wordContent",
                 wordContent: ''
             })
+            // todo 清除动画
         })
     }
+    // todo emitter 显示动画
     window.ipcRenderer.send('searchWord-send', word);
 }
 

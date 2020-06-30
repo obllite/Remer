@@ -56,7 +56,9 @@ async function dirTree(pathParams, callback) {
     }
 }
 // 新建文件夹
-function newFold(newFoldPath, foldInfo) {
+async function newFold(newFoldPath, foldInfo) {
+    console.log("new fold path is",newFoldPath)
+    console.log("fold info is", foldInfo)
     // 新建fold
     fs.mkdir(newFoldPath, (err) => {
         if (err) {
@@ -82,7 +84,7 @@ function newFold(newFoldPath, foldInfo) {
 }
 
 // 新建文件
-function newFile(fileInfo) {
+async function newFile(fileInfo) {
     console.log('new file is ', fileInfo)
     let filePath = path.join(rootPath, fileInfo.path)
     //console.log('file path is ', filePath)
@@ -92,11 +94,7 @@ function newFile(fileInfo) {
         return false
     } else {
         fs.openSync(filePath, 'w')
-        fs.writeFile(filePath, template.notebook_initTemplate, function (err) {
-            if (err) {
-                throw err
-            }
-        });
+        fs.writeFileSync(filePath, template.notebook_initTemplate);
         console.log('create file success, file path is ', filePath)
         updateFileInfo('new', filePath)
         return true

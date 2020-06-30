@@ -92,7 +92,7 @@ function downloadHandler() {
         .then((response) => {
             console.log("down load success")
             let newFileInfo = genFileInfo(response.data["RelativePath"])
-            main_process_utils.diffFileInfo(newFileInfo)
+            main_process_utils.diffFileInfo(newFileInfo, response.data)
         })
         .catch((err) => {
             console.log(err)
